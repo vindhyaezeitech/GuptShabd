@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Anil_Project/Shabdam/app/src/main/res/drawable/bg_grey.xml" value="0.1325" />
+        <entry key="..\:/Anil_Project/Shabdam/app/src/main/res/layout/activity_game.xml" value="0.1796875" />
+        <entry key="..\:/Anil_Project/Shabdam/app/src/main/res/layout/activity_guptshabd.xml" value="0.1796875" />
         <entry key="app/src/main/res/drawable/bg_answer.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/bg_default_key.xml" value="0.1355" />
         <entry key="app/src/main/res/drawable/bg_green_box.xml" value="0.1025" />
