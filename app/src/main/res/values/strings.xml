@@ -35,7 +35,9 @@
     <string name="current_streak_text">Current \n Streak</string>
     <string name="max_streak_text">Max Streak</string>
     <string name="samay_laga_text">समय लगा </string>
-    <string name="gas_distribution_text">गेस डिस्ट्रीब्यूशन </string>
+    <string name="gas_distribution_text">गेस डिस्ट्रीब्यूशन</string>
+    <string name="hint_text">हिंट</string>
+    <string name="answer_dekho_text">उत्तर देखो</string>
 
     // Right Answer Text
     <string name="right_answer">व</string>

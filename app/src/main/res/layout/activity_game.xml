@@ -5,7 +5,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GameActivity"
+    android:background="@color/white"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@drawable/radius_background"
+        android:elevation="@dimen/_10sdp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_toRightOf="@id/iv_back_btn"
+            android:text="@string/shabdam_text"
+            android:textColor="@color/text_color_black"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_question_mark_btn"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:src="@drawable/question_mark_icon" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_settings_btn"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:src="@drawable/settings_icon" />
+
+            <ImageView
+                android:id="@+id/iv_statistics_btn"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_toLeftOf="@id/iv_settings_btn"
+                android:src="@drawable/statistics_icon" />
+
+            <ImageView
+                android:id="@+id/iv_trophy_btn"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_toLeftOf="@id/iv_statistics_btn"
+                android:src="@drawable/trophy_icon" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -232,27 +294,102 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_15sdp"
                 android:layout_marginBottom="16dp">
 
-                <Button
+                <RelativeLayout
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@drawable/box_radius"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:backgroundTint="@color/text_color_black">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:background="@drawable/button_radius">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_13sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/hint_text"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/_13sdp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:src="@drawable/hint_icon" />
+                </RelativeLayout>
+
+
+                <!--      <Button
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentLeft="true"
+                          android:layout_marginLeft="12dp"
+                          android:background="#000"
+                          android:text="हिंट">
+
+                      </Button>-->
+
+               <!-- <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="12dp"
-                    android:background="#000"
-                    android:text="हिंट">
-
-                </Button>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#000"
-                    android:text="उत्तर देखो"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="12dp">
+                    android:layout_marginRight="12dp"
+                    android:background="#000"
+                    android:text="उत्तर देखो">
 
-                </Button>
+                </Button>-->
+
+                <RelativeLayout
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@drawable/box_radius"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:backgroundTint="@color/text_color_black">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_uttar_dekho_btn"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:background="@drawable/button_radius">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_13sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/answer_dekho_text"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/_13sdp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:src="@drawable/uttar_dekho_icon" />
+                </RelativeLayout>
+
             </RelativeLayout>
         </LinearLayout>
 

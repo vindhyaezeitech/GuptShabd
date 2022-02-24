@@ -3,11 +3,23 @@ package com.guptshabd;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.guptshabd.ui.activity.GuptshabdActivity;
+import com.guptshabd.ui.activity.LeaderBoardActivity;
+import com.guptshabd.ui.activity.SettingsActivity;
+import com.guptshabd.ui.activity.ShabdamActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +45,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     StringBuilder[] matra = new StringBuilder[3];
     char[] charArray;
-
+    private RelativeLayout rl_uttar_dekho_btn, continue_btn;
 
 
     @Override
@@ -98,19 +110,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.tv_bada_ae).setOnClickListener(this);
         findViewById(R.id.tv_chota_o).setOnClickListener(this);
         findViewById(R.id.tv_bada_o).setOnClickListener(this);
-
-
-
-
-
-
+        findViewById(R.id.rl_uttar_dekho_btn).setOnClickListener(this);
+        findViewById(R.id.iv_question_mark_btn).setOnClickListener(this);
+        findViewById(R.id.iv_trophy_btn).setOnClickListener(this);
+        findViewById(R.id.iv_statistics_btn).setOnClickListener(this);
+        findViewById(R.id.iv_settings_btn).setOnClickListener(this);
 
 
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
 
             case R.id.tv_ka:
             case R.id.tv_kha:
@@ -157,10 +168,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.tv_bada_ae:
             case R.id.tv_chota_o:
             case R.id.tv_bada_o:
-                if(index < currentAttempt*3){
+                if (index < currentAttempt * 3) {
                     btnIdList.add(view.getId());
                 }
-                setText(((TextView)findViewById(view.getId())).getText().toString());
+                setText(((TextView) findViewById(view.getId())).getText().toString());
                 break;
 
             case R.id.tv_cross:
@@ -171,58 +182,115 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 submitText();
                 break;
 
+            case R.id.rl_uttar_dekho_btn:
+                startActivity(new Intent(this, ShabdamActivity.class));
+                break;
+
+            case R.id.iv_question_mark_btn:
+                kaiseKhelePopup();
+                break;
+
+            case R.id.iv_trophy_btn:
+                startActivity(new Intent(this, LeaderBoardActivity.class));
+                break;
+
+            case R.id.iv_statistics_btn:
+                statisticsPopup();
+                break;
+
+            case R.id.iv_settings_btn:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+
         }
+    }
+
+    private void statisticsPopup() {
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(GameActivity.this,R.style.CustomAlertDialog);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.statistics_popup_layout, viewGroup, false);
+        ImageView cancel_btn=dialogView.findViewById(R.id.iv_cancel_btn);
+        builder.setView(dialogView);
+        final android.app.AlertDialog alertDialog = builder.create();
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+    }
+
+    private void kaiseKhelePopup() {
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(GameActivity.this,R.style.CustomAlertDialog);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.kaise_khele_popup_layout, viewGroup, false);
+        RelativeLayout continue_btn=dialogView.findViewById(R.id.rl_continue_btn);
+        builder.setView(dialogView);
+        final AlertDialog alertDialog = builder.create();
+        continue_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCancelable(false);
+        alertDialog.show();
     }
 
     /**
      * check which cell to set text
      * If already have text accept MATRA_TEXT then remove text
      * and add new text
+     *
      * @param s
      */
     private void setText(String s) {
-        if(index < currentAttempt*3){
-            index = index+1;
-            if(getId(index) != 0){
+        if (index < currentAttempt * 3) {
+            index = index + 1;
+            if (getId(index) != 0) {
                 updateWordCharArray(s);
-                ((TextView)findViewById(getId(index))).setText(new StringBuilder().append(s).append(getTextIndex(index)));
+                ((TextView) findViewById(getId(index))).setText(new StringBuilder().append(s).append(getTextIndex(index)));
             }
         }
 
     }
 
     private void updateWordCharArray(String s) {
-        entered_word_array[index%MAX_CHAR_LENGTH == 0?MAX_CHAR_LENGTH-1: (index%MAX_CHAR_LENGTH)-1] = s.toCharArray()[0];
+        entered_word_array[index % MAX_CHAR_LENGTH == 0 ? MAX_CHAR_LENGTH - 1 : (index % MAX_CHAR_LENGTH) - 1] = s.toCharArray()[0];
     }
 
-    private String getTextIndex(int index){
-        return ((TextView)findViewById(getId(index))).getText().toString();
+    private String getTextIndex(int index) {
+        return ((TextView) findViewById(getId(index))).getText().toString();
     }
 
     private void removeText() {
-        if(index> (currentAttempt-1)*3){
-            ((TextView)findViewById(getId(index))).setText("");
-            if(btnIdList != null && btnIdList.size()>0){
-                btnIdList.remove(btnIdList.size()-1);
+        if (index > (currentAttempt - 1) * 3) {
+            ((TextView) findViewById(getId(index))).setText("");
+            if (btnIdList != null && btnIdList.size() > 0) {
+                btnIdList.remove(btnIdList.size() - 1);
             }
             updateWordCharArray("x");
-            ((TextView)findViewById(getId(index))).setText(matra[index%MAX_CHAR_LENGTH == 0? MAX_CHAR_LENGTH-1: (index%MAX_CHAR_LENGTH)-1]);
+            ((TextView) findViewById(getId(index))).setText(matra[index % MAX_CHAR_LENGTH == 0 ? MAX_CHAR_LENGTH - 1 : (index % MAX_CHAR_LENGTH) - 1]);
 
-            index = index -1;
+            index = index - 1;
         }
     }
 
     private void submitText() {
-        if(index == 0 || index%MAX_CHAR_LENGTH !=0){
+        if (index == 0 || index % MAX_CHAR_LENGTH != 0) {
             ToastUtils.show(GameActivity.this, "Text is too short");
             return;
         }
 
-        if(index%MAX_CHAR_LENGTH == 0){
+        if (index % MAX_CHAR_LENGTH == 0) {
             //verifyText--> call API --> increment count
             verifyText();
             //Increment current Attempt Count at Last
-            if(currentAttempt < MAX_ATTEMPT){
+            if (currentAttempt < MAX_ATTEMPT) {
                 currentAttempt = currentAttempt + 1;
                 updateCurrentAttempt();
             }
@@ -239,14 +307,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateCurrentAttempt() {
         //Update Matra
-        for (int i = 1; i < MAX_CHAR_LENGTH+1; i++) {
-            ((TextView)findViewById(getId((currentAttempt-1)*3+i))).setText(matra[i-1].toString());
+        for (int i = 1; i < MAX_CHAR_LENGTH + 1; i++) {
+            ((TextView) findViewById(getId((currentAttempt - 1) * 3 + i))).setText(matra[i - 1].toString());
         }
 
     }
 
-    private int getId(int pos){
-        switch (pos){
+    private int getId(int pos) {
+        switch (pos) {
             case 1:
                 return R.id.et_1;
 
@@ -298,28 +366,28 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         return 0;
     }
 
-    private void showMatraText(){
+    private void showMatraText() {
         charArray = correctWord.toCharArray();
         matra[0] = new StringBuilder();
         matra[1] = new StringBuilder();
         matra[2] = new StringBuilder();
-        int count =0;
+        int count = 0;
         boolean br = false;
         for (int i = 0; i < charArray.length; i++) {
-            if (checkLetter(charArray[i])){
+            if (checkLetter(charArray[i])) {
                 word_array[count] = charArray[i];
                 count++;
-            }else {
-                matra[count -1].append(charArray[i]);
+            } else {
+                matra[count - 1].append(charArray[i]);
             }
 
         }
-        Log.d("",matra.toString());
+        Log.d("", matra.toString());
     }
 
-    private boolean checkLetter(char c){
-        if(((int)c >= 2309 && (int)c<=2316) || ((int)c >= 2325 && (int)c<=2361)
-            ||(int)c== 2319 || (int)c == 2320 || (int)c == 2323 || (int)c == 2324){
+    private boolean checkLetter(char c) {
+        if (((int) c >= 2309 && (int) c <= 2316) || ((int) c >= 2325 && (int) c <= 2361)
+                || (int) c == 2319 || (int) c == 2320 || (int) c == 2323 || (int) c == 2324) {
             return true;
         }
         return false;
@@ -327,45 +395,45 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * if word array same and entered_word_array
-     *      Correct Word
-     *      hit api, stop timer, disable keyboard, color all the answer boxes with green
+     * Correct Word
+     * hit api, stop timer, disable keyboard, color all the answer boxes with green
      * Else check word in dictionary
-     *      yes then check is letter are in word_array
-     *          yes check if it is right place
-     *              yes color answer box of that letter with green
-     *                  color keyboard box of that letter with green
-     *              no color answer box of that letter with yellow
-     *                 color keyboard box of that letter with yellow
-*               no color answer box with yellow
-     *             color keyborad box of that letter with yellow
-     *      no re-attempt or color it with grey
+     * yes then check is letter are in word_array
+     * yes check if it is right place
+     * yes color answer box of that letter with green
+     * color keyboard box of that letter with green
+     * no color answer box of that letter with yellow
+     * color keyboard box of that letter with yellow
+     * no color answer box with yellow
+     * color keyborad box of that letter with yellow
+     * no re-attempt or color it with grey
      *
      * @return
      */
-    private boolean mapWord(){
-        if(Arrays.equals(word_array,entered_word_array)){
+    private boolean mapWord() {
+        if (Arrays.equals(word_array, entered_word_array)) {
             updateGreenBoxes();
             return true;
         }// dictionary check is pending
-        else{//check is letter are in word_array
+        else {//check is letter are in word_array
             for (int i = 0; i < entered_word_array.length; i++) {
                 boolean isExist = false;
-                for (int j = 0; j < word_array.length ; j++) {
-                    if(entered_word_array[i] == word_array[j]){
+                for (int j = 0; j < word_array.length; j++) {
+                    if (entered_word_array[i] == word_array[j]) {
                         isExist = true;
-                        if(i == j){//same postion green
-                            ((TextView)findViewById(getId((currentAttempt-1)*3+1+i))).setBackgroundResource(R.drawable.bg_green_box);
-                            ((TextView)findViewById(btnIdList.get(i))).setBackgroundResource(R.drawable.bg_green_box);
-                        }else {// yellow
-                            ((TextView)findViewById(getId((currentAttempt-1)*3+1+i))).setBackgroundResource(R.drawable.bg_yellow);
-                            ((TextView)findViewById(btnIdList.get(i))).setBackgroundResource(R.drawable.bg_yellow);
+                        if (i == j) {//same postion green
+                            ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setBackgroundResource(R.drawable.bg_green_box);
+                            ((TextView) findViewById(btnIdList.get(i))).setBackgroundResource(R.drawable.bg_green_box);
+                        } else {// yellow
+                            ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setBackgroundResource(R.drawable.bg_yellow);
+                            ((TextView) findViewById(btnIdList.get(i))).setBackgroundResource(R.drawable.bg_yellow);
 
                         }
                     }
                 }
-                if(!isExist){//Not in word
-                    ((TextView)findViewById(getId((currentAttempt-1)*3+1+i))).setBackgroundResource(R.drawable.bg_grey);
-                    ((TextView)findViewById(btnIdList.get(i))).setBackgroundResource(R.drawable.bg_grey);
+                if (!isExist) {//Not in word
+                    ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setBackgroundResource(R.drawable.bg_grey);
+                    ((TextView) findViewById(btnIdList.get(i))).setBackgroundResource(R.drawable.bg_grey);
                 }
             }
 
@@ -374,13 +442,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateGreenBoxes() {
-        for (int i = (currentAttempt-1)*3+1; i <currentAttempt*3+1 ; i++) {
-            ((TextView)findViewById(getId(i))).setBackgroundResource(R.drawable.bg_green_box);
+        for (int i = (currentAttempt - 1) * 3 + 1; i < currentAttempt * 3 + 1; i++) {
+            ((TextView) findViewById(getId(i))).setBackgroundResource(R.drawable.bg_green_box);
         }
 
         //update Key Board
         for (int j = 0; j < btnIdList.size(); j++) {
-            ((TextView)findViewById(btnIdList.get(j))).setBackgroundResource(R.drawable.bg_green_box);
+            ((TextView) findViewById(btnIdList.get(j))).setBackgroundResource(R.drawable.bg_green_box);
         }
     }
 }

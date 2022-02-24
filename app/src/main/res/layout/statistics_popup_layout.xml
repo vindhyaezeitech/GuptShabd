@@ -32,10 +32,11 @@
             android:textStyle="bold" />
 
         <ImageView
+            android:id="@+id/iv_cancel_btn"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/_25sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginRight="@dimen/_15sdp"
             android:src="@drawable/cancel_icon" />
 
@@ -553,7 +554,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_30sdp">
 
         <RelativeLayout
             android:layout_width="@dimen/_100sdp"
