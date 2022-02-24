@@ -326,7 +326,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * if word array same ad entered_word_array
+     * if word array same and entered_word_array
      *      Correct Word
      *      hit api, stop timer, disable keyboard, color all the answer boxes with green
      * Else check word in dictionary
