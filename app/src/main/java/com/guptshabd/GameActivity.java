@@ -1,14 +1,11 @@
 package com.guptshabd;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.guptshabd.ui.activity.GuptshabdActivity;
 import com.guptshabd.ui.activity.LeaderBoardActivity;
 import com.guptshabd.ui.activity.SettingsActivity;
 import com.guptshabd.ui.activity.ShabdamActivity;
@@ -194,7 +190,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.iv_trophy_btn:
-                startActivity(new Intent(this, LeaderBoardActivity.class));
+                Intent intent=new Intent(this, LeaderBoardActivity.class);
+                intent.putExtra("type","2");
+                startActivity(intent);
                 break;
 
             case R.id.iv_statistics_btn:
@@ -202,8 +200,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.iv_settings_btn:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
+                Intent intent1=new Intent(this, SettingsActivity.class);
+                intent1.putExtra("type","2");
+                startActivity(intent1);                break;
 
         }
     }

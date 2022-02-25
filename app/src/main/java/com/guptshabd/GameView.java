@@ -1,5 +1,9 @@
 package com.guptshabd;
 
+import com.guptshabd.model.Datum;
+
+import java.util.List;
+
 public interface GameView {
 
     void showProgress();
@@ -10,4 +14,7 @@ public interface GameView {
 
     }
 
+    default void onGetLeaderBoardListFetched(List<Datum> list){
+
+    }
 }

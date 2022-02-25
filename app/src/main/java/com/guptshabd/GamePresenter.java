@@ -1,5 +1,7 @@
 package com.guptshabd;
 
+import com.guptshabd.model.GetLeaderboardList;
+import com.guptshabd.model.GetLeaderboardRequest;
 import com.guptshabd.model.GetWordRequest;
 import com.guptshabd.network.ApiService;
 import com.guptshabd.network.RetrofitClient;
@@ -38,6 +40,30 @@ public class GamePresenter {
 
     }
 
+    public void fetchLeaderBoardList(){
+
+        GetLeaderboardRequest request=new GetLeaderboardRequest();
+        request.setGameUserId("1");
+
+        if(gameView != null){
+            gameView.showProgress();
+        }
+        compositeDisposable.add(apiService.getLeaderBoardAPIList(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if(response != null ){
+                        if(gameView != null){
+                            gameView.hideProgress();
+                        }
+                        gameView.onGetLeaderBoardListFetched(response.getData());
+                    }
+                }, throwable -> {
+
+                }));
+
+
+    }
 
 
     public void onDestroy(){

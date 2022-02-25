@@ -36,7 +36,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     startActivity(intent);
                     finish();
                     break;
-                } else {
+                } else if (type.equals("2")){
                     Intent intent = new Intent(this, GameActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
