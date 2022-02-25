@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.guptshabd.model.GetWordRequest;
 import com.guptshabd.model.getwordresp.Datum;
+import com.guptshabd.model.statistics.Data;
 import com.guptshabd.ui.activity.LeaderBoardActivity;
 import com.guptshabd.ui.activity.SettingsActivity;
 import com.guptshabd.ui.activity.ShabdamActivity;
@@ -51,7 +52,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private GamePresenter gamePresenter;
     private FrameLayout flLoading;
-
+    private TextView tv_played,tv_win,tv_current_streak,tv_max_streak;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,6 +222,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         ViewGroup viewGroup = findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.statistics_popup_layout, viewGroup, false);
         ImageView cancel_btn=dialogView.findViewById(R.id.iv_cancel_btn);
+        tv_played=dialogView.findViewById(R.id.tv_played);
+        tv_win=dialogView.findViewById(R.id.tv_win);
+        tv_current_streak=dialogView.findViewById(R.id.tv_current_streak);
+        tv_max_streak=dialogView.findViewById(R.id.tv_max_streak);
         builder.setView(dialogView);
         final android.app.AlertDialog alertDialog = builder.create();
         cancel_btn.setOnClickListener(new View.OnClickListener() {
@@ -572,6 +577,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
     @Override
     public void showProgress() {
         if(!isFinishing()){
@@ -600,5 +606,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         this.correctWord = datumCorrectWord.getWords();
         showMatraText();
         updateCurrentAttempt();
+    }
+
+    @Override
+    public void onStatisticsDataFetched(Data data) {
+        GameView.super.onStatisticsDataFetched(data);
+        tv_played.setText(data.getPlayed());
+        tv_current_streak.setText(data.getCurrentStreak());
+        tv_max_streak.setText(data.getMaxStreak());
+
+        int win= Integer.parseInt(data.getWin());
+        int total_played= Integer.parseInt(data.getPlayed());
+        int percent=(win/total_played)*100;
+        tv_win.setText(percent);
+        Log.d("Percentage",""+percent);
     }
 }

@@ -51,18 +51,21 @@
         android:weightSum="3">
 
         <RelativeLayout
+            android:id="@+id/rl_two"
             android:layout_width="0dp"
+            android:visibility="gone"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/_15sdp"
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/tv_name_two"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/iv_small_img"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/_2sdp"
-                android:text="@string/name"
+                android:text=""
                 android:textColor="@color/text_color_black"
                 android:textSize="@dimen/_13sdp" />
 
@@ -87,18 +90,21 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_one"
             android:layout_width="0dp"
+            android:visibility="gone"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/tv_name_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/iv_large_img"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/_2sdp"
-                android:text="@string/name1"
+                android:text=""
                 android:textColor="@color/text_color_black"
                 android:textSize="@dimen/_13sdp" />
 
@@ -125,19 +131,22 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_three"
             android:layout_width="0dp"
+            android:visibility="gone"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_15sdp"
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/tv_name_three"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/iv_mini_img"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/_2sdp"
-                android:text="@string/name2"
+                android:text=""
                 android:textColor="@color/text_color_black"
                 android:textSize="@dimen/_13sdp" />
 
@@ -182,12 +191,12 @@
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_getLeaderboard_List"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:id="@+id/rv_getLeaderboard_List"/>
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp" />
 
         <!--<LinearLayout
             android:layout_width="match_parent"
