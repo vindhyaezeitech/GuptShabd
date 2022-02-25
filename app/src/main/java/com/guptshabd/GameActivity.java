@@ -8,10 +8,14 @@ import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -52,11 +56,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private GamePresenter gamePresenter;
     private FrameLayout flLoading;
 
+    Animation animBlink;
+    int blinkCount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        // load the animation
+        animBlink = AnimationUtils.loadAnimation(this,
+                R.anim.blink);
         initViewClick();
 
         gamePresenter = new GamePresenter(this);
@@ -76,6 +86,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tvKa.setOnClickListener(this);
         tvCross.setOnClickListener(this);
         tvEnter.setOnClickListener(this);
+
+
+
+
+
         findViewById(R.id.tv_kha).setOnClickListener(this);
         findViewById(R.id.tv_ga).setOnClickListener(this);
         findViewById(R.id.tv_gha).setOnClickListener(this);
@@ -194,7 +209,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.rl_uttar_dekho_btn:
-                startActivity(new Intent(this, ShabdamActivity.class));
+                if(!TextUtils.isEmpty(correctWord)){
+                    Intent intent = new Intent(this, ShabdamActivity.class);
+                    intent.putExtra("word", correctWord);
+                    startActivity(intent);
+                }
                 break;
 
             case R.id.iv_question_mark_btn:
@@ -432,6 +451,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mapWord() {
         if (Arrays.equals(word_array, entered_word_array)) {
             updateGreenBoxes();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
+                    startActivity(intent);
+                }
+            }, 1000);
             return true;
         }// dictionary check is pending
         else {//check is letter are in word_array
@@ -600,5 +626,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         this.correctWord = datumCorrectWord.getWords();
         showMatraText();
         updateCurrentAttempt();
+        /*if(blinkCount == 0){
+            tvEnter.startAnimation(animBlink);
+            tvCross.startAnimation(animBlink);
+        }*/
     }
 }

@@ -15,7 +15,6 @@
         <entry key="..\:/Anil_Project/Shabdam/app/src/main/res/layout/activity_settings.xml" value="0.1796875" />
         <entry key="..\:/Anil_Project/Shabdam/app/src/main/res/layout/activity_shabdam.xml" value="0.1796875" />
         <entry key="..\:/Anil_Project/Shabdam/app/src/main/res/layout/activity_statistics.xml" value="0.1796875" />
-        <entry key="..\:/Anil_Project/Shabdam/app/src/main/res/layout/getleaderboard_item_list_layout.xml" value="0.1796875" />
         <entry key="..\:/Anil_Project/Shabdam/app/src/main/res/layout/kaise_khele_popup_layout.xml" value="0.1796875" />
         <entry key="..\:/Anil_Project/Shabdam/app/src/main/res/layout/statistics_popup_layout.xml" value="0.1796875" />
         <entry key="app/src/main/res/drawable/bg_answer.xml" value="0.201" />
@@ -25,6 +24,7 @@
         <entry key="app/src/main/res/drawable/bg_yellow.xml" value="0.207" />
         <entry key="app/src/main/res/layout/activity_game.xml" value="0.22007293701171876" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20290679931640626" />
+        <entry key="app/src/main/res/layout/activity_shabdam.xml" value="0.18795289855072464" />
       </map>
     </option>
   </component>

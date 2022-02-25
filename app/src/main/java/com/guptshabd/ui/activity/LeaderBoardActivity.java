@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.guptshabd.GameActivity;
@@ -52,12 +53,12 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back_btn: {
-                if (type.equals("1")) {
+                if (!TextUtils.isEmpty(type) && type.equals("1")) {
                     Intent intent = new Intent(this, ShabdamActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
-                }else if (type.equals("2")){
+                }else{
                     Intent intent = new Intent(this, GameActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
