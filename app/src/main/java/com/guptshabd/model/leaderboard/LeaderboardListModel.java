@@ -1,9 +1,9 @@
-package com.guptshabd.model;
+package com.guptshabd.model.leaderboard;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Datum {
+public class LeaderboardListModel {
     @SerializedName("id")
     @Expose
     private String id;

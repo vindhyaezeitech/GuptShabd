@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.guptshabd.R;
-import com.guptshabd.model.Datum;
+import com.guptshabd.model.leaderboard.LeaderboardListModel;
 
 import java.util.List;
 
 
 public class GetLeaderboardListAdapter extends RecyclerView.Adapter<GetLeaderboardListAdapter.ViewHolder> {
     private Context context;
-    private List<Datum> list;
+    private List<LeaderboardListModel> list;
 
 
-    public GetLeaderboardListAdapter(Context context, List<Datum> listData) {
+    public GetLeaderboardListAdapter(Context context, List<LeaderboardListModel> listData) {
         this.context = context;
         this.list=listData;
     }

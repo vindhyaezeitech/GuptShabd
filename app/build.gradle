@@ -21,7 +21,6 @@ android {
         }
         release {
             buildConfigField "String", "BASE_URL", '"https://alphamtappfeed.mobiletak.com/appapi/nt/"'
-
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

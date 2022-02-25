@@ -12,10 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.guptshabd.model.GetWordRequest;
+import com.guptshabd.model.getwordresp.Datum;
 import com.guptshabd.ui.activity.LeaderBoardActivity;
 import com.guptshabd.ui.activity.SettingsActivity;
 import com.guptshabd.ui.activity.ShabdamActivity;
@@ -46,20 +49,29 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     char[] charArray;
     private RelativeLayout rl_uttar_dekho_btn, continue_btn;
 
+    private GamePresenter gamePresenter;
+    private FrameLayout flLoading;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         initViewClick();
-        showMatraText();
-        updateCurrentAttempt();
+
+        gamePresenter = new GamePresenter(this);
+        GetWordRequest getWordRequest = new GetWordRequest();
+        getWordRequest.setUserId("1");
+        getWordRequest.setWordId(Arrays.asList("2","3"));
+        gamePresenter.fetchNewWord(getWordRequest);
+
     }
 
     private void initViewClick() {
         tvKa = findViewById(R.id.tv_ka);
         tvCross = findViewById(R.id.tv_cross);
         tvEnter = findViewById(R.id.tv_enter);
+        flLoading = findViewById(R.id.fl_loading);
 
         tvKa.setOnClickListener(this);
         tvCross.setOnClickListener(this);
@@ -190,9 +202,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.iv_trophy_btn:
-                Intent intent=new Intent(this, LeaderBoardActivity.class);
-                intent.putExtra("type","2");
-                startActivity(intent);
+                startActivity(new Intent(this, LeaderBoardActivity.class));
                 break;
 
             case R.id.iv_statistics_btn:
@@ -200,9 +210,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.iv_settings_btn:
-                Intent intent1=new Intent(this, SettingsActivity.class);
-                intent1.putExtra("type","2");
-                startActivity(intent1);                break;
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
 
         }
     }
@@ -222,7 +231,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setCancelable(false);
+
+        callgetStreakAPI();
         alertDialog.show();
+    }
+
+    private void callgetStreakAPI() {
+        gamePresenter=new GamePresenter(this);
+        gamePresenter.fetchStatisticsData();
     }
 
     private void kaiseKhelePopup() {
@@ -283,7 +299,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void submitText() {
-       // animate();
+        // animate();
         if (index == 0 || index % MAX_CHAR_LENGTH != 0) {
             ToastUtils.show(GameActivity.this, "Text is too short");
             return;
@@ -558,21 +574,31 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void showProgress() {
-
+        if(!isFinishing()){
+            flLoading.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void hideProgress() {
+        if(!isFinishing()){
+            flLoading.setVisibility(View.GONE);
+        }
 
     }
 
     @Override
     public void onError(String errorMsg) {
-
+        if(!isFinishing()){
+            flLoading.setVisibility(View.GONE);
+            ToastUtils.show(GameActivity.this, errorMsg);
+        }
     }
 
     @Override
-    public void onWordFetched() {
-
+    public void onWordFetched(Datum datumCorrectWord) {
+        this.correctWord = datumCorrectWord.getWords();
+        showMatraText();
+        updateCurrentAttempt();
     }
 }

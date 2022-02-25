@@ -1,11 +1,9 @@
-package com.guptshabd.model;
+package com.guptshabd.model.statistics;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-public class GetLeaderboardList {
+public class StatisticsMainModel {
     @SerializedName("status")
     @Expose
     private String status;
@@ -14,7 +12,7 @@ public class GetLeaderboardList {
     private String statusMessage;
     @SerializedName("data")
     @Expose
-    private List<Datum> data = null;
+    private Data data;
 
     public String getStatus() {
         return status;
@@ -32,13 +30,11 @@ public class GetLeaderboardList {
         this.statusMessage = statusMessage;
     }
 
-    public List<Datum> getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(List<Datum> data) {
+    public void setData(Data data) {
         this.data = data;
     }
-
-
 }

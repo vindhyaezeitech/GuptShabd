@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
 public class GetWordRequest implements Parcelable
 {
 
-    @SerializedName("user_id")
+    @SerializedName("game_user_id")
     @Expose
     private String userId;
     @SerializedName("word_id")

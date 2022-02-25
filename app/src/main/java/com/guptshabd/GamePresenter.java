@@ -1,7 +1,6 @@
 package com.guptshabd;
 
-import com.guptshabd.model.GetLeaderboardList;
-import com.guptshabd.model.GetLeaderboardRequest;
+import com.guptshabd.model.leaderboard.GetLeaderboardRequest;
 import com.guptshabd.model.GetWordRequest;
 import com.guptshabd.network.ApiService;
 import com.guptshabd.network.RetrofitClient;
@@ -27,11 +26,11 @@ public class GamePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-            if(response != null ){
+            if(response != null && response.getData() != null &&response.getData() != null && response.getData().size() > 0){
                 if(gameView != null){
                     gameView.hideProgress();
                 }
-                gameView.onWordFetched();
+                gameView.onWordFetched(response.getData().get(0));
             }
         }, throwable -> {
 
@@ -62,6 +61,28 @@ public class GamePresenter {
 
                 }));
 
+    }
+    public void fetchStatisticsData(){
+
+        GetLeaderboardRequest request=new GetLeaderboardRequest();
+        request.setGameUserId("1");
+
+        if(gameView != null){
+            gameView.showProgress();
+        }
+        compositeDisposable.add(apiService.getStreakData(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if(response != null ){
+                        if(gameView != null){
+                            gameView.hideProgress();
+                        }
+                        gameView.onStatisticsDataFetched(response.getData());
+                    }
+                }, throwable -> {
+
+                }));
 
     }
 

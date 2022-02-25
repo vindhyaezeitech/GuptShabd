@@ -12,7 +12,7 @@ import com.guptshabd.GameActivity;
 import com.guptshabd.GamePresenter;
 import com.guptshabd.GameView;
 import com.guptshabd.R;
-import com.guptshabd.model.Datum;
+import com.guptshabd.model.leaderboard.LeaderboardListModel;
 import com.guptshabd.ui.adapter.GetLeaderboardListAdapter;
 
 import java.util.List;
@@ -83,7 +83,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     }
 
     @Override
-    public void onGetLeaderBoardListFetched(List<Datum> list) {
+    public void onGetLeaderBoardListFetched(List<LeaderboardListModel> list) {
         adapter = new GetLeaderboardListAdapter(this, list);
         RecyclerView.LayoutManager layoutManagerLive = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManagerLive);
