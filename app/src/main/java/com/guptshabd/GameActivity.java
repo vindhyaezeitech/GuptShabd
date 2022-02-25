@@ -3,6 +3,9 @@ package com.guptshabd;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -27,7 +30,7 @@ import java.util.Arrays;
 /**
  * Main Activity
  */
-public class GameActivity extends AppCompatActivity implements View.OnClickListener {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener, GameView {
 
     private int index = 0;
     private int MAX_INDEX = 16;
@@ -281,6 +284,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void submitText() {
+       // animate();
         if (index == 0 || index % MAX_CHAR_LENGTH != 0) {
             ToastUtils.show(GameActivity.this, "Text is too short");
             return;
@@ -450,5 +454,126 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         for (int j = 0; j < btnIdList.size(); j++) {
             ((TextView) findViewById(btnIdList.get(j))).setBackgroundResource(R.drawable.bg_green_box);
         }
+    }
+
+    Animator.AnimatorListener animatorListener;
+    private void animate(){
+        try{
+
+
+            //visibleView.visible()
+            AnimatorSet flipOutAnimatorSet =
+                    (AnimatorSet) AnimatorInflater.loadAnimator(
+                            GameActivity.this,
+                            R.animator.flip_out
+                    );
+
+            AnimatorSet flipInAnimatorSet =
+                    (AnimatorSet) AnimatorInflater.loadAnimator(
+                            GameActivity.this,
+                            R.animator.flip_in
+                    );
+
+            //visibleView.visible()
+            AnimatorSet flipOutAnimatorSet2 =
+                    (AnimatorSet) AnimatorInflater.loadAnimator(
+                            GameActivity.this,
+                            R.animator.flip_out
+                    );
+
+            AnimatorSet flipInAnimatorSet2 =
+                    (AnimatorSet) AnimatorInflater.loadAnimator(
+                            GameActivity.this,
+                            R.animator.flip_in
+                    );
+
+            //visibleView.visible()
+            AnimatorSet flipOutAnimatorSet3 =
+                    (AnimatorSet) AnimatorInflater.loadAnimator(
+                            GameActivity.this,
+                            R.animator.flip_out
+                    );
+
+            AnimatorSet flipInAnimatorSet3 =
+                    (AnimatorSet) AnimatorInflater.loadAnimator(
+                            GameActivity.this,
+                            R.animator.flip_in
+                    );
+
+            flipOutAnimatorSet.setTarget(findViewById(R.id.et_1));
+            flipOutAnimatorSet2.setTarget(findViewById(R.id.et_2));
+            flipOutAnimatorSet3.setTarget(findViewById(R.id.et_3));
+
+            flipInAnimatorSet.setTarget(findViewById(R.id.et_1));
+            flipInAnimatorSet2.setTarget(findViewById(R.id.et_2));
+            flipInAnimatorSet3.setTarget(findViewById(R.id.et_3));
+
+            animatorListener = new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    if(animator == flipOutAnimatorSet){
+                        flipInAnimatorSet.start();
+                        flipOutAnimatorSet2.start();
+                    }else if( animator == flipOutAnimatorSet2){
+                        flipInAnimatorSet2.start();
+                        flipOutAnimatorSet3.start();
+                    }else {
+                        flipInAnimatorSet3.start();
+                    }
+
+
+                    ((TextView)findViewById(R.id.et_1)).setBackgroundResource(R.drawable.bg_green_box);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            };
+
+
+            flipOutAnimatorSet.start();
+
+
+            flipOutAnimatorSet.addListener(animatorListener);
+            flipOutAnimatorSet2.addListener(animatorListener);
+            flipOutAnimatorSet3.addListener(animatorListener);
+
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void onError(String errorMsg) {
+
+    }
+
+    @Override
+    public void onWordFetched() {
+
     }
 }
