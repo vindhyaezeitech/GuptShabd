@@ -13,7 +13,8 @@
         android:layout_height="@dimen/_50sdp"
         android:background="@drawable/radius_background"
         android:elevation="@dimen/_10sdp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -69,738 +70,755 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#F1F2FA">
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@color/white">
+            android:background="#F1F2FA">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="50dp">
-                <TextView
-                    android:id="@+id/et_1"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black"></TextView>
+                android:orientation="vertical"
+                android:background="@color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="50dp">
+                    <TextView
+                        android:id="@+id/et_1"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black"></TextView>
 
-                <TextView
-                    android:id="@+id/et_2"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black"></TextView>
+                    <TextView
+                        android:id="@+id/et_2"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black"></TextView>
 
-                <TextView
-                    android:id="@+id/et_3"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black"></TextView>
+                    <TextView
+                        android:id="@+id/et_3"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="2dp">
+                    <TextView
+                        android:id="@+id/et_4"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        ></TextView>
+
+                    <TextView
+                        android:id="@+id/et_5"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        ></TextView>
+
+                    <TextView
+                        android:id="@+id/et_6"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="2dp">
+                    <TextView
+                        android:id="@+id/et_7"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/et_8"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/et_9"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black">
+
+                    </TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="2dp">
+                    <TextView
+                        android:id="@+id/et_10"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/et_11"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/et_12"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black">
+
+                    </TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="2dp">
+                    <TextView
+                        android:id="@+id/et_13"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/et_14"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/et_15"
+                        android:layout_width="@dimen/answer_box_size"
+                        android:layout_height="@dimen/answer_box_size"
+                        android:background="@drawable/bg_answer"
+                        android:textSize="18dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:textColor="@color/black">
+
+                    </TextView>
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginLeft="@dimen/_15sdp"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:layout_marginBottom="16dp">
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:background="@drawable/box_radius"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:backgroundTint="@color/text_color_black">
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_marginTop="@dimen/_7sdp"
+                        android:background="@drawable/button_radius">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_13sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:text="@string/hint_text"
+                            android:textColor="@color/text_color_black"
+                            android:textSize="@dimen/_13sdp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:src="@drawable/hint_icon" />
+                    </RelativeLayout>
+
+
+                    <!--      <Button
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_alignParentLeft="true"
+                              android:layout_marginLeft="12dp"
+                              android:background="#000"
+                              android:text="हिंट">
+
+                          </Button>-->
+
+                    <!-- <Button
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_alignParentRight="true"
+                         android:layout_marginRight="12dp"
+                         android:background="#000"
+                         android:text="उत्तर देखो">
+
+                     </Button>-->
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:background="@drawable/box_radius"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:backgroundTint="@color/text_color_black">
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_uttar_dekho_btn"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/_7sdp"
+                        android:background="@drawable/button_radius">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_13sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:text="@string/answer_dekho_text"
+                            android:textColor="@color/text_color_black"
+                            android:textSize="@dimen/_13sdp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:src="@drawable/uttar_dekho_icon" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="2dp">
-                <TextView
-                    android:id="@+id/et_4"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    ></TextView>
-
-                <TextView
-                    android:id="@+id/et_5"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    ></TextView>
-
-                <TextView
-                    android:id="@+id/et_6"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black"></TextView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="2dp">
-                <TextView
-                    android:id="@+id/et_7"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/et_8"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/et_9"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black">
-
-                </TextView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="2dp">
-                <TextView
-                    android:id="@+id/et_10"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/et_11"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/et_12"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black">
-
-                </TextView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="2dp">
-                <TextView
-                    android:id="@+id/et_13"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/et_14"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/et_15"
-                    android:layout_width="@dimen/answer_box_size"
-                    android:layout_height="@dimen/answer_box_size"
-                    android:background="@drawable/bg_answer"
-                    android:textSize="18dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/black">
-
-                </TextView>
-            </LinearLayout>
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:layout_marginLeft="@dimen/_15sdp"
-                android:layout_marginRight="@dimen/_15sdp"
-                android:layout_marginBottom="16dp">
+                android:layout_height="0dp"
+                android:layout_weight="1"
 
-                <RelativeLayout
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_35sdp"
-                    android:background="@drawable/box_radius"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:backgroundTint="@color/text_color_black">
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_35sdp"
-                    android:layout_marginTop="@dimen/_7sdp"
-                    android:background="@drawable/button_radius">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_13sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:text="@string/hint_text"
-                        android:textColor="@color/text_color_black"
-                        android:textSize="@dimen/_13sdp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:src="@drawable/hint_icon" />
-                </RelativeLayout>
-
-
-                <!--      <Button
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_alignParentLeft="true"
-                          android:layout_marginLeft="12dp"
-                          android:background="#000"
-                          android:text="हिंट">
-
-                      </Button>-->
-
-               <!-- <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="12dp"
-                    android:background="#000"
-                    android:text="उत्तर देखो">
-
-                </Button>-->
-
-                <RelativeLayout
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_35sdp"
-                    android:background="@drawable/box_radius"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:backgroundTint="@color/text_color_black">
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_uttar_dekho_btn"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_35sdp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="@dimen/_7sdp"
-                    android:background="@drawable/button_radius">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_13sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:text="@string/answer_dekho_text"
-                        android:textColor="@color/text_color_black"
-                        android:textSize="@dimen/_13sdp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:src="@drawable/uttar_dekho_icon" />
-                </RelativeLayout>
-
-            </RelativeLayout>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-
-            >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
-                android:orientation="vertical">
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="12dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_ka"
-                        style="@style/key_style_default"
-                        android:text="क" />
-
-                    <TextView
-                        android:id="@+id/tv_kha"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ख" />
-
-                    <TextView
-                        android:id="@+id/tv_ga"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ग" />
-
-                    <TextView
-                        android:id="@+id/tv_gha"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="घ" />
-
-                    <TextView
-                        android:id="@+id/tv_anga"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ङ" />
-
-                    <TextView
-                        android:id="@+id/tv_cha"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="च" />
-
-                    <TextView
-                        android:id="@+id/tv_chah"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="छ" />
-
-                    <TextView
-                        android:id="@+id/tv_ja"
-                        style="@style/key_style_default"
-                        android:text="ज" />
-
-                    <TextView
-                        android:id="@+id/tv_jha"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="झ" />
-
-                    <TextView
-                        android:id="@+id/tv_ea"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ञ" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginRight="12dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-
-                    <TextView
-                        android:id="@+id/tv_ta"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ट" />
-
-                    <TextView
-                        android:id="@+id/tdha"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ठ" />
-
-                    <TextView
-                        android:id="@+id/tv_da"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ड" />
-
-                    <TextView
-                        android:id="@+id/tv_dha"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ढ" />
-
-                    <TextView
-                        android:id="@+id/tv_ada"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ण" />
-
-                    <TextView
-                        android:id="@+id/tv_tea"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="त" />
-
-                    <TextView
-                        android:id="@+id/tv_tha"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="थ" />
-
-                    <TextView
-                        android:id="@+id/tv_dea"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="द" />
-
-                    <TextView
-                        android:id="@+id/tv_dhea"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ध" />
-
-                    <TextView
-                        android:id="@+id/tv_na"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="न" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginRight="12dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-
-                    <TextView
-                        android:id="@+id/tv_pa"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="प" />
-
-                    <TextView
-                        android:id="@+id/tv_fa"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="फ" />
-
-                    <TextView
-                        android:id="@+id/tv_ba"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ब" />
-
-                    <TextView
-                        android:id="@+id/tv_bha"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="भ" />
-
-                    <TextView
-                        android:id="@+id/tv_ma"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="म" />
-
-                    <TextView
-                        android:id="@+id/tv_ya"
-                        style="@style/key_style_default"
-                        android:text="य"
-                        android:layout_marginLeft="4dp"
-                        />
-
-                    <TextView
-                        android:id="@+id/tv_ra"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="र" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginRight="12dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-
-                    <TextView
-                        android:id="@+id/tv_la"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ल" />
-
-                    <TextView
-                        android:id="@+id/tv_va"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="व" />
-
-                    <TextView
-                        android:id="@+id/tv_sha"
-                        style="@style/key_style_default"
-                        android:text="श"
-                        android:layout_marginLeft="4dp"
-                        />
-
-                    <TextView
-                        android:id="@+id/tv_skha"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ष" />
-
-                    <TextView
-                        android:id="@+id/tv_sa"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="स" />
-
-                    <TextView
-                        android:id="@+id/tv_ha"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ह" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginRight="12dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_chota_a"
-                        style="@style/key_style_default"
-                        android:text="अ" />
-
-                    <TextView
-                        android:id="@+id/tv_bada_a"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="आ" />
-
-                    <TextView
-                        android:id="@+id/tv_choti_e"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="इ" />
-
-                    <TextView
-                        android:id="@+id/tv_badi_e"
-                        style="@style/key_style_default"
-                        android:layout_marginLeft="4dp"
-                        android:text="ई" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:id="@+id/tv_enter"
-                        style="@style/key_style_default"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_weight="1"
-                        android:text="एंटर"
-
-                        />
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="12dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginRight="12dp"
-                            android:gravity="center_horizontal"
-                            android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/tv_ka"
+                            style="@style/key_style_default"
+                            android:text="क" />
 
-                            <TextView
-                                android:id="@+id/tv_chota_u"
-                                style="@style/key_style_default"
-                                android:text="उ" />
+                        <TextView
+                            android:id="@+id/tv_kha"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ख" />
 
-                            <TextView
-                                android:id="@+id/tv_bada_u"
-                                style="@style/key_style_default"
-                                android:layout_marginLeft="4dp"
-                                android:text="ऊ" />
+                        <TextView
+                            android:id="@+id/tv_ga"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ग" />
 
-                            <TextView
-                                android:id="@+id/tv_rishi"
-                                style="@style/key_style_default"
-                                android:layout_marginLeft="4dp"
-                                android:text="ऋ" />
+                        <TextView
+                            android:id="@+id/tv_gha"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="घ" />
 
-                            <TextView
-                                android:id="@+id/tv_lira"
-                                style="@style/key_style_default"
-                                android:layout_marginLeft="4dp"
-                                android:text="ऌ" />
+                        <TextView
+                            android:id="@+id/tv_anga"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ङ" />
 
+                        <TextView
+                            android:id="@+id/tv_cha"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="च" />
 
-                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_chah"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="छ" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginRight="12dp"
-                            android:gravity="center_horizontal"
-                            android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/tv_ja"
+                            style="@style/key_style_default"
+                            android:text="ज" />
 
-                            <TextView
-                                android:id="@+id/tv_chot_ae"
-                                style="@style/key_style_default"
-                                android:text="ए" />
+                        <TextView
+                            android:id="@+id/tv_jha"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="झ" />
 
-                            <TextView
-                                android:id="@+id/tv_bada_ae"
-                                style="@style/key_style_default"
-                                android:layout_marginLeft="4dp"
-                                android:text="ऐ" />
+                        <TextView
+                            android:id="@+id/tv_ea"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ञ" />
 
-                            <TextView
-                                android:id="@+id/tv_chota_o"
-                                style="@style/key_style_default"
-                                android:layout_marginLeft="4dp"
-                                android:text="ओ" />
-
-                            <TextView
-                                android:id="@+id/tv_bada_o"
-                                style="@style/key_style_default"
-                                android:layout_marginLeft="4dp"
-                                android:text="औ" />
-
-                        </LinearLayout>
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tv_cross"
-                        style="@style/key_style_default"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
                         android:layout_marginTop="4dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_weight="1"
-                        android:text="X" />
+                        android:layout_marginRight="12dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
 
+
+                        <TextView
+                            android:id="@+id/tv_ta"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ट" />
+
+                        <TextView
+                            android:id="@+id/tdha"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ठ" />
+
+                        <TextView
+                            android:id="@+id/tv_da"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ड" />
+
+                        <TextView
+                            android:id="@+id/tv_dha"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ढ" />
+
+                        <TextView
+                            android:id="@+id/tv_ada"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ण" />
+
+                        <TextView
+                            android:id="@+id/tv_tea"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="त" />
+
+                        <TextView
+                            android:id="@+id/tv_tha"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="थ" />
+
+                        <TextView
+                            android:id="@+id/tv_dea"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="द" />
+
+                        <TextView
+                            android:id="@+id/tv_dhea"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ध" />
+
+                        <TextView
+                            android:id="@+id/tv_na"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="न" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="12dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:id="@+id/tv_pa"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="प" />
+
+                        <TextView
+                            android:id="@+id/tv_fa"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="फ" />
+
+                        <TextView
+                            android:id="@+id/tv_ba"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ब" />
+
+                        <TextView
+                            android:id="@+id/tv_bha"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="भ" />
+
+                        <TextView
+                            android:id="@+id/tv_ma"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="म" />
+
+                        <TextView
+                            android:id="@+id/tv_ya"
+                            style="@style/key_style_default"
+                            android:text="य"
+                            android:layout_marginLeft="4dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_ra"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="र" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="12dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:id="@+id/tv_la"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ल" />
+
+                        <TextView
+                            android:id="@+id/tv_va"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="व" />
+
+                        <TextView
+                            android:id="@+id/tv_sha"
+                            style="@style/key_style_default"
+                            android:text="श"
+                            android:layout_marginLeft="4dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_skha"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ष" />
+
+                        <TextView
+                            android:id="@+id/tv_sa"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="स" />
+
+                        <TextView
+                            android:id="@+id/tv_ha"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ह" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="12dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_chota_a"
+                            style="@style/key_style_default"
+                            android:text="अ" />
+
+                        <TextView
+                            android:id="@+id/tv_bada_a"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="आ" />
+
+                        <TextView
+                            android:id="@+id/tv_choti_e"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="इ" />
+
+                        <TextView
+                            android:id="@+id/tv_badi_e"
+                            style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+                            android:text="ई" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:id="@+id/tv_enter"
+                            style="@style/key_style_default"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_weight="1"
+                            android:text="एंटर"
+
+                            />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginRight="12dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_chota_u"
+                                    style="@style/key_style_default"
+                                    android:text="उ" />
+
+                                <TextView
+                                    android:id="@+id/tv_bada_u"
+                                    style="@style/key_style_default"
+                                    android:layout_marginLeft="4dp"
+                                    android:text="ऊ" />
+
+                                <TextView
+                                    android:id="@+id/tv_rishi"
+                                    style="@style/key_style_default"
+                                    android:layout_marginLeft="4dp"
+                                    android:text="ऋ" />
+
+                                <TextView
+                                    android:id="@+id/tv_lira"
+                                    style="@style/key_style_default"
+                                    android:layout_marginLeft="4dp"
+                                    android:text="ऌ" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginRight="12dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_chot_ae"
+                                    style="@style/key_style_default"
+                                    android:text="ए" />
+
+                                <TextView
+                                    android:id="@+id/tv_bada_ae"
+                                    style="@style/key_style_default"
+                                    android:layout_marginLeft="4dp"
+                                    android:text="ऐ" />
+
+                                <TextView
+                                    android:id="@+id/tv_chota_o"
+                                    style="@style/key_style_default"
+                                    android:layout_marginLeft="4dp"
+                                    android:text="ओ" />
+
+                                <TextView
+                                    android:id="@+id/tv_bada_o"
+                                    style="@style/key_style_default"
+                                    android:layout_marginLeft="4dp"
+                                    android:text="औ" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_cross"
+                            style="@style/key_style_default"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_weight="1"
+                            android:text="X" />
+
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-    </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#aaffffff">
+            <ProgressBar
+                android:layout_gravity="center"
+                android:layout_width="@dimen/_48sdp"
+                android:layout_height="@dimen/_48sdp">
+
+            </ProgressBar>
+        </FrameLayout>
+    </FrameLayout>
 
 </LinearLayout>

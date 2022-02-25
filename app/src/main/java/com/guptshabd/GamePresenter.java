@@ -25,11 +25,11 @@ public class GamePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-            if(response != null ){
+            if(response != null && response.getData() != null &&response.getData() != null && response.getData().size() > 0){
                 if(gameView != null){
                     gameView.hideProgress();
                 }
-                gameView.onWordFetched();
+                gameView.onWordFetched(response.getData().get(0));
             }
         }, throwable -> {
 

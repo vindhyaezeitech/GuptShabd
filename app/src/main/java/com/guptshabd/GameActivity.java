@@ -1,25 +1,24 @@
 package com.guptshabd;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.guptshabd.ui.activity.GuptshabdActivity;
+import com.guptshabd.model.GetWordRequest;
+import com.guptshabd.model.getwordresp.Datum;
 import com.guptshabd.ui.activity.LeaderBoardActivity;
 import com.guptshabd.ui.activity.SettingsActivity;
 import com.guptshabd.ui.activity.ShabdamActivity;
@@ -50,20 +49,29 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     char[] charArray;
     private RelativeLayout rl_uttar_dekho_btn, continue_btn;
 
+    private GamePresenter gamePresenter;
+    private FrameLayout flLoading;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         initViewClick();
-        showMatraText();
-        updateCurrentAttempt();
+
+        gamePresenter = new GamePresenter(this);
+        GetWordRequest getWordRequest = new GetWordRequest();
+        getWordRequest.setUserId("1");
+        getWordRequest.setWordId(Arrays.asList("2","3"));
+        gamePresenter.fetchNewWord(getWordRequest);
+
     }
 
     private void initViewClick() {
         tvKa = findViewById(R.id.tv_ka);
         tvCross = findViewById(R.id.tv_cross);
         tvEnter = findViewById(R.id.tv_enter);
+        flLoading = findViewById(R.id.fl_loading);
 
         tvKa.setOnClickListener(this);
         tvCross.setOnClickListener(this);
@@ -559,21 +567,31 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void showProgress() {
-
+        if(!isFinishing()){
+            flLoading.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void hideProgress() {
+        if(!isFinishing()){
+            flLoading.setVisibility(View.GONE);
+        }
 
     }
 
     @Override
     public void onError(String errorMsg) {
-
+        if(!isFinishing()){
+            flLoading.setVisibility(View.GONE);
+            ToastUtils.show(GameActivity.this, errorMsg);
+        }
     }
 
     @Override
-    public void onWordFetched() {
-
+    public void onWordFetched(Datum datumCorrectWord) {
+        this.correctWord = datumCorrectWord.getWords();
+        showMatraText();
+        updateCurrentAttempt();
     }
 }
