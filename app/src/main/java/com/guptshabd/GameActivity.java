@@ -77,6 +77,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         getWordRequest.setWordId(Arrays.asList("2","3"));
         gamePresenter.fetchNewWord(getWordRequest);
 
+        if(GameApplication.getInstance().getHelpCount() == 0){
+            GameApplication.getInstance().setHelpCount(1);
+            kaiseKhelePopup();
+        }
+
     }
 
     private void initViewClick() {
@@ -411,22 +416,32 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showMatraText() {
-        charArray = correctWord.toCharArray();
-        matra[0] = new StringBuilder();
-        matra[1] = new StringBuilder();
-        matra[2] = new StringBuilder();
-        int count = 0;
-        boolean br = false;
-        for (int i = 0; i < charArray.length; i++) {
-            if (checkLetter(charArray[i])) {
-                word_array[count] = charArray[i];
-                count++;
-            } else {
-                matra[count - 1].append(charArray[i]);
-            }
+        try{
+            charArray = correctWord.toCharArray();
+            matra[0] = new StringBuilder();
+            matra[1] = new StringBuilder();
+            matra[2] = new StringBuilder();
+            int count = 0;
+            boolean br = false;
+            for (int i = 0; i < charArray.length; i++) {
+                if (checkLetter(charArray[i])) {
+                    word_array[count] = charArray[i];
+                    count++;
+                } else {
+                    matra[count - 1].append(charArray[i]);
+                }
 
+            }
+            Log.d("", matra.toString());
+        }catch (Exception e){
+            if(gamePresenter != null){
+                GetWordRequest getWordRequest = new GetWordRequest();
+                getWordRequest.setUserId("1");
+                getWordRequest.setWordId(Arrays.asList("2","3"));
+                gamePresenter.fetchNewWord(getWordRequest);
+            }
+            e.printStackTrace();
         }
-        Log.d("", matra.toString());
     }
 
     private boolean checkLetter(char c) {
@@ -644,8 +659,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         int win= Integer.parseInt(data.getWin());
         int total_played= Integer.parseInt(data.getPlayed());
-        int percent=(win/total_played)*100;
-        tv_win.setText(percent);
+        float percent=(win/total_played)*100f;
+        tv_win.setText(String.valueOf(percent));
         Log.d("Percentage",""+percent);
     }
 }

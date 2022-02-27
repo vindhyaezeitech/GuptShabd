@@ -102,10 +102,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_back_btn: {
-                Intent intent = new Intent(this, GameActivity.class);
-        switch (view.getId())
-        {
+
             case R.id.iv_back_btn:
             {
                 /*Intent intent = new Intent(this, GameActivity.class);
@@ -137,6 +134,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         }
 
     }
+
 
     private void statisticsPopup() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(ShabdamActivity.this, R.style.CustomAlertDialog);
