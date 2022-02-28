@@ -40,10 +40,10 @@ public class GamePresenter {
 
     }
 
-    public void fetchLeaderBoardList(){
+    public void fetchLeaderBoardList(String game_id){
 
         GetLeaderboardRequest request=new GetLeaderboardRequest();
-        request.setGameUserId("1");
+        request.setGameUserId(game_id);
 
         if(gameView != null){
             gameView.showProgress();
@@ -63,10 +63,9 @@ public class GamePresenter {
                 }));
 
     }
-    public void fetchStatisticsData(){
-
+    public void fetchStatisticsData(String game_id){
         GetLeaderboardRequest request=new GetLeaderboardRequest();
-        request.setGameUserId("1");
+        request.setGameUserId(game_id);
 
         if(gameView != null){
             gameView.showProgress();

@@ -16,6 +16,7 @@ import com.shabdamsdk.GamePresenter;
 import com.shabdamsdk.GameView;
 import com.shabdamsdk.R;
 import com.shabdamsdk.model.leaderboard.LeaderboardListModel;
+import com.shabdamsdk.pref.CommonPreference;
 import com.shabdamsdk.ui.adapter.GetLeaderboardListAdapter;
 
 import java.util.List;
@@ -53,9 +54,11 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     }
 
     private void callGetLeaderBoardListAPI() {
+        String game_id = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
+
         gamePresenter = new GamePresenter(this);
         //  compositeDisposable = interestPresenter.loadCategoryData();
-        gamePresenter.fetchLeaderBoardList();
+        gamePresenter.fetchLeaderBoardList(game_id);
     }
 
     @Override
@@ -67,9 +70,9 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
                 startActivity(intent);
                 finish();
             } else {
-                Intent intent = new Intent(this, GameActivity.class);
+               /* Intent intent = new Intent(this, GameActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                startActivity(intent);*/
                 finish();
             }
         }

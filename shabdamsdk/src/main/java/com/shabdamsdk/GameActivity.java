@@ -28,8 +28,6 @@ import com.shabdamsdk.model.statistics.Data;
 import com.shabdamsdk.pref.CommonPreference;
 import com.shabdamsdk.ui.activity.LeaderBoardActivity;
 import com.shabdamsdk.ui.activity.SettingsActivity;
-import com.shabdamsdk.ui.activity.LeaderBoardActivity;
-import com.shabdamsdk.ui.activity.SettingsActivity;
 import com.shabdamsdk.ui.activity.ShabdamActivity;
 
 import java.util.ArrayList;
@@ -120,8 +118,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.IS_FIRST_TIME, true);
             kaiseKhelePopup();
         }
-
-
     }
 
     private void initViewClick() {
@@ -243,8 +239,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void callgetStreakAPI() {
+        String game_id = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
         gamePresenter = new GamePresenter(this);
-        gamePresenter.fetchStatisticsData();
+        gamePresenter.fetchStatisticsData(game_id);
     }
 
     private void kaiseKhelePopup() {

@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.shabdamsdk.GameActivity;
 import com.shabdamsdk.GamePresenter;
 import com.shabdamsdk.GameView;
 import com.shabdamsdk.R;
 import com.shabdamsdk.model.statistics.Data;
+import com.shabdamsdk.pref.CommonPreference;
 
 public class ShabdamActivity extends AppCompatActivity implements GameView, View.OnClickListener {
     private GamePresenter gamePresenter;
@@ -34,7 +36,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shabdam);
-        if(getIntent().getExtras() != null){
+        if (getIntent().getExtras() != null) {
             correctWord = getIntent().getStringExtra("word");
             showMatraText();
         }
@@ -53,12 +55,12 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         tvTwo = findViewById(R.id.tv_two);
         tvThree = findViewById(R.id.tv_three);
 
-        try{
+        try {
             tvOne.setText(new StringBuilder().append(word_array[0]).append(matra[0]));
             tvTwo.setText(new StringBuilder().append(word_array[1]).append(matra[1]));
             tvThree.setText(new StringBuilder().append(word_array[2]).append(matra[2]));
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -66,7 +68,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     }
 
     private void showMatraText() {
-        try{
+        try {
             charArray = correctWord.toCharArray();
             matra[0] = new StringBuilder();
             matra[1] = new StringBuilder();
@@ -83,7 +85,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
 
             }
             Log.d("", matra.toString());
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -99,9 +101,15 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.iv_back_btn) {/*Intent intent = new Intent(this, GameActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);*/
+        if (id == R.id.iv_back_btn) {
+            Intent intent = new Intent(this, GameActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+            intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
+            intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
+            intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
+            intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
+            startActivity(intent);
             finish();
         } else if (id == R.id.iv_question_mark_btn) {
             kaiseKhelePopup();
@@ -116,7 +124,6 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
             intent1.putExtra("type", "1");
             startActivity(intent1);
         }
-
     }
 
 
@@ -145,8 +152,9 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     }
 
     private void callgetStreakAPI() {
+        String game_id = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
         gamePresenter = new GamePresenter(this);
-        gamePresenter.fetchStatisticsData();
+        gamePresenter.fetchStatisticsData(game_id);
     }
 
     private void kaiseKhelePopup() {

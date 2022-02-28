@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".ui.activity.ShabdamActivity">
 
     <LinearLayout
@@ -18,20 +18,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_12sdp"
             android:layout_toRightOf="@id/iv_back_btn"
             android:text="@string/shabdam_text"
             android:textColor="@color/text_color_black"
-            android:textSize="@dimen/_15sdp"
+            android:textSize="@dimen/_20sdp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/iv_question_mark_btn"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_12sdp"
             android:src="@drawable/question_mark_icon" />
 
         <RelativeLayout
@@ -43,7 +43,7 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/_15sdp"
                 android:src="@drawable/settings_icon" />
 
@@ -51,7 +51,7 @@
                 android:id="@+id/iv_statistics_btn"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/_15sdp"
                 android:layout_toLeftOf="@id/iv_settings_btn"
                 android:src="@drawable/statistics_icon" />
@@ -60,7 +60,7 @@
                 android:id="@+id/iv_trophy_btn"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/_15sdp"
                 android:layout_toLeftOf="@id/iv_statistics_btn"
                 android:src="@drawable/trophy_icon" />
@@ -111,7 +111,7 @@
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginRight="@dimen/_30sdp"
         android:orientation="horizontal"
-        android:weightSum="4">
+        android:weightSum="3">
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -175,7 +175,6 @@
         </RelativeLayout>
 
 
-
     </LinearLayout>
 
     <RelativeLayout
@@ -222,9 +221,9 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_below="@id/rl_agla_shabd_btn"
             android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_40sdp"
+            android:layout_below="@id/rl_agla_shabd_btn"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_35sdp"
             android:background="@drawable/box_radius"
