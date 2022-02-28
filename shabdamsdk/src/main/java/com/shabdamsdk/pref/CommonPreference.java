@@ -3,6 +3,7 @@ package com.shabdamsdk.pref;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 public class CommonPreference {
     private static final String SETTINGS_NAME = "shabdam_pref";
@@ -90,6 +91,54 @@ public class CommonPreference {
         return mPref.getInt(key, 0);
     }
 
+    private boolean isAddUser() {
+        return TextUtils.isEmpty(getString(Key.GAME_USER_ID));
+    }
+
+    public String getAddUser() {
+        return isAddUser() ? "" : getString(Key.GAME_USER_ID);
+    }
+
+    private boolean isUserid() {
+        return TextUtils.isEmpty(getString(Key.USER_ID));
+    }
+
+    public String getUserid() {
+        return isUserid() ? "" : getString(Key.USER_ID);
+    }
+
+    private boolean isName() {
+        return TextUtils.isEmpty(getString(Key.NAME));
+    }
+
+    public String getName() {
+        return isName() ? "" : getString(Key.NAME);
+    }
+
+    private boolean isUname() {
+        return TextUtils.isEmpty(getString(Key.UNAME));
+    }
+
+    public String getUname() {
+        return isUname() ? "" : getString(Key.UNAME);
+    }
+
+    private boolean isEmail() {
+        return TextUtils.isEmpty(getString(Key.EMAIL));
+    }
+
+    public String getEmail() {
+        return isEmail() ? "" : getString(Key.EMAIL);
+    }
+
+    private boolean isProfileImage() {
+        return TextUtils.isEmpty(getString(Key.PROFILE_IMAGE));
+    }
+
+    public String getProfileImage() {
+        return isProfileImage() ? "" : getString(Key.PROFILE_IMAGE);
+    }
+
     public void remove(String... keys) {
         doEdit();
         for (String key : keys) {
@@ -129,7 +178,7 @@ public class CommonPreference {
         }
     }
 
-    public class Key{
+    public class Key {
         public static final String USER_ID = "user_id";
         public static final String IS_FIRST_TIME = "is_first_time";
         public static final String NAME = "name";
