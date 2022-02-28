@@ -88,12 +88,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         getWordRequest.setWordId(Arrays.asList("2","3"));
         gamePresenter.fetchNewWord(getWordRequest);
 
-        /*if(GameApplication.getInstance().getHelpCount() == 0){
-            GameApplication.getInstance().setHelpCount(1);
-            kaiseKhelePopup();
-        }*/
-
-        kaiseKhelePopup();
+       if(!CommonPreference.getInstance(GameActivity.this).getBoolean(CommonPreference.Key.IS_FIRST_TIME)){
+           CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.IS_FIRST_TIME,true );
+           kaiseKhelePopup();
+       }
 
 
     }

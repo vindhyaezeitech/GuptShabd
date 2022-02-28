@@ -131,6 +131,7 @@ public class CommonPreference {
 
     public class Key{
         public static final String USER_ID = "user_id";
+        public static final String IS_FIRST_TIME = "is_first_time";
     }
 
 }
