@@ -6,7 +6,8 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.guptshabd.ui.activity.ShabdamActivity;
+import com.shabdamsdk.GameActivity;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,12 +15,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        GameApplication.getInstance().setHelpCount(0);
 
         Handler handler= new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, GameActivity.class));
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putExtra("user_id","1");
+                startActivity(intent);
                 finish();
             }
         },2000);
