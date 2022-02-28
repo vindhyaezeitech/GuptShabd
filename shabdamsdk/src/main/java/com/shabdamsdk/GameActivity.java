@@ -22,6 +22,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.shabdamsdk.model.GetWordRequest;
+import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.model.getwordresp.Datum;
 import com.shabdamsdk.model.statistics.Data;
 import com.shabdamsdk.pref.CommonPreference;
@@ -62,19 +63,39 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     Animation animBlink;
     int blinkCount;
-    private String userId;
+    private String userId, name, u_name, email, profile_image;
 
-    private TextView tv_played,tv_win,tv_current_streak,tv_max_streak;
+    private TextView tv_played, tv_win, tv_current_streak, tv_max_streak;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         // load the animation
-        if(getIntent().getExtras() != null ){
+        if (getIntent().getExtras() != null) {
             userId = getIntent().getStringExtra("user_id");
-            CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.USER_ID, userId);
-        }else {
+            name = getIntent().getStringExtra("name");
+            u_name = getIntent().getStringExtra("uname");
+            email = getIntent().getStringExtra("email");
+            profile_image = getIntent().getStringExtra("profile_image");
+
+            if (!TextUtils.isEmpty(userId)) {
+                CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.USER_ID, userId);
+            }
+
+            if (!TextUtils.isEmpty(name)) {
+                CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.NAME, name);
+            }
+            if (!TextUtils.isEmpty(u_name)) {
+                CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.UNAME, u_name);
+            }
+            if (!TextUtils.isEmpty(email)) {
+                CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.EMAIL, email);
+            }
+            if (!TextUtils.isEmpty(profile_image)) {
+                CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.PROFILE_IMAGE, profile_image);
+            }
+        } else {
             return;
         }
 
@@ -83,15 +104,22 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         initViewClick();
 
         gamePresenter = new GamePresenter(this);
-        GetWordRequest getWordRequest = new GetWordRequest();
-        getWordRequest.setUserId("1");
-        getWordRequest.setWordId(Arrays.asList("2","3"));
-        gamePresenter.fetchNewWord(getWordRequest);
 
-       if(!CommonPreference.getInstance(GameActivity.this).getBoolean(CommonPreference.Key.IS_FIRST_TIME)){
-           CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.IS_FIRST_TIME,true );
-           kaiseKhelePopup();
-       }
+        if (!TextUtils.isEmpty(userId))
+        {
+            AddUserRequest request=new AddUserRequest();
+            request.setUserId(userId);
+            request.setName(name);
+            request.setUname(u_name);
+            request.setEmail(email);
+            request.setProfileimage(profile_image);
+            gamePresenter.addUser(request);
+        }
+
+        if (!CommonPreference.getInstance(GameActivity.this).getBoolean(CommonPreference.Key.IS_FIRST_TIME)) {
+            CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.IS_FIRST_TIME, true);
+            kaiseKhelePopup();
+        }
 
 
     }
@@ -105,9 +133,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tvKa.setOnClickListener(this);
         tvCross.setOnClickListener(this);
         tvEnter.setOnClickListener(this);
-
-
-
 
 
         findViewById(R.id.tv_kha).setOnClickListener(this);
@@ -194,14 +219,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void statisticsPopup() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this,R.style.CustomAlertDialog);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this, R.style.CustomAlertDialog);
         ViewGroup viewGroup = findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.statistics_popup_layout, viewGroup, false);
-        ImageView cancel_btn=dialogView.findViewById(R.id.iv_cancel_btn);
-        tv_played=dialogView.findViewById(R.id.tv_played);
-        tv_win=dialogView.findViewById(R.id.tv_win);
-        tv_current_streak=dialogView.findViewById(R.id.tv_current_streak);
-        tv_max_streak=dialogView.findViewById(R.id.tv_max_streak);
+        ImageView cancel_btn = dialogView.findViewById(R.id.iv_cancel_btn);
+        tv_played = dialogView.findViewById(R.id.tv_played);
+        tv_win = dialogView.findViewById(R.id.tv_win);
+        tv_current_streak = dialogView.findViewById(R.id.tv_current_streak);
+        tv_max_streak = dialogView.findViewById(R.id.tv_max_streak);
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
         cancel_btn.setOnClickListener(new View.OnClickListener() {
@@ -218,15 +243,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void callgetStreakAPI() {
-        gamePresenter=new GamePresenter(this);
+        gamePresenter = new GamePresenter(this);
         gamePresenter.fetchStatisticsData();
     }
 
     private void kaiseKhelePopup() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this,R.style.CustomAlertDialog);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this, R.style.CustomAlertDialog);
         ViewGroup viewGroup = findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.kaise_khele_popup_layout, viewGroup, false);
-        RelativeLayout continue_btn=dialogView.findViewById(R.id.rl_continue_btn);
+        RelativeLayout continue_btn = dialogView.findViewById(R.id.rl_continue_btn);
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
         continue_btn.setOnClickListener(new View.OnClickListener() {
@@ -367,7 +392,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showMatraText() {
-        try{
+        try {
             charArray = correctWord.toCharArray();
             matra[0] = new StringBuilder();
             matra[1] = new StringBuilder();
@@ -384,11 +409,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             }
             Log.d("", matra.toString());
-        }catch (Exception e){
-            if(gamePresenter != null){
+        } catch (Exception e) {
+            if (gamePresenter != null) {
                 GetWordRequest getWordRequest = new GetWordRequest();
                 getWordRequest.setUserId("1");
-                getWordRequest.setWordId(Arrays.asList("2","3"));
+                getWordRequest.setWordId(Arrays.asList("2", "3"));
                 gamePresenter.fetchNewWord(getWordRequest);
             }
             e.printStackTrace();
@@ -470,8 +495,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     Animator.AnimatorListener animatorListener;
-    private void animate(){
-        try{
+
+    private void animate() {
+        try {
 
 
             //visibleView.visible()
@@ -529,18 +555,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void onAnimationEnd(Animator animator) {
-                    if(animator == flipOutAnimatorSet){
+                    if (animator == flipOutAnimatorSet) {
                         flipInAnimatorSet.start();
                         flipOutAnimatorSet2.start();
-                    }else if( animator == flipOutAnimatorSet2){
+                    } else if (animator == flipOutAnimatorSet2) {
                         flipInAnimatorSet2.start();
                         flipOutAnimatorSet3.start();
-                    }else {
+                    } else {
                         flipInAnimatorSet3.start();
                     }
 
 
-                    ((TextView)findViewById(R.id.et_1)).setBackgroundResource(R.drawable.bg_green_box);
+                    ((TextView) findViewById(R.id.et_1)).setBackgroundResource(R.drawable.bg_green_box);
                 }
 
                 @Override
@@ -563,9 +589,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             flipOutAnimatorSet3.addListener(animatorListener);
 
 
-
-
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -573,14 +597,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void showProgress() {
-        if(!isFinishing()){
+        if (!isFinishing()) {
             flLoading.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void hideProgress() {
-        if(!isFinishing()){
+        if (!isFinishing()) {
             flLoading.setVisibility(View.GONE);
         }
 
@@ -588,7 +612,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onError(String errorMsg) {
-        if(!isFinishing()){
+        if (!isFinishing()) {
             flLoading.setVisibility(View.GONE);
             ToastUtils.show(GameActivity.this, errorMsg);
         }
@@ -608,10 +632,25 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tv_current_streak.setText(data.getCurrentStreak());
         tv_max_streak.setText(data.getMaxStreak());
 
-        int win= Integer.parseInt(data.getWin());
-        int total_played= Integer.parseInt(data.getPlayed());
-        float percent=(win/total_played)*100f;
+        int win = Integer.parseInt(data.getWin());
+        int total_played = Integer.parseInt(data.getPlayed());
+        float percent = (win / total_played) * 100f;
         tv_win.setText(String.valueOf(percent));
-        Log.d("Percentage",""+percent);
+        Log.d("Percentage", "" + percent);
+    }
+
+    @Override
+    public void onAddUser(com.shabdamsdk.model.adduser.Data data) {
+        if (data != null) {
+            if (data.getId() !=0)
+            {
+                CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
+                GetWordRequest getWordRequest = new GetWordRequest();
+                getWordRequest.setUserId(String.valueOf(data.getId()));
+                getWordRequest.setWordId(Arrays.asList("2", "3"));
+                gamePresenter.fetchNewWord(getWordRequest);
+            }
+        }
+
     }
 }

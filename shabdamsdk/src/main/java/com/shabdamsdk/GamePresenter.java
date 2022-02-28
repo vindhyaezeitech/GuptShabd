@@ -1,6 +1,7 @@
 package com.shabdamsdk;
 
 import com.shabdamsdk.model.GetWordRequest;
+import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
 import com.shabdamsdk.network.ApiService;
 import com.shabdamsdk.network.RetrofitClient;
@@ -86,6 +87,26 @@ public class GamePresenter {
 
     }
 
+    public void addUser(AddUserRequest addUserRequest){
+
+        if(gameView != null){
+            gameView.showProgress();
+        }
+        compositeDisposable.add(apiService.addUser(addUserRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if(response != null ){
+                        if(gameView != null){
+                            gameView.hideProgress();
+                        }
+                        gameView.onAddUser(response.getData());
+                    }
+                }, throwable -> {
+
+                }));
+
+    }
 
     public void onDestroy(){
 

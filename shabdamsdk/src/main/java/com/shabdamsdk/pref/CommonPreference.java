@@ -132,6 +132,11 @@ public class CommonPreference {
     public class Key{
         public static final String USER_ID = "user_id";
         public static final String IS_FIRST_TIME = "is_first_time";
+        public static final String NAME = "name";
+        public static final String UNAME = "uname";
+        public static final String EMAIL = "email";
+        public static final String PROFILE_IMAGE = "profile_image";
+        public static final String GAME_USER_ID = "game_user_id";
     }
 
 }

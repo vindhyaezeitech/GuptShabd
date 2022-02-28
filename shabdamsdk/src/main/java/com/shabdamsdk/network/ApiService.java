@@ -1,6 +1,8 @@
 package com.shabdamsdk.network;
 
 import com.shabdamsdk.model.GetWordRequest;
+import com.shabdamsdk.model.adduser.AddUserRequest;
+import com.shabdamsdk.model.adduser.AddUserResponse;
 import com.shabdamsdk.model.getwordresp.GetWordResponse;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardList;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
@@ -20,5 +22,8 @@ public interface ApiService {
 
     @POST("get_streak")
     Observable<StatisticsMainModel> getStreakData(@Body GetLeaderboardRequest body);
+
+    @POST("add_gameuser")
+    Observable<AddUserResponse> addUser(@Body AddUserRequest body);
 
 }

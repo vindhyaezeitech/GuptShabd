@@ -16,13 +16,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         GameApplication.getInstance().setHelpCount(0);
-
         Handler handler= new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
                 intent.putExtra("user_id","1");
+                intent.putExtra("name","vikash");
+                intent.putExtra("uname","vikash");
+                intent.putExtra("email","vikash@mailinator.com");
+                intent.putExtra("profile_image","");
                 startActivity(intent);
                 finish();
             }

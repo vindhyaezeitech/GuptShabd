@@ -24,4 +24,8 @@ public interface GameView {
     default void onStatisticsDataFetched(Data data){
 
     }
+
+    default void onAddUser(com.shabdamsdk.model.adduser.Data data){
+
+    }
 }
