@@ -6,7 +6,8 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.guptshabd.ui.activity.ShabdamActivity;
+import com.shabdamsdk.GameActivity;
+
 
 public class MainActivity extends AppCompatActivity {
 

@@ -14,27 +14,8 @@
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.GuptShabd">
-        <activity
-            android:name=".ui.activity.ShabdamActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.StatisticsActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.LeaderBoardActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.SettingsActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".GameActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+        android:theme="@style/Theme.Design.Light.NoActionBar">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

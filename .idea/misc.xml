@@ -25,6 +25,9 @@
         <entry key="app/src/main/res/layout/activity_game.xml" value="0.22007293701171876" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20290679931640626" />
         <entry key="app/src/main/res/layout/activity_shabdam.xml" value="0.18795289855072464" />
+        <entry key="shabdamsdk/src/main/res/drawable/box_radius.xml" value="0.111" />
+        <entry key="shabdamsdk/src/main/res/layout/activity_game.xml" value="0.1" />
+        <entry key="shabdamsdk/src/main/res/layout/activity_shabdam.xml" value="0.1" />
       </map>
     </option>
   </component>
