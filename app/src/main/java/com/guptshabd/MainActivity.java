@@ -21,7 +21,9 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, GameActivity.class));
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putExtra("user_id","1");
+                startActivity(intent);
                 finish();
             }
         },2000);

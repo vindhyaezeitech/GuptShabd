@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.shabdamsdk.model.GetWordRequest;
 import com.shabdamsdk.model.getwordresp.Datum;
 import com.shabdamsdk.model.statistics.Data;
+import com.shabdamsdk.pref.CommonPreference;
 import com.shabdamsdk.ui.activity.LeaderBoardActivity;
 import com.shabdamsdk.ui.activity.SettingsActivity;
 import com.shabdamsdk.ui.activity.LeaderBoardActivity;
@@ -61,6 +62,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     Animation animBlink;
     int blinkCount;
+    private String userId;
 
     private TextView tv_played,tv_win,tv_current_streak,tv_max_streak;
 
@@ -69,6 +71,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         // load the animation
+        if(getIntent().getExtras() != null ){
+            userId = getIntent().getStringExtra("user_id");
+            CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.USER_ID, userId);
+        }else {
+            return;
+        }
+
         animBlink = AnimationUtils.loadAnimation(this,
                 R.anim.blink);
         initViewClick();
