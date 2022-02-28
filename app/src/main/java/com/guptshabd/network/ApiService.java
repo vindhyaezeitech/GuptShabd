@@ -12,7 +12,4 @@ public interface ApiService {
 
     @POST("get_words")
     Observable<GetWordResponse> fetchNewWord(@Body GetWordRequest body);
-
-
-
 }
