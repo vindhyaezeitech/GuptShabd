@@ -5,8 +5,10 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,11 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.shabdamsdk.model.GetWordRequest;
@@ -32,6 +37,7 @@ import com.shabdamsdk.ui.activity.ShabdamActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Main Activity
@@ -55,16 +61,20 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     StringBuilder[] matra = new StringBuilder[3];
     char[] charArray;
-    private RelativeLayout rl_uttar_dekho_btn, continue_btn;
+    private RelativeLayout rl_uttar_dekho_btn, continue_btn, agla_shabd_btn;
 
     private GamePresenter gamePresenter;
     private FrameLayout flLoading;
+    private boolean mTimingRunning;
 
     Animation animBlink;
     int blinkCount;
     private String userId, name, u_name, email, profile_image;
+    private TextView tv_played, tv_win, tv_current_streak, tv_max_streak,tv_timer_counter_text;
+    private Chronometer tv_timer_text;
+    private long pauseOffset, minutes, seconds;
+    private String minute, second;
 
-    private TextView tv_played, tv_win, tv_current_streak, tv_max_streak;
 
     private int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
             R.id.tv_cha, R.id.tv_chah, R.id.tv_ja, R.id.tv_jha, R.id.tv_ea,
@@ -130,11 +140,65 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void gameTimer() {
+        tv_timer_text.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                if ((SystemClock.elapsedRealtime() - tv_timer_text.getBase() >= 3600000)) {
+                    tv_timer_text.setBase(SystemClock.elapsedRealtime());
+                    Toast.makeText(GameActivity.this, "Game Finished!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        startTimer();
+    }
+
+    private void startTimer() {
+        if (!mTimingRunning) {
+            tv_timer_text.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+            tv_timer_text.start();
+            mTimingRunning = true;
+        }
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gameTimer();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mTimingRunning) {
+            int time;
+            tv_timer_text.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
+            mTimingRunning = false;
+            time = Math.toIntExact(pauseOffset);
+            minutes = TimeUnit.MILLISECONDS.toMinutes(time);
+            seconds = TimeUnit.MILLISECONDS.toSeconds(time);
+            minute = String.valueOf(minutes);
+            second = String.valueOf(seconds);
+            Log.d("game", String.valueOf(minute));
+            Log.d("game", String.valueOf(second));
+        }
+    }
+
     private void initViewClick() {
         tvKa = findViewById(R.id.tv_ka);
         tvCross = findViewById(R.id.tv_cross);
         tvEnter = findViewById(R.id.tv_enter);
         flLoading = findViewById(R.id.fl_loading);
+        agla_shabd_btn = findViewById(R.id.rl_agla_shabd_btn);
+        tv_timer_text = findViewById(R.id.tv_timer_text);
 
         tvKa.setOnClickListener(this);
         tvCross.setOnClickListener(this);
@@ -195,6 +259,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -208,9 +273,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.tv_enter) {
             submitText();
         } else if (id == R.id.rl_uttar_dekho_btn) {
+            if (mTimingRunning) {
+                int time;
+                tv_timer_text.stop();
+                pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
+                mTimingRunning = false;
+                time = Math.toIntExact(pauseOffset);
+                minutes = TimeUnit.MILLISECONDS.toMinutes(time);
+                seconds = TimeUnit.MILLISECONDS.toSeconds(time);
+                minute = String.valueOf(minutes);
+                second = String.valueOf(seconds);
+                Log.d("game", String.valueOf(minute));
+                Log.d("game", String.valueOf(second));
+            }
             if (!TextUtils.isEmpty(correctWord)) {
                 Intent intent = new Intent(this, ShabdamActivity.class);
                 intent.putExtra("word", correctWord);
+                intent.putExtra("minute", minute);
+                intent.putExtra("second", second);
                 startActivity(intent);
             }
         } else if (id == R.id.iv_question_mark_btn) {
@@ -221,12 +301,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             statisticsPopup();
         } else if (id == R.id.iv_settings_btn) {
             startActivity(new Intent(this, SettingsActivity.class));
-        } else if(id == R.id.rl_hint){
+        } else if (id == R.id.rl_hint) {
             showHint();
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void statisticsPopup() {
+        if (mTimingRunning) {
+            int time;
+            tv_timer_text.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
+            mTimingRunning = false;
+            time = Math.toIntExact(pauseOffset);
+            minutes = TimeUnit.MILLISECONDS.toMinutes(time);
+            seconds = TimeUnit.MILLISECONDS.toSeconds(time);
+            minute = String.valueOf(minutes);
+            second = String.valueOf(seconds);
+            Log.d("game", String.valueOf(minute));
+            Log.d("game", String.valueOf(second));
+        }
         final AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this, R.style.CustomAlertDialog);
         ViewGroup viewGroup = findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.statistics_popup_layout, viewGroup, false);
@@ -235,11 +329,34 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tv_win = dialogView.findViewById(R.id.tv_win);
         tv_current_streak = dialogView.findViewById(R.id.tv_current_streak);
         tv_max_streak = dialogView.findViewById(R.id.tv_max_streak);
+        agla_shabd_btn = dialogView.findViewById(R.id.rl_agla_shabd_btn);
+        tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
+        tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
+
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tv_timer_text.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+                tv_timer_text.start();
+                mTimingRunning = true;
+                alertDialog.dismiss();
+            }
+        });
+
+        agla_shabd_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!TextUtils.isEmpty(userId)) {
+                    AddUserRequest request = new AddUserRequest();
+                    request.setUserId(userId);
+                    request.setName(name);
+                    request.setUname(u_name);
+                    request.setEmail(email);
+                    request.setProfileimage(profile_image);
+                    gamePresenter.addUser(request);
+                }
                 alertDialog.dismiss();
             }
         });
@@ -589,7 +706,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
 
-                    ((TextView) findViewById(R.id.et_1)).setBackgroundResource(R.drawable.bg_green_box);
+                    findViewById(R.id.et_1).setBackgroundResource(R.drawable.bg_green_box);
                 }
 
                 @Override
@@ -655,18 +772,20 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tv_current_streak.setText(data.getCurrentStreak());
         tv_max_streak.setText(data.getMaxStreak());
 
-        int win = Integer.parseInt(data.getWin());
-        int total_played = Integer.parseInt(data.getPlayed());
-        float percent = (win / total_played) * 100f;
-        tv_win.setText(String.valueOf(percent));
-        Log.d("Percentage", "" + percent);
+        if (data.getWin().equals("0") || data.getPlayed().equals("0")) {
+            tv_win.setText("0");
+        } else {
+            int win = Integer.parseInt(data.getWin());
+            int total_played = Integer.parseInt(data.getPlayed());
+            float percent = (win / total_played) * 100f;
+            tv_win.setText(String.valueOf(percent));
+        }
     }
 
     @Override
     public void onAddUser(com.shabdamsdk.model.adduser.Data data) {
         if (data != null) {
-            if (data.getId() !=0)
-            {
+            if (data.getId() != 0) {
                 CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
                 GetWordRequest getWordRequest = new GetWordRequest();
                 getWordRequest.setUserId(String.valueOf(data.getId()));
@@ -696,6 +815,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[hintCount-1]).append(matra[hintCount-1]));
+            updateWordCharArray(String.valueOf(word_array[hintCount-1]));
             int id = getKeyId(String.valueOf(word_array[hintCount-1]));
             if( id != -1){
                 btnIdList.add(id);

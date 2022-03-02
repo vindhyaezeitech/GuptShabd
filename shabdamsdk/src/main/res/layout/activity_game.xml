@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -301,7 +300,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_45sdp"
                     android:layout_marginLeft="@dimen/_15sdp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="@dimen/_15sdp"
@@ -362,6 +361,27 @@
                          android:text="उत्तर देखो">
 
                      </Button>-->
+
+                    <ImageView
+                        android:id="@+id/iv_timer_icon"
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
+                        android:layout_marginLeft="@dimen/_30sdp"
+                        android:layout_marginTop="@dimen/_18sdp"
+                        android:layout_toRightOf="@id/rl_hint"
+                        android:src="@drawable/timer_icon" />
+
+                    <Chronometer
+                        android:id="@+id/tv_timer_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_18sdp"
+                        android:layout_marginRight="@dimen/_35sdp"
+                        android:layout_toRightOf="@id/iv_timer_icon"
+                        android:text=""
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/_13sdp" />
 
                     <RelativeLayout
                         android:layout_width="@dimen/_100sdp"
@@ -427,8 +447,7 @@
                         <TextView
                             android:id="@+id/tv_ka"
                             style="@style/key_style_default"
-                            android:text="क"
-                            />
+                            android:text="क" />
 
                         <TextView
                             android:id="@+id/tv_kha"
@@ -756,42 +775,42 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-<!--
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="12dp"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginRight="12dp"
-                                android:gravity="center_horizontal"
-                                android:orientation="horizontal">
+                            <!--
+                                                        <LinearLayout
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_marginLeft="12dp"
+                                                            android:layout_marginTop="4dp"
+                                                            android:layout_marginRight="12dp"
+                                                            android:gravity="center_horizontal"
+                                                            android:orientation="horizontal">
 
-                                <TextView
-                                    android:id="@+id/tv_chota_u"
-                                    style="@style/key_style_default"
-                                    android:text="उ" />
+                                                            <TextView
+                                                                android:id="@+id/tv_chota_u"
+                                                                style="@style/key_style_default"
+                                                                android:text="उ" />
 
-                                <TextView
-                                    android:id="@+id/tv_bada_u"
-                                    style="@style/key_style_default"
-                                    android:layout_marginLeft="4dp"
-                                    android:text="ऊ" />
+                                                            <TextView
+                                                                android:id="@+id/tv_bada_u"
+                                                                style="@style/key_style_default"
+                                                                android:layout_marginLeft="4dp"
+                                                                android:text="ऊ" />
 
-                                <TextView
-                                    android:id="@+id/tv_rishi"
-                                    style="@style/key_style_default"
-                                    android:layout_marginLeft="4dp"
-                                    android:text="ऋ" />
+                                                            <TextView
+                                                                android:id="@+id/tv_rishi"
+                                                                style="@style/key_style_default"
+                                                                android:layout_marginLeft="4dp"
+                                                                android:text="ऋ" />
 
-                                <TextView
-                                    android:id="@+id/tv_lira"
-                                    style="@style/key_style_default"
-                                    android:layout_marginLeft="4dp"
-                                    android:text="ऌ" />
+                                                            <TextView
+                                                                android:id="@+id/tv_lira"
+                                                                style="@style/key_style_default"
+                                                                android:layout_marginLeft="4dp"
+                                                                android:text="ऌ" />
 
 
-                            </LinearLayout>
--->
+                                                        </LinearLayout>
+                            -->
 
                             <LinearLayout
                                 android:layout_width="match_parent"

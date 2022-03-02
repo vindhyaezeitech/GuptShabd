@@ -21,16 +21,16 @@ import com.shabdamsdk.model.statistics.Data;
 import com.shabdamsdk.pref.CommonPreference;
 
 public class ShabdamActivity extends AppCompatActivity implements GameView, View.OnClickListener {
-    private GamePresenter gamePresenter;
-    private TextView tv_played, tv_win, tv_current_streak, tv_max_streak;
-
-    private String correctWord;
-    private TextView tvOne, tvTwo, tvThree;
-
     char[] word_array = new char[3];
     char[] entered_word_array = new char[3];
     StringBuilder[] matra = new StringBuilder[3];
     char[] charArray;
+    private GamePresenter gamePresenter;
+    private TextView tv_played, tv_win, tv_current_streak, tv_max_streak, tv_timer_counter_text;
+    private String correctWord;
+    private TextView tvOne, tvTwo, tvThree;
+    private RelativeLayout agla_shabd_btn;
+    private String minute, second;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +38,13 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         setContentView(R.layout.activity_shabdam);
         if (getIntent().getExtras() != null) {
             correctWord = getIntent().getStringExtra("word");
+            minute = getIntent().getStringExtra("minute");
+            second = getIntent().getStringExtra("second");
+            Log.d("time_", minute);
+            Log.d("time_", second);
             showMatraText();
         }
         inIt();
-
     }
 
     private void inIt() {
@@ -50,6 +53,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         findViewById(R.id.iv_trophy_btn).setOnClickListener(this);
         findViewById(R.id.iv_statistics_btn).setOnClickListener(this);
         findViewById(R.id.iv_settings_btn).setOnClickListener(this);
+        findViewById(R.id.rl_agla_shabd_btn).setOnClickListener(this);
 
         tvOne = findViewById(R.id.tv_one);
         tvTwo = findViewById(R.id.tv_two);
@@ -91,11 +95,8 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     }
 
     private boolean checkLetter(char c) {
-        if (((int) c >= 2309 && (int) c <= 2316) || ((int) c >= 2325 && (int) c <= 2361)
-                || (int) c == 2319 || (int) c == 2320 || (int) c == 2323 || (int) c == 2324) {
-            return true;
-        }
-        return false;
+        return ((int) c >= 2309 && (int) c <= 2316) || ((int) c >= 2325 && (int) c <= 2361)
+                || (int) c == 2319 || (int) c == 2320 || (int) c == 2323 || (int) c == 2324;
     }
 
     @Override
@@ -123,6 +124,16 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
             Intent intent1 = new Intent(this, SettingsActivity.class);
             intent1.putExtra("type", "1");
             startActivity(intent1);
+        } else if (id == R.id.rl_agla_shabd_btn) {
+            Intent intent = new Intent(this, GameActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+            intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
+            intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
+            intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
+            intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -136,12 +147,30 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         tv_win = dialogView.findViewById(R.id.tv_win);
         tv_current_streak = dialogView.findViewById(R.id.tv_current_streak);
         tv_max_streak = dialogView.findViewById(R.id.tv_max_streak);
+        agla_shabd_btn = dialogView.findViewById(R.id.rl_agla_shabd_btn);
+        tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
+        tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
+            }
+        });
+
+        agla_shabd_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ShabdamActivity.this, GameActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("user_id", CommonPreference.getInstance(ShabdamActivity.this).getString(CommonPreference.Key.USER_ID));
+                intent.putExtra("name", CommonPreference.getInstance(ShabdamActivity.this).getString(CommonPreference.Key.NAME));
+                intent.putExtra("uname", CommonPreference.getInstance(ShabdamActivity.this).getString(CommonPreference.Key.UNAME));
+                intent.putExtra("email", CommonPreference.getInstance(ShabdamActivity.this).getString(CommonPreference.Key.EMAIL));
+                intent.putExtra("profile_image", CommonPreference.getInstance(ShabdamActivity.this).getString(CommonPreference.Key.PROFILE_IMAGE));
+                startActivity(intent);
+                finish();
             }
         });
         alertDialog.setCanceledOnTouchOutside(false);
@@ -197,10 +226,27 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         tv_current_streak.setText(data.getCurrentStreak());
         tv_max_streak.setText(data.getMaxStreak());
 
-        int win = Integer.parseInt(data.getWin());
-        int total_played = Integer.parseInt(data.getPlayed());
-        int percent = (win / total_played) * 100;
-        tv_win.setText(percent);
-        Log.d("Percentage", "" + percent);
+        if (data.getWin().equals("0") || data.getPlayed().equals("0")) {
+            tv_win.setText("0");
+        } else {
+            int win = Integer.parseInt(data.getWin());
+            int total_played = Integer.parseInt(data.getPlayed());
+            float percent = (win / total_played) * 100f;
+            tv_win.setText(String.valueOf(percent));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+        intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
+        intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
+        intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
+        intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
+        startActivity(intent);
+        finish();
     }
 }
