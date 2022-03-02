@@ -28,4 +28,12 @@ public interface GameView {
     default void onAddUser(com.shabdamsdk.model.adduser.Data data){
 
     }
+
+    default void onWordCheckDic(boolean isMatched){
+
+    }
+
+    default void onGameSubmit(){
+
+    }
 }

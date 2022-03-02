@@ -1,6 +1,8 @@
 package com.shabdamsdk;
 
+import com.shabdamsdk.model.CheckWordDicRequest;
 import com.shabdamsdk.model.GetWordRequest;
+import com.shabdamsdk.model.SubmitGameRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
 import com.shabdamsdk.network.ApiService;
@@ -100,6 +102,48 @@ public class GamePresenter {
                             gameView.hideProgress();
                         }
                         gameView.onAddUser(response.getData());
+                    }
+                }, throwable -> {
+
+                }));
+
+    }
+
+    public void submitGame(SubmitGameRequest submitGameRequest){
+
+        if(gameView != null){
+            gameView.showProgress();
+        }
+        compositeDisposable.add(apiService.submitGame(submitGameRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if(response != null ){
+                        if(gameView != null){
+                            gameView.hideProgress();
+                        }
+                        gameView.onGameSubmit();
+                    }
+                }, throwable -> {
+
+                }));
+
+    }
+
+    public void checkDictionary(CheckWordDicRequest checkWordDicRequest){
+
+        if(gameView != null){
+            gameView.showProgress();
+        }
+        compositeDisposable.add(apiService.checkWord(checkWordDicRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if(response != null ){
+                        if(gameView != null){
+                            gameView.hideProgress();
+                        }
+                        gameView.onWordCheckDic(true);
                     }
                 }, throwable -> {
 

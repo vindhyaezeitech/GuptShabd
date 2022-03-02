@@ -26,7 +26,9 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.shabdamsdk.model.CheckWordDicRequest;
 import com.shabdamsdk.model.GetWordRequest;
+import com.shabdamsdk.model.SubmitGameRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.model.getwordresp.Datum;
 import com.shabdamsdk.model.statistics.Data;
@@ -173,22 +175,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         gameTimer();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onPause() {
         super.onPause();
         if (mTimingRunning) {
-            int time;
             tv_timer_text.stop();
             pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
             mTimingRunning = false;
-            time = Math.toIntExact(pauseOffset);
-            minutes = TimeUnit.MILLISECONDS.toMinutes(time);
-            seconds = TimeUnit.MILLISECONDS.toSeconds(time);
-            minute = String.valueOf(minutes);
-            second = String.valueOf(seconds);
-            Log.d("game", String.valueOf(minute));
-            Log.d("game", String.valueOf(second));
+            minutes = TimeUnit.MILLISECONDS.toMinutes(pauseOffset);
+            seconds = TimeUnit.MILLISECONDS.toSeconds(pauseOffset)%60;
+            minute = String.format("%02d", minutes);
+            second = String.format("%02d", seconds);
         }
     }
 
@@ -271,20 +268,25 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.tv_cross) {
             removeText();
         } else if (id == R.id.tv_enter) {
-            submitText();
+            if (index == 0 || index % MAX_CHAR_LENGTH != 0) {
+                ToastUtils.show(GameActivity.this, "Text is too short");
+                return;
+            }
+            if(gamePresenter != null){
+                CheckWordDicRequest request = new CheckWordDicRequest();
+                request.setWord(getEnteredText());
+                gamePresenter.checkDictionary(request);
+            }
+            //submitText();
         } else if (id == R.id.rl_uttar_dekho_btn) {
             if (mTimingRunning) {
-                int time;
                 tv_timer_text.stop();
                 pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
                 mTimingRunning = false;
-                time = Math.toIntExact(pauseOffset);
-                minutes = TimeUnit.MILLISECONDS.toMinutes(time);
-                seconds = TimeUnit.MILLISECONDS.toSeconds(time);
-                minute = String.valueOf(minutes);
-                second = String.valueOf(seconds);
-                Log.d("game", String.valueOf(minute));
-                Log.d("game", String.valueOf(second));
+                minutes = TimeUnit.MILLISECONDS.toMinutes(pauseOffset);
+                seconds = TimeUnit.MILLISECONDS.toSeconds(pauseOffset)%60;
+                minute = String.format("%02d", minutes);
+                second = String.format("%02d", seconds);
             }
             if (!TextUtils.isEmpty(correctWord)) {
                 Intent intent = new Intent(this, ShabdamActivity.class);
@@ -306,20 +308,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    private String getEnteredText() {
+        String str = "";
+        for (int i = 0; i <entered_word_array.length ; i++) {
+            str = new StringBuilder().append(entered_word_array[i]).append(matra[i]).toString();
+        }
+
+        return str;
+    }
+
     private void statisticsPopup() {
         if (mTimingRunning) {
-            int time;
             tv_timer_text.stop();
             pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
             mTimingRunning = false;
-            time = Math.toIntExact(pauseOffset);
-            minutes = TimeUnit.MILLISECONDS.toMinutes(time);
-            seconds = TimeUnit.MILLISECONDS.toSeconds(time);
-            minute = String.valueOf(minutes);
-            second = String.valueOf(seconds);
-            Log.d("game", String.valueOf(minute));
-            Log.d("game", String.valueOf(second));
+            minutes = TimeUnit.MILLISECONDS.toMinutes(pauseOffset);
+            seconds = TimeUnit.MILLISECONDS.toSeconds(pauseOffset)%60;
+            minute = String.format("%02d", minutes);
+            second = String.format("%02d", seconds);
         }
         final AlertDialog.Builder builder = new AlertDialog.Builder(GameActivity.this, R.style.CustomAlertDialog);
         ViewGroup viewGroup = findViewById(android.R.id.content);
@@ -431,11 +437,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void submitText() {
-         animate();
-        if (index == 0 || index % MAX_CHAR_LENGTH != 0) {
-            ToastUtils.show(GameActivity.this, "Text is too short");
-            return;
-        }
+
+        animate();
 
         if (index % MAX_CHAR_LENGTH == 0) {
             //verifyText--> call API --> increment count
@@ -582,7 +585,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mapWord() {
         if (Arrays.equals(word_array, entered_word_array)) {
             updateGreenBoxes();
-            openLeaderBoardOnGameEnd();
+            if(gamePresenter != null){
+                if(tv_timer_text != null){
+                    tv_timer_text.stop();
+                    pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
+                    mTimingRunning = false;
+
+                }
+                SubmitGameRequest submitGameRequest = new SubmitGameRequest();
+                submitGameRequest.setGameUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
+                submitGameRequest.setGameStatus(Constants.WIN);
+                submitGameRequest.setTime(String.valueOf(pauseOffset/1000));
+                gamePresenter.submitGame(submitGameRequest);
+            }
             return true;
         }// dictionary check is pending
         else {//check is letter are in word_array
@@ -846,5 +861,20 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         return id;
+    }
+
+    @Override
+    public void onWordCheckDic(boolean isMatched) {
+        if(isMatched){
+            // shake attempted layout
+            submitText();
+        }else {
+            ToastUtils.show(GameActivity.this, "शब्द शब्दकोश में नहीं है। ");
+        }
+    }
+
+    @Override
+    public void onGameSubmit() {
+        openLeaderBoardOnGameEnd();
     }
 }
