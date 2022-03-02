@@ -314,7 +314,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void submitText() {
-        // animate();
+         animate();
         if (index == 0 || index % MAX_CHAR_LENGTH != 0) {
             ToastUtils.show(GameActivity.this, "Text is too short");
             return;
@@ -329,6 +329,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 updateCurrentAttempt();
             }
             btnIdList.clear();
+
+            if(index == MAX_ATTEMPT*MAX_CHAR_LENGTH){
+                if (!Arrays.equals(word_array, entered_word_array)) {
+                    openLeaderBoardOnGameEnd();
+                }
+
+            }
+
         }
     }
 
@@ -457,13 +465,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mapWord() {
         if (Arrays.equals(word_array, entered_word_array)) {
             updateGreenBoxes();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
-                    startActivity(intent);
-                }
-            }, 1000);
+            openLeaderBoardOnGameEnd();
             return true;
         }// dictionary check is pending
         else {//check is letter are in word_array
@@ -490,6 +492,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         return false;
+    }
+
+    private void openLeaderBoardOnGameEnd() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
+                intent.putExtra("type","2");
+                startActivity(intent);
+                finish();
+            }
+        }, 500);
     }
 
     private void updateGreenBoxes() {
@@ -548,13 +562,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             R.animator.flip_in
                     );
 
-            flipOutAnimatorSet.setTarget(findViewById(R.id.et_1));
-            flipOutAnimatorSet2.setTarget(findViewById(R.id.et_2));
-            flipOutAnimatorSet3.setTarget(findViewById(R.id.et_3));
+            flipOutAnimatorSet.setTarget(findViewById(getId((currentAttempt-1)*3+1)));
+            flipOutAnimatorSet2.setTarget(findViewById(getId((currentAttempt-1)*3+2)));
+            flipOutAnimatorSet3.setTarget(findViewById(getId((currentAttempt-1)*3+3)));
 
-            flipInAnimatorSet.setTarget(findViewById(R.id.et_1));
-            flipInAnimatorSet2.setTarget(findViewById(R.id.et_2));
-            flipInAnimatorSet3.setTarget(findViewById(R.id.et_3));
+            flipInAnimatorSet.setTarget(findViewById(getId((currentAttempt-1)*3+1)));
+            flipInAnimatorSet2.setTarget(findViewById(getId((currentAttempt-1)*3+2)));
+            flipInAnimatorSet3.setTarget(findViewById(getId((currentAttempt-1)*3+3)));
 
             animatorListener = new Animator.AnimatorListener() {
                 @Override
@@ -664,9 +678,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    /**
+     * Hard coded log-- can make it dynamic but not in mood
+     */
     void showHint(){
         if(hintCount < 2){
             btnIdList.clear();
+            entered_word_array[hintCount] = word_array[hintCount];
             hintCount++;
             int pos = ((currentAttempt -1)*3)+hintCount;
 
@@ -678,7 +696,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[hintCount-1]).append(matra[hintCount-1]));
-            updateWordCharArray(String.valueOf(word_array[hintCount-1]));
             int id = getKeyId(String.valueOf(word_array[hintCount-1]));
             if( id != -1){
                 btnIdList.add(id);
