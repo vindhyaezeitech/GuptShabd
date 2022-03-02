@@ -155,24 +155,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             tv_timer_text.start();
             mTimingRunning = true;
         }
-/*
-        new CountDownTimer(50000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                // Used for formatting digit to be in 2 digits only
-                NumberFormat f = new DecimalFormat("00");
-                long hour = (millisUntilFinished / 3600000) % 24;
-                long min = (millisUntilFinished / 60000) % 60;
-                tv_timer_text.setText(f.format(hour) + ":" + f.format(min));
-            }
-            // When the task is over it will print 00:00:00 there
-            public void onFinish() {
-            }
-        }.start();
-*/
     }
-   /* private void pauseTimer() {
 
-    }*/
 
     @Override
     protected void onStart() {
