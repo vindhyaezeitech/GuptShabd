@@ -44,11 +44,39 @@ import java.util.concurrent.TimeUnit;
  */
 public class GameActivity extends AppCompatActivity implements View.OnClickListener, GameView {
 
+    private int index = 0;
+    private int MAX_INDEX = 16;
+    private int currentAttempt = 1;
     public static final int MAX_CHAR_LENGTH = 3;
     public static final int MAX_ATTEMPT = 5;
-    private final int MAX_INDEX = 16;
-    private final ArrayList<Integer> btnIdList = new ArrayList<>();
-    private final int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
+    private String correctWord = "संदेश";
+    private int hintCount=0;
+
+    private TextView tvKa;
+    private TextView tvCross;
+    private TextView tvEnter;
+    char[] word_array = new char[3];
+    char[] entered_word_array = new char[3];
+    private ArrayList<Integer> btnIdList = new ArrayList<>();
+
+    StringBuilder[] matra = new StringBuilder[3];
+    char[] charArray;
+    private RelativeLayout rl_uttar_dekho_btn, continue_btn, agla_shabd_btn;
+
+    private GamePresenter gamePresenter;
+    private FrameLayout flLoading;
+    private boolean mTimingRunning;
+
+    Animation animBlink;
+    int blinkCount;
+    private String userId, name, u_name, email, profile_image;
+    private TextView tv_played, tv_win, tv_current_streak, tv_max_streak,tv_timer_counter_text;
+    private Chronometer tv_timer_text;
+    private long pauseOffset, minutes, seconds;
+    private String minute, second;
+
+
+    private int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
             R.id.tv_cha, R.id.tv_chah, R.id.tv_ja, R.id.tv_jha, R.id.tv_ea,
             R.id.tv_ta, R.id.tdha, R.id.tv_da, R.id.tv_dha, R.id.tv_ada,
             R.id.tv_tea, R.id.tv_tha, R.id.tv_dea, R.id.tv_dhea, R.id.tv_na,
@@ -57,30 +85,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             R.id.tv_sa, R.id.tv_ha, R.id.tv_chota_a, R.id.tv_bada_a, R.id.tv_choti_e,
             R.id.tv_badi_e, R.id.tv_chota_u, R.id.tv_bada_u, R.id.tv_rishi, R.id.tv_lira,
             R.id.tv_chot_ae, R.id.tv_bada_ae, R.id.tv_chota_o, R.id.tv_bada_o};
-    char[] word_array = new char[3];
-    char[] entered_word_array = new char[3];
-    StringBuilder[] matra = new StringBuilder[3];
-    char[] charArray;
-    Animation animBlink;
-    int blinkCount;
-    Animator.AnimatorListener animatorListener;
-    private int index = 0;
-    private int currentAttempt = 1;
-    private String correctWord = "संदेश";
-    private int hintCount = 0;
-    private TextView tvKa;
-    private TextView tvCross;
-    private TextView tvEnter;
-    private RelativeLayout rl_uttar_dekho_btn, continue_btn, agla_shabd_btn;
-    private GamePresenter gamePresenter;
-    private FrameLayout flLoading;
-    private boolean mTimingRunning;
-    private String userId, name, u_name, email, profile_image;
-    private TextView tv_played, tv_win, tv_current_streak, tv_max_streak,tv_timer_counter_text;
-    private Chronometer tv_timer_text;
-    private long pauseOffset, minutes, seconds;
-    private String minute, second;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,11 +121,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 R.anim.blink);
         initViewClick();
 
-
         gamePresenter = new GamePresenter(this);
 
-        if (!TextUtils.isEmpty(userId)) {
-            AddUserRequest request = new AddUserRequest();
+        if (!TextUtils.isEmpty(userId))
+        {
+            AddUserRequest request=new AddUserRequest();
             request.setUserId(userId);
             request.setName(name);
             request.setUname(u_name);
@@ -356,7 +360,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 alertDialog.dismiss();
             }
         });
-
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setCancelable(false);
 
@@ -428,7 +431,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void submitText() {
-        // animate();
+         animate();
         if (index == 0 || index % MAX_CHAR_LENGTH != 0) {
             ToastUtils.show(GameActivity.this, "Text is too short");
             return;
@@ -443,6 +446,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 updateCurrentAttempt();
             }
             btnIdList.clear();
+
+            if(index == MAX_ATTEMPT*MAX_CHAR_LENGTH){
+                if (!Arrays.equals(word_array, entered_word_array)) {
+                    openLeaderBoardOnGameEnd();
+                }
+
+            }
+
         }
     }
 
@@ -544,8 +555,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private boolean checkLetter(char c) {
-        return ((int) c >= 2309 && (int) c <= 2316) || ((int) c >= 2325 && (int) c <= 2361)
-                || (int) c == 2319 || (int) c == 2320 || (int) c == 2323 || (int) c == 2324;
+        if (((int) c >= 2309 && (int) c <= 2316) || ((int) c >= 2325 && (int) c <= 2361)
+                || (int) c == 2319 || (int) c == 2320 || (int) c == 2323 || (int) c == 2324) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -568,13 +582,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mapWord() {
         if (Arrays.equals(word_array, entered_word_array)) {
             updateGreenBoxes();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
-                    startActivity(intent);
-                }
-            }, 1000);
+            openLeaderBoardOnGameEnd();
             return true;
         }// dictionary check is pending
         else {//check is letter are in word_array
@@ -584,18 +592,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     if (entered_word_array[i] == word_array[j]) {
                         isExist = true;
                         if (i == j) {//same postion green
-                            findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_green_box);
-                            findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_green_box);
+                            ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setBackgroundResource(R.drawable.bg_green_box);
+                            ((TextView) findViewById(btnIdList.get(i))).setBackgroundResource(R.drawable.bg_green_box);
                         } else {// yellow
-                            findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_yellow);
-                            findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_yellow);
+                            ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setBackgroundResource(R.drawable.bg_yellow);
+                            ((TextView) findViewById(btnIdList.get(i))).setBackgroundResource(R.drawable.bg_yellow);
 
                         }
                     }
                 }
                 if (!isExist) {//Not in word
-                    findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_grey);
-                    findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_grey);
+                    ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setBackgroundResource(R.drawable.bg_grey);
+                    ((TextView) findViewById(btnIdList.get(i))).setBackgroundResource(R.drawable.bg_grey);
                 }
             }
 
@@ -603,16 +611,30 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
+    private void openLeaderBoardOnGameEnd() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
+                intent.putExtra("type","2");
+                startActivity(intent);
+                finish();
+            }
+        }, 500);
+    }
+
     private void updateGreenBoxes() {
         for (int i = (currentAttempt - 1) * 3 + 1; i < currentAttempt * 3 + 1; i++) {
-            findViewById(getId(i)).setBackgroundResource(R.drawable.bg_green_box);
+            ((TextView) findViewById(getId(i))).setBackgroundResource(R.drawable.bg_green_box);
         }
 
         //update Key Board
         for (int j = 0; j < btnIdList.size(); j++) {
-            findViewById(btnIdList.get(j)).setBackgroundResource(R.drawable.bg_green_box);
+            ((TextView) findViewById(btnIdList.get(j))).setBackgroundResource(R.drawable.bg_green_box);
         }
     }
+
+    Animator.AnimatorListener animatorListener;
 
     private void animate() {
         try {
@@ -657,13 +679,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             R.animator.flip_in
                     );
 
-            flipOutAnimatorSet.setTarget(findViewById(R.id.et_1));
-            flipOutAnimatorSet2.setTarget(findViewById(R.id.et_2));
-            flipOutAnimatorSet3.setTarget(findViewById(R.id.et_3));
+            flipOutAnimatorSet.setTarget(findViewById(getId((currentAttempt-1)*3+1)));
+            flipOutAnimatorSet2.setTarget(findViewById(getId((currentAttempt-1)*3+2)));
+            flipOutAnimatorSet3.setTarget(findViewById(getId((currentAttempt-1)*3+3)));
 
-            flipInAnimatorSet.setTarget(findViewById(R.id.et_1));
-            flipInAnimatorSet2.setTarget(findViewById(R.id.et_2));
-            flipInAnimatorSet3.setTarget(findViewById(R.id.et_3));
+            flipInAnimatorSet.setTarget(findViewById(getId((currentAttempt-1)*3+1)));
+            flipInAnimatorSet2.setTarget(findViewById(getId((currentAttempt-1)*3+2)));
+            flipInAnimatorSet3.setTarget(findViewById(getId((currentAttempt-1)*3+3)));
 
             animatorListener = new Animator.AnimatorListener() {
                 @Override
@@ -775,25 +797,29 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    void showHint() {
-        if (hintCount < 2) {
+    /**
+     * Hard coded log-- can make it dynamic but not in mood
+     */
+    void showHint(){
+        if(hintCount < 2){
             btnIdList.clear();
+            entered_word_array[hintCount] = word_array[hintCount];
             hintCount++;
-            int pos = ((currentAttempt - 1) * 3) + hintCount;
+            int pos = ((currentAttempt -1)*3)+hintCount;
 
-            if (hintCount == 2) {
+            if(hintCount == 2){
                 btnIdList.add(getKeyId(String.valueOf(word_array[0])));
-                ((TextView) findViewById(getId(pos - 1))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
+                ((TextView) findViewById(getId(pos-1))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
                 entered_word_array[0] = word_array[0];
 
             }
 
-            ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[hintCount - 1]).append(matra[hintCount - 1]));
-            updateWordCharArray(String.valueOf(word_array[hintCount - 1]));
-            int id = getKeyId(String.valueOf(word_array[hintCount - 1]));
-            if (id != -1) {
+            ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[hintCount-1]).append(matra[hintCount-1]));
+            updateWordCharArray(String.valueOf(word_array[hintCount-1]));
+            int id = getKeyId(String.valueOf(word_array[hintCount-1]));
+            if( id != -1){
                 btnIdList.add(id);
-                findViewById(id).setBackgroundResource(R.drawable.bg_green_box);
+                ((TextView)findViewById(id)).setBackgroundResource(R.drawable.bg_green_box);
             }
             index = pos;
 
@@ -803,17 +829,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void clearNextBoxesAfterHint() {
-        for (int i = 0; i < 3 - hintCount; i++) {
-            ((TextView) findViewById(getId(index + i + 1))).setText("");
+        for (int i = 0; i <3-hintCount ; i++) {
+            ((TextView)findViewById(getId(index+i+1))).setText("");
         }
     }
 
 
-    public int getKeyId(String str) {
+
+
+    public int getKeyId(String str){
         int id = -1;
 
         for (int i = 0; i < keyIdArray.length; i++) {
-            if (((TextView) findViewById(keyIdArray[i])).getText().toString().equalsIgnoreCase(str)) {
+            if(((TextView)findViewById(keyIdArray[i])).getText().toString().equalsIgnoreCase(str)){
                 id = keyIdArray[i];
             }
         }

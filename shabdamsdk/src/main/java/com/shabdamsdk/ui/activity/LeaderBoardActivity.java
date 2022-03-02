@@ -69,10 +69,18 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
-            } else {
-               /* Intent intent = new Intent(this, GameActivity.class);
+            } else if(!TextUtils.isEmpty(type) && type.equals("2")){
+                Intent intent = new Intent(this, GameActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);*/
+                intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+                intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
+                intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
+                intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
+                intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
+
+                startActivity(intent);
+                finish();
+            }else {
                 finish();
             }
         }
