@@ -1,8 +1,8 @@
 package com.shabdamsdk;
 
-import com.shabdamsdk.model.CheckWordDicRequest;
+import com.shabdamsdk.model.dictionary.CheckWordDicRequest;
 import com.shabdamsdk.model.GetWordRequest;
-import com.shabdamsdk.model.SubmitGameRequest;
+import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
 import com.shabdamsdk.network.ApiService;
@@ -143,7 +143,7 @@ public class GamePresenter {
                         if(gameView != null){
                             gameView.hideProgress();
                         }
-                        gameView.onWordCheckDic(true);
+                        gameView.onWordCheckDic(response.getStatus().equalsIgnoreCase("true")?true:false);
                     }
                 }, throwable -> {
 

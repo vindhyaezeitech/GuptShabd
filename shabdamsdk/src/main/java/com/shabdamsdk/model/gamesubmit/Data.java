@@ -1,5 +1,5 @@
 
-package com.shabdamsdk.model;
+package com.shabdamsdk.model.gamesubmit;
 
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
@@ -7,49 +7,61 @@ import android.os.Parcelable.Creator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SubmitGameRequest implements Parcelable
+public class Data implements Parcelable
 {
 
+    @SerializedName("id")
+    @Expose
+    private Integer id;
     @SerializedName("game_user_id")
     @Expose
-    private String gameUserId;
+    private Integer gameUserId;
     @SerializedName("time")
     @Expose
     private String time;
     @SerializedName("game_status")
     @Expose
     private String gameStatus;
-    public final static Creator<SubmitGameRequest> CREATOR = new Creator<SubmitGameRequest>() {
+    public final static Creator<Data> CREATOR = new Creator<Data>() {
 
 
         @SuppressWarnings({
             "unchecked"
         })
-        public SubmitGameRequest createFromParcel(android.os.Parcel in) {
-            return new SubmitGameRequest(in);
+        public Data createFromParcel(android.os.Parcel in) {
+            return new Data(in);
         }
 
-        public SubmitGameRequest[] newArray(int size) {
-            return (new SubmitGameRequest[size]);
+        public Data[] newArray(int size) {
+            return (new Data[size]);
         }
 
     }
     ;
 
-    protected SubmitGameRequest(android.os.Parcel in) {
-        this.gameUserId = ((String) in.readValue((String.class.getClassLoader())));
+    protected Data(android.os.Parcel in) {
+        this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.gameUserId = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.time = ((String) in.readValue((String.class.getClassLoader())));
         this.gameStatus = ((String) in.readValue((String.class.getClassLoader())));
     }
 
-    public SubmitGameRequest() {
+    public Data() {
     }
 
-    public String getGameUserId() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getGameUserId() {
         return gameUserId;
     }
 
-    public void setGameUserId(String gameUserId) {
+    public void setGameUserId(Integer gameUserId) {
         this.gameUserId = gameUserId;
     }
 
@@ -70,6 +82,7 @@ public class SubmitGameRequest implements Parcelable
     }
 
     public void writeToParcel(android.os.Parcel dest, int flags) {
+        dest.writeValue(id);
         dest.writeValue(gameUserId);
         dest.writeValue(time);
         dest.writeValue(gameStatus);

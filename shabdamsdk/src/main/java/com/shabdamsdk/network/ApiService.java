@@ -1,10 +1,12 @@
 package com.shabdamsdk.network;
 
-import com.shabdamsdk.model.CheckWordDicRequest;
+import com.shabdamsdk.model.dictionary.CheckWordDicRequest;
 import com.shabdamsdk.model.GetWordRequest;
-import com.shabdamsdk.model.SubmitGameRequest;
+import com.shabdamsdk.model.gamesubmit.GameSubmitResponse;
+import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.model.adduser.AddUserResponse;
+import com.shabdamsdk.model.dictionary.CheckWordDicResponse;
 import com.shabdamsdk.model.getwordresp.GetWordResponse;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardList;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
@@ -29,9 +31,9 @@ public interface ApiService {
     Observable<AddUserResponse> addUser(@Body AddUserRequest body);
 
     @POST("check_words")
-    Observable<AddUserResponse> checkWord(@Body CheckWordDicRequest body);
+    Observable<CheckWordDicResponse> checkWord(@Body CheckWordDicRequest body);
 
     @POST("game_submit")
-    Observable<AddUserResponse> submitGame(@Body SubmitGameRequest body);
+    Observable<GameSubmitResponse> submitGame(@Body SubmitGameRequest body);
 
 }

@@ -26,9 +26,9 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.shabdamsdk.model.CheckWordDicRequest;
+import com.shabdamsdk.model.dictionary.CheckWordDicRequest;
 import com.shabdamsdk.model.GetWordRequest;
-import com.shabdamsdk.model.SubmitGameRequest;
+import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.model.getwordresp.Datum;
 import com.shabdamsdk.model.statistics.Data;
@@ -268,7 +268,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.tv_cross) {
             removeText();
         } else if (id == R.id.tv_enter) {
-            if (index == 0 || index % MAX_CHAR_LENGTH != 0) {
+            if (index != currentAttempt*MAX_CHAR_LENGTH) {
                 ToastUtils.show(GameActivity.this, "Text is too short");
                 return;
             }
@@ -310,11 +310,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private String getEnteredText() {
         String str = "";
+        StringBuilder builder = new StringBuilder();
         for (int i = 0; i <entered_word_array.length ; i++) {
-            str = new StringBuilder().append(entered_word_array[i]).append(matra[i]).toString();
+            builder.append(entered_word_array[i]).append(matra[i]).toString();
         }
 
-        return str;
+        return builder.toString();
     }
 
     private void statisticsPopup() {
@@ -437,7 +438,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void submitText() {
 
-        animate();
+        //animate();
 
         if (index % MAX_CHAR_LENGTH == 0) {
             //verifyText--> call API --> increment count
@@ -775,6 +776,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onWordFetched(Datum datumCorrectWord) {
         this.correctWord = datumCorrectWord.getWords();
+        ToastUtils.show(GameActivity.this, correctWord);
         showMatraText();
         updateCurrentAttempt();
     }
@@ -844,7 +846,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void clearNextBoxesAfterHint() {
         for (int i = 0; i <3-hintCount ; i++) {
-            ((TextView)findViewById(getId(index+i+1))).setText("");
+            ((TextView)findViewById(getId(index+i+1))).setText(matra[i+1]);
         }
     }
 
