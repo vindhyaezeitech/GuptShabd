@@ -348,16 +348,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         agla_shabd_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!TextUtils.isEmpty(userId)) {
-                    AddUserRequest request = new AddUserRequest();
-                    request.setUserId(userId);
-                    request.setName(name);
-                    request.setUname(u_name);
-                    request.setEmail(email);
-                    request.setProfileimage(profile_image);
-                    gamePresenter.addUser(request);
-                }
-                alertDialog.dismiss();
+                Intent intent = new Intent(GameActivity.this, GameActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("user_id", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.USER_ID));
+                intent.putExtra("name", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME));
+                intent.putExtra("uname", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.UNAME));
+                intent.putExtra("email", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.EMAIL));
+                intent.putExtra("profile_image", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.PROFILE_IMAGE));
+                startActivity(intent);
+                finish();
             }
         });
         alertDialog.setCanceledOnTouchOutside(false);
