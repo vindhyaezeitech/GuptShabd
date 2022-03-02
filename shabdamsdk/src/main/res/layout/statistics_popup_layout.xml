@@ -221,10 +221,11 @@
             android:textStyle="bold"/>
 
         <TextView
+            android:id="@+id/tv_time_counter_text"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="20:10"
+            android:text=""
             android:gravity="right"
             android:layout_marginRight="@dimen/_15sdp"
             android:textColor="@color/text_color_black"
