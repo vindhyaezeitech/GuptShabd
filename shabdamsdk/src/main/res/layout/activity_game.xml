@@ -317,6 +317,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/rl_hint"
                         android:layout_width="@dimen/_80sdp"
                         android:layout_height="@dimen/_35sdp"
                         android:layout_marginTop="@dimen/_7sdp"
@@ -426,7 +427,8 @@
                         <TextView
                             android:id="@+id/tv_ka"
                             style="@style/key_style_default"
-                            android:text="क" />
+                            android:text="क"
+                            />
 
                         <TextView
                             android:id="@+id/tv_kha"
@@ -848,7 +850,8 @@
             android:id="@+id/fl_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#aaffffff">
+            android:background="#aaffffff"
+            android:visibility="gone">
 
             <ProgressBar
                 android:layout_width="@dimen/_48sdp"

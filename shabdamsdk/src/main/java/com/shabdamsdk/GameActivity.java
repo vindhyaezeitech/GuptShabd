@@ -44,6 +44,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public static final int MAX_CHAR_LENGTH = 3;
     public static final int MAX_ATTEMPT = 5;
     private String correctWord = "संदेश";
+    private int hintCount=0;
 
     private TextView tvKa;
     private TextView tvCross;
@@ -65,6 +66,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView tv_played, tv_win, tv_current_streak, tv_max_streak;
 
+    private int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
+            R.id.tv_cha, R.id.tv_chah, R.id.tv_ja, R.id.tv_jha, R.id.tv_ea,
+            R.id.tv_ta, R.id.tdha, R.id.tv_da, R.id.tv_dha, R.id.tv_ada,
+            R.id.tv_tea, R.id.tv_tha, R.id.tv_dea, R.id.tv_dhea, R.id.tv_na,
+            R.id.tv_pa, R.id.tv_fa, R.id.tv_ba, R.id.tv_ma, R.id.tv_ya,
+            R.id.tv_ra, R.id.tv_la, R.id.tv_va, R.id.tv_sha, R.id.tv_skha,
+            R.id.tv_sa, R.id.tv_ha, R.id.tv_chota_a, R.id.tv_bada_a, R.id.tv_choti_e,
+            R.id.tv_badi_e, R.id.tv_chota_u, R.id.tv_bada_u, R.id.tv_rishi, R.id.tv_lira,
+            R.id.tv_chot_ae, R.id.tv_bada_ae, R.id.tv_chota_o, R.id.tv_bada_o};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +139,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tvKa.setOnClickListener(this);
         tvCross.setOnClickListener(this);
         tvEnter.setOnClickListener(this);
-
+        findViewById(R.id.rl_hint).setOnClickListener(this);
 
         findViewById(R.id.tv_kha).setOnClickListener(this);
         findViewById(R.id.tv_ga).setOnClickListener(this);
@@ -211,6 +221,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             statisticsPopup();
         } else if (id == R.id.iv_settings_btn) {
             startActivity(new Intent(this, SettingsActivity.class));
+        } else if(id == R.id.rl_hint){
+            showHint();
         }
     }
 
@@ -649,5 +661,53 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
+    }
+
+
+    void showHint(){
+        if(hintCount < 2){
+            btnIdList.clear();
+            hintCount++;
+            int pos = ((currentAttempt -1)*3)+hintCount;
+
+            if(hintCount == 2){
+                btnIdList.add(getKeyId(String.valueOf(word_array[0])));
+                ((TextView) findViewById(getId(pos-1))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
+                entered_word_array[0] = word_array[0];
+
+            }
+
+            ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[hintCount-1]).append(matra[hintCount-1]));
+            updateWordCharArray(String.valueOf(word_array[hintCount-1]));
+            int id = getKeyId(String.valueOf(word_array[hintCount-1]));
+            if( id != -1){
+                btnIdList.add(id);
+                ((TextView)findViewById(id)).setBackgroundResource(R.drawable.bg_green_box);
+            }
+            index = pos;
+
+
+            clearNextBoxesAfterHint();
+        }
+    }
+
+    private void clearNextBoxesAfterHint() {
+        for (int i = 0; i <3-hintCount ; i++) {
+            ((TextView)findViewById(getId(index+i+1))).setText("");
+        }
+    }
+
+
+
+
+    public int getKeyId(String str){
+        int id = -1;
+
+        for (int i = 0; i < keyIdArray.length; i++) {
+            if(((TextView)findViewById(keyIdArray[i])).getText().toString().equalsIgnoreCase(str)){
+                id = keyIdArray[i];
+            }
+        }
+        return id;
     }
 }
