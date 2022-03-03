@@ -5,7 +5,6 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,10 +23,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.shabdamsdk.db.DatabaseClient;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.shabdamsdk.db.Task;
 import com.shabdamsdk.model.GetWordRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
@@ -40,7 +46,6 @@ import com.shabdamsdk.ui.activity.LeaderBoardActivity;
 import com.shabdamsdk.ui.activity.SettingsActivity;
 import com.shabdamsdk.ui.activity.ShabdamActivity;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,31 +58,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final int MAX_CHAR_LENGTH = 3;
     public static final int MAX_ATTEMPT = 5;
-    char[] word_array = new char[3];
-    char[] entered_word_array = new char[3];
-    StringBuilder[] matra = new StringBuilder[3];
-    char[] charArray;
-    Animation animBlink;
-    int blinkCount;
-    Animator.AnimatorListener animatorListener;
-    private int index = 0;
     private final int MAX_INDEX = 16;
-    private int currentAttempt = 1;
-    private String correctWord = "संदेश";
-    private int hintCount = 0;
-    private TextView tvKa;
-    private TextView tvCross;
-    private TextView tvEnter;
     private final ArrayList<Integer> btnIdList = new ArrayList<>();
-    private RelativeLayout rl_uttar_dekho_btn, continue_btn, agla_shabd_btn;
-    private GamePresenter gamePresenter;
-    private FrameLayout flLoading;
-    private boolean mTimingRunning;
-    private String userId, name, u_name, email, profile_image;
-    private TextView tv_played, tv_win, tv_current_streak, tv_max_streak, tv_timer_counter_text;
-    private Chronometer tv_timer_text;
-    private long pauseOffset, minutes, seconds;
-    private String minute, second;
     private final int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
             R.id.tv_cha, R.id.tv_chah, R.id.tv_ja, R.id.tv_jha, R.id.tv_ea,
             R.id.tv_ta, R.id.tdha, R.id.tv_da, R.id.tv_dha, R.id.tv_ada,
@@ -87,14 +69,39 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             R.id.tv_sa, R.id.tv_ha, R.id.tv_chota_a, R.id.tv_bada_a, R.id.tv_choti_e,
             R.id.tv_badi_e, R.id.tv_chota_u, R.id.tv_bada_u, R.id.tv_rishi, R.id.tv_lira,
             R.id.tv_chot_ae, R.id.tv_bada_ae, R.id.tv_chota_o, R.id.tv_bada_o};
+    char[] word_array = new char[3];
+    char[] entered_word_array = new char[3];
+    StringBuilder[] matra = new StringBuilder[3];
+    char[] charArray;
+    Animation animBlink;
+    int blinkCount;
+    Animator.AnimatorListener animatorListener;
+    List<String> list = new ArrayList<>();
+    private int index = 0;
+    private int currentAttempt = 1;
+    private String correctWord = "संदेश";
+    private int hintCount = 0;
+    private TextView tvKa;
+    private TextView tvCross;
+    private TextView tvEnter;
+    private RelativeLayout rl_uttar_dekho_btn, continue_btn, agla_shabd_btn;
+    private GamePresenter gamePresenter;
+    private FrameLayout flLoading;
+    private boolean mTimingRunning;
+    private String userId, name, u_name, email, profile_image;
+    private TextView tv_played, tv_win, tv_current_streak, tv_max_streak, tv_timer_counter_text;
+    private Chronometer tv_timer_text;
+    private long pauseOffset, minutes, seconds;
+    private String minute, second;
     private Datum datumCorrectWord;
-    List<String> list=new ArrayList<>();
+    private InterstitialAd mInterstitialAd;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        interstitialAdd();
 
 
         // load the animation
@@ -146,6 +153,44 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             kaiseKhelePopup();
         }
     }
+
+    private void interstitialAdd() {
+
+       /* MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });*/
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        mInterstitialAd = interstitialAd;
+                        //Log.i(TAG, "onAdLoaded");
+                        loadAdd();
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        //Log.i(TAG, loadAdError.getMessage());
+                        mInterstitialAd = null;
+                    }
+                });
+
+    }
+
+    private void loadAdd() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd.show(this);
+        } else {
+            Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private void gameTimer() {
         tv_timer_text.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
@@ -633,10 +678,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void saveID(String id) {
-        Task task=new Task();
+        Task task = new Task();
         task.setWordId(id);
 
-        gamePresenter.saveIDLocalDB(GameActivity.this,task);
+        gamePresenter.saveIDLocalDB(GameActivity.this, task);
 
     }
 
@@ -647,7 +692,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
                 intent.putExtra("type", "2");
                 startActivity(intent);
-                finish();
+                //finish();
             }
         }, 500);
     }
