@@ -1,5 +1,10 @@
 package com.shabdamsdk;
 
+import android.content.Context;
+
+import com.shabdamsdk.db.AppDatabase;
+import com.shabdamsdk.db.DatabaseClient;
+import com.shabdamsdk.db.Task;
 import com.shabdamsdk.model.dictionary.CheckWordDicRequest;
 import com.shabdamsdk.model.GetWordRequest;
 import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
@@ -16,6 +21,7 @@ public class GamePresenter {
     private GameView gameView;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private ApiService apiService = RetrofitClient.getInstance();
+
 
     public GamePresenter(GameView gameView){
         this.gameView = gameView;
@@ -144,6 +150,40 @@ public class GamePresenter {
                             gameView.hideProgress();
                         }
                         gameView.onWordCheckDic(response.getStatus().equalsIgnoreCase("true")?true:false);
+                    }
+                }, throwable -> {
+
+                }));
+
+    }
+
+    public void fetchLocalDBData(Context context){
+
+        compositeDisposable.add(DatabaseClient.getInstance(context).getAppDatabase().taskDao().getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if(response != null ){
+                        if(gameView != null){
+                            gameView.hideProgress();
+                        }
+                    }
+                }, throwable -> {
+
+                }));
+
+    }
+
+    public void saveIDLocalDB(Context context, Task task){
+
+        compositeDisposable.add(DatabaseClient.getInstance(context).getAppDatabase().taskDao().insert(task)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if(response != null ){
+                        if(gameView != null){
+                            gameView.hideProgress();
+                        }
                     }
                 }, throwable -> {
 

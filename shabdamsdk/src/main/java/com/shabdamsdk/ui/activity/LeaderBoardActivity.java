@@ -77,7 +77,6 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
                 intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
                 intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
                 intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
-
                 startActivity(intent);
                 finish();
             }else {

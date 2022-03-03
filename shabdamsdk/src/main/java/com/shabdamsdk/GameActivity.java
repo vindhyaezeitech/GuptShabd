@@ -5,6 +5,7 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,6 +40,7 @@ import com.shabdamsdk.ui.activity.LeaderBoardActivity;
 import com.shabdamsdk.ui.activity.SettingsActivity;
 import com.shabdamsdk.ui.activity.ShabdamActivity;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -86,6 +88,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             R.id.tv_badi_e, R.id.tv_chota_u, R.id.tv_bada_u, R.id.tv_rishi, R.id.tv_lira,
             R.id.tv_chot_ae, R.id.tv_bada_ae, R.id.tv_chota_o, R.id.tv_bada_o};
     private Datum datumCorrectWord;
+    List<String> list=new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -547,18 +551,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
             Log.d("", matra.toString());
         } catch (Exception e) {
-            List<Task> taskList = DatabaseClient
-                    .getInstance(getApplicationContext())
-                    .getAppDatabase()
-                    .taskDao()
-                    .getAll();
-
-            Log.d("list",""+taskList.get(0).getWordId());
-
             if (gamePresenter != null) {
                 GetWordRequest getWordRequest = new GetWordRequest();
-                getWordRequest.setUserId("1");
-                getWordRequest.setWordId(Arrays.asList("2", "3"));
+                getWordRequest.setUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
+                getWordRequest.setWordId(list);
                 gamePresenter.fetchNewWord(getWordRequest);
             }
             e.printStackTrace();
@@ -597,6 +593,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     mTimingRunning = false;
 
                 }
+                if (!TextUtils.isEmpty(datumCorrectWord.getId())) {
+                    saveID(datumCorrectWord.getId());
+                }
                 SubmitGameRequest submitGameRequest = new SubmitGameRequest();
                 submitGameRequest.setGameUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
                 submitGameRequest.setGameStatus(Constants.WIN);
@@ -604,9 +603,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 gamePresenter.submitGame(submitGameRequest);
                 // save correct word id
                 //datumCorrectWord.getId()
-                if (!TextUtils.isEmpty(datumCorrectWord.getId())) {
-                    saveID(datumCorrectWord.getId());
-                }
+
             }
             return true;
         }// dictionary check is pending
@@ -622,7 +619,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         } else {// yellow
                             findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_yellow);
                             findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_yellow);
-
                         }
                     }
                 }
@@ -637,14 +633,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void saveID(String id) {
-        Task task = new Task();
+        Task task=new Task();
         task.setWordId(id);
 
-        //adding to database
-        DatabaseClient.getInstance(getApplicationContext()).getAppDatabase()
-                .taskDao()
-                .insert(task);
-        //return null;
+        gamePresenter.saveIDLocalDB(GameActivity.this,task);
+
     }
 
     private void openLeaderBoardOnGameEnd() {
@@ -825,7 +818,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
                 GetWordRequest getWordRequest = new GetWordRequest();
                 getWordRequest.setUserId(String.valueOf(data.getId()));
-                getWordRequest.setWordId(Arrays.asList("2", "3"));
+                getWordRequest.setWordId(list);
                 gamePresenter.fetchNewWord(getWordRequest);
             }
         }
