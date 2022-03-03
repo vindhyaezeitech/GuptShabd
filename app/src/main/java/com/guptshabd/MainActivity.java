@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                intent.putExtra("user_id","1");
-                intent.putExtra("name","vikash");
+                intent.putExtra("user_id",getIntent().getStringExtra("user_id"));
+                intent.putExtra("name",getIntent().getStringExtra("name"));
                 intent.putExtra("uname","vikash");
                 intent.putExtra("email","vikash@mailinator.com");
                 intent.putExtra("profile_image","");

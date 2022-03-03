@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity
+@Entity(tableName = "task")
 public class Task implements Serializable {
 
     @PrimaryKey(autoGenerate = true)

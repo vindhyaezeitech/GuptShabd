@@ -555,7 +555,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 GetWordRequest getWordRequest = new GetWordRequest();
                 getWordRequest.setUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
                 getWordRequest.setWordId(list);
-                gamePresenter.fetchNewWord(getWordRequest);
+                gamePresenter.fetchNewWord(GameActivity.this,getWordRequest);
             }
             e.printStackTrace();
         }
@@ -819,7 +819,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 GetWordRequest getWordRequest = new GetWordRequest();
                 getWordRequest.setUserId(String.valueOf(data.getId()));
                 getWordRequest.setWordId(list);
-                gamePresenter.fetchNewWord(getWordRequest);
+                gamePresenter.fetchNewWord(GameActivity.this, getWordRequest);
             }
         }
 

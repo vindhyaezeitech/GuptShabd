@@ -20,4 +20,8 @@ public interface TaskDao {
     @Insert
     void insert(Task task);
 
+    @Query("DELETE FROM task")
+    void deleteAllCategory();
+
+
 }

@@ -14,6 +14,8 @@ import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
 import com.shabdamsdk.network.ApiService;
 import com.shabdamsdk.network.RetrofitClient;
 
+import java.util.ArrayList;
+
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -29,25 +31,48 @@ public class GamePresenter {
         this.gameView = gameView;
     }
 
-    public void fetchNewWord(GetWordRequest request){
+    public void fetchNewWord(Context context,GetWordRequest request){
         if(gameView != null){
             gameView.showProgress();
         }
+
+        compositeDisposable.add(DatabaseClient.getInstance(context).getAppDatabase().taskDao().getAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    ArrayList<String> wordIdList = new ArrayList<>();
+                    if(response != null ){
+                        if(response.size() > 0){
+                            for (int i = 0; i <response.size() ; i++) {
+                                wordIdList.add(response.get(i).getWordId());
+                            }
+                        }
+                    }
+
+                    request.setWordId(wordIdList);
+                    callWordAPI(request);
+                }, throwable -> {
+                    callWordAPI(request);
+                }));
+
+    }
+
+    public void callWordAPI(GetWordRequest request){
         compositeDisposable.add(apiService.fetchNewWord(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-            if(response != null && response.getData() != null &&response.getData() != null && response.getData().size() > 0){
-                if(gameView != null){
-                    gameView.hideProgress();
-                }
-                gameView.onWordFetched(response.getData().get(0));
-            }
-        }, throwable -> {
-
-        }));
-
-
+                    if(response != null && response.getData() != null &&response.getData() != null && response.getData().size() > 0){
+                        if(gameView != null){
+                            gameView.hideProgress();
+                        }
+                        gameView.onWordFetched(response.getData().get(0));
+                    }
+                }, throwable -> {
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
+                }));
     }
 
     public void fetchLeaderBoardList(String game_id){
@@ -159,22 +184,6 @@ public class GamePresenter {
 
     }
 
-    public void fetchLocalDBData(Context context){
-
-        compositeDisposable.add(DatabaseClient.getInstance(context).getAppDatabase().taskDao().getAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if(response != null ){
-                        if(gameView != null){
-                            gameView.hideProgress();
-                        }
-                    }
-                }, throwable -> {
-
-                }));
-
-    }
 
     public void saveIDLocalDB(Context context, Task task){
 
