@@ -18,6 +18,6 @@ public interface TaskDao {
     Observable<List<Task>> getAll();
 
     @Insert
-    Observable<Long> insert(Task task);
+    void insert(Task task);
 
 }

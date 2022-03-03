@@ -1,6 +1,7 @@
 package com.shabdamsdk;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.shabdamsdk.db.AppDatabase;
 import com.shabdamsdk.db.DatabaseClient;
@@ -13,6 +14,7 @@ import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
 import com.shabdamsdk.network.ApiService;
 import com.shabdamsdk.network.RetrofitClient;
 
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -176,18 +178,10 @@ public class GamePresenter {
 
     public void saveIDLocalDB(Context context, Task task){
 
-        compositeDisposable.add(DatabaseClient.getInstance(context).getAppDatabase().taskDao().insert(task)
+        compositeDisposable.add(Completable.fromAction(() -> DatabaseClient.getInstance(context).getAppDatabase().taskDao().insert(task))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if(response != null ){
-                        if(gameView != null){
-                            gameView.hideProgress();
-                        }
-                    }
-                }, throwable -> {
-
-                }));
+                .subscribe());
 
     }
 
