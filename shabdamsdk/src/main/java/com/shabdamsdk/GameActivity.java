@@ -87,6 +87,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             R.id.tv_sa, R.id.tv_ha, R.id.tv_chota_a, R.id.tv_bada_a, R.id.tv_choti_e,
             R.id.tv_badi_e, R.id.tv_chota_u, R.id.tv_bada_u, R.id.tv_rishi, R.id.tv_lira,
             R.id.tv_chot_ae, R.id.tv_bada_ae, R.id.tv_chota_o, R.id.tv_bada_o};
+    private Datum datumCorrectWord;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -597,6 +599,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 submitGameRequest.setGameStatus(Constants.WIN);
                 submitGameRequest.setTime(String.valueOf(pauseOffset/1000));
                 gamePresenter.submitGame(submitGameRequest);
+                // save correct word id
+                //datumCorrectWord.getId()
             }
             return true;
         }// dictionary check is pending
@@ -775,6 +779,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onWordFetched(Datum datumCorrectWord) {
+        this.datumCorrectWord = datumCorrectWord;
         this.correctWord = datumCorrectWord.getWords();
         ToastUtils.show(GameActivity.this, correctWord);
         showMatraText();
