@@ -2,20 +2,22 @@ package com.shabdamsdk.db;
 
 
 
+import android.database.Observable;
+
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 
 
 @Dao
 public interface TaskDao {
 
     @Query("SELECT * FROM Task")
-    Observable<List<Task>> getAll();
+    Single<List<Task>> getAll();
 
     @Insert
     void insert(Task task);

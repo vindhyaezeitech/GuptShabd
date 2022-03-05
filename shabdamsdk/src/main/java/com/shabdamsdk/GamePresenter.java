@@ -195,6 +195,10 @@ public class GamePresenter {
     }
 
     public void onDestroy(){
+        if(compositeDisposable != null){
+            compositeDisposable.clear();
+            compositeDisposable.dispose();
+        }
 
     }
 }
