@@ -27,7 +27,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -170,7 +172,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         // an ad is loaded.
                         mInterstitialAd = interstitialAd;
                         //Log.i(TAG, "onAdLoaded");
-                        loadAdd();
+                       // loadAdd();
                     }
 
                     @Override
@@ -179,6 +181,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         //Log.i(TAG, loadAdError.getMessage());
                         mInterstitialAd = null;
                     }
+
+
+
                 });
 
     }
@@ -186,6 +191,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void loadAdd() {
         if (mInterstitialAd != null) {
             mInterstitialAd.show(this);
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+                    showHint();
+                    interstitialAdd();
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    super.onAdFailedToShowFullScreenContent(adError);
+                    showHint();
+                    interstitialAdd();
+                }
+            });
         } else {
             Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
         }
@@ -353,7 +373,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.iv_settings_btn) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.rl_hint) {
-            showHint();
+           // showHint();
+            if (hintCount < 2) {
+                loadAdd();
+            }
         }
     }
 
@@ -388,6 +411,32 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         agla_shabd_btn = dialogView.findViewById(R.id.rl_agla_shabd_btn);
         tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
         tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
+
+        if(currentAttempt == 1){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }else if(currentAttempt == 2){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }else if(currentAttempt == 3){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }else if( currentAttempt == 4){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }
 
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
