@@ -1,6 +1,7 @@
 package com.shabdamsdk.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -27,7 +28,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     private GamePresenter gamePresenter;
     private GetLeaderboardListAdapter adapter;
     private RecyclerView recyclerView;
-    private RelativeLayout rl_one, rl_two, rl_three;
+    private RelativeLayout rl_one, rl_two, rl_three, rl_share_btn;
     private TextView tv_name_one, tv_name_two, tv_name_three;
 
     @Override
@@ -46,6 +47,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
         tv_name_one = findViewById(R.id.tv_name_one);
         tv_name_two = findViewById(R.id.tv_name_two);
         tv_name_three = findViewById(R.id.tv_name_three);
+        rl_share_btn = findViewById(R.id.rl_share_btn);
         Intent intent = getIntent();
         type = intent.getStringExtra("type");
 
@@ -69,7 +71,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
-            } else if(!TextUtils.isEmpty(type) && type.equals("2")){
+            } else if (!TextUtils.isEmpty(type) && type.equals("2")) {
                 Intent intent = new Intent(this, GameActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
@@ -79,12 +81,14 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
                 intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
                 startActivity(intent);
                 finish();
-            }else {
+            } else if (view.getId() == R.id.rl_share_btn) {
+                //takeScreenshot(Screensh.FULL);
+
+            } else {
                 finish();
             }
         }
     }
-
     @Override
     public void showProgress() {
 

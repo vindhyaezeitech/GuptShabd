@@ -220,43 +220,6 @@
                 android:src="@drawable/forward_arrow_icon" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_below="@id/rl_agla_shabd_btn"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_35sdp"
-            android:background="@drawable/box_radius"
-            android:backgroundTint="@color/text_color_black">
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_below="@id/rl_agla_shabd_btn"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_32sdp"
-            android:background="@drawable/button_radius">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:text="@string/share_text"
-                android:textColor="@color/text_color_black"
-                android:textSize="@dimen/_13sdp" />
-
-            <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_20sdp"
-                android:src="@drawable/share_icon" />
-        </RelativeLayout>
-
     </RelativeLayout>
 
 </LinearLayout>
