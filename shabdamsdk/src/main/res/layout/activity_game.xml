@@ -85,6 +85,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/ll_grid_one"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
@@ -124,6 +125,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_grid_two"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -163,6 +165,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_grid_three"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -208,6 +211,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_grid_four"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -253,6 +257,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_grid_five"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -878,6 +883,26 @@
                 android:layout_gravity="center">
 
             </ProgressBar>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_dic_error"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_160sdp"
+            android:layout_gravity="bottom"
+            android:background="#80ff0000"
+            android:clickable="true"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="@dimen/_24sdp"
+                android:text="शब्द शब्दकोश में नहीं है।"
+                android:layout_gravity="center"/>
+
         </FrameLayout>
     </FrameLayout>
 

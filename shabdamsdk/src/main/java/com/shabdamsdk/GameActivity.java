@@ -2,7 +2,9 @@ package com.shabdamsdk;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -14,8 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,8 +30,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -95,6 +102,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private String minute, second;
     private Datum datumCorrectWord;
     private InterstitialAd mInterstitialAd;
+    private Animation shakeAnimation;
 
 
     @Override
@@ -170,7 +178,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         // an ad is loaded.
                         mInterstitialAd = interstitialAd;
                         //Log.i(TAG, "onAdLoaded");
-                        loadAdd();
+                       // loadAdd();
                     }
 
                     @Override
@@ -179,6 +187,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         //Log.i(TAG, loadAdError.getMessage());
                         mInterstitialAd = null;
                     }
+
+
+
                 });
 
     }
@@ -186,6 +197,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void loadAdd() {
         if (mInterstitialAd != null) {
             mInterstitialAd.show(this);
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+                    showHint();
+                    interstitialAdd();
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    super.onAdFailedToShowFullScreenContent(adError);
+                    showHint();
+                    interstitialAdd();
+                }
+            });
         } else {
             Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
         }
@@ -353,7 +379,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.iv_settings_btn) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.rl_hint) {
-            showHint();
+           // showHint();
+            if (hintCount < 2) {
+                loadAdd();
+            }
         }
     }
 
@@ -388,6 +417,32 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         agla_shabd_btn = dialogView.findViewById(R.id.rl_agla_shabd_btn);
         tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
         tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
+
+        if(currentAttempt == 1){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }else if(currentAttempt == 2){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }else if(currentAttempt == 3){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }else if( currentAttempt == 4){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }
 
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
@@ -479,6 +534,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 btnIdList.remove(btnIdList.size() - 1);
             }
             updateWordCharArray("x");
+            ((TextView)findViewById(getId(index))).setBackgroundResource(R.drawable.bg_answer);
             ((TextView) findViewById(getId(index))).setText(matra[index % MAX_CHAR_LENGTH == 0 ? MAX_CHAR_LENGTH - 1 : (index % MAX_CHAR_LENGTH) - 1]);
 
             index = index - 1;
@@ -486,34 +542,42 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void submitText() {
+        animate();
 
-        //animate();
 
-        if (index % MAX_CHAR_LENGTH == 0) {
-            //verifyText--> call API --> increment count
-            verifyText();
-            //Increment current Attempt Count at Last
-            if (currentAttempt < MAX_ATTEMPT) {
-                currentAttempt = currentAttempt + 1;
-                updateCurrentAttempt();
-            }
-            btnIdList.clear();
+       new Handler().postDelayed(new Runnable() {
+           @Override
+           public void run() {
+               if (index % MAX_CHAR_LENGTH == 0) {
 
-            if (index == MAX_ATTEMPT * MAX_CHAR_LENGTH) {
-                if (!Arrays.equals(word_array, entered_word_array)) {
-                    openLeaderBoardOnGameEnd();
-                }
+                   //verifyText--> call API --> increment count
+                   if(!verifyText()){
+                       //Increment current Attempt Count at Last
+                       if (currentAttempt < MAX_ATTEMPT) {
+                           currentAttempt = currentAttempt + 1;
+                           updateCurrentAttempt();
+                       }
+                       btnIdList.clear();
+                   }
 
-            }
 
-        }
+                   if (index == MAX_ATTEMPT * MAX_CHAR_LENGTH) {
+                       if (!Arrays.equals(word_array, entered_word_array)) {
+                           openLeaderBoardOnGameEnd();
+                       }
+
+                   }
+
+               }
+           }
+       }, 1600);
     }
 
     /**
      * hit API to check word in dictionary
      */
-    private void verifyText() {
-        mapWord();
+    private boolean verifyText() {
+       return mapWord();
     }
 
     private void updateCurrentAttempt() {
@@ -600,7 +664,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 GetWordRequest getWordRequest = new GetWordRequest();
                 getWordRequest.setUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
                 getWordRequest.setWordId(list);
-                gamePresenter.fetchNewWord(getWordRequest);
+                gamePresenter.fetchNewWord(GameActivity.this,getWordRequest);
             }
             e.printStackTrace();
         }
@@ -661,15 +725,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         if (i == j) {//same postion green
                             findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_green_box);
                             findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_green_box);
+                            ((TextView)findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+                            ((TextView)findViewById(btnIdList.get(i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+
                         } else {// yellow
                             findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_yellow);
                             findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_yellow);
+                            ((TextView)findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+                            ((TextView)findViewById(btnIdList.get(i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+
                         }
                     }
                 }
                 if (!isExist) {//Not in word
                     findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_grey);
                     findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_grey);
+                    ((TextView)findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+                    ((TextView)findViewById(btnIdList.get(i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+
                 }
             }
 
@@ -700,11 +773,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void updateGreenBoxes() {
         for (int i = (currentAttempt - 1) * 3 + 1; i < currentAttempt * 3 + 1; i++) {
             findViewById(getId(i)).setBackgroundResource(R.drawable.bg_green_box);
+            ((TextView)findViewById(getId(i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
         }
 
         //update Key Board
         for (int j = 0; j < btnIdList.size(); j++) {
             findViewById(btnIdList.get(j)).setBackgroundResource(R.drawable.bg_green_box);
+            ((TextView)findViewById(btnIdList.get(j))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+
         }
     }
 
@@ -769,16 +845,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 public void onAnimationEnd(Animator animator) {
                     if (animator == flipOutAnimatorSet) {
                         flipInAnimatorSet.start();
-                        flipOutAnimatorSet2.start();
+                       // flipOutAnimatorSet2.start();
                     } else if (animator == flipOutAnimatorSet2) {
                         flipInAnimatorSet2.start();
-                        flipOutAnimatorSet3.start();
+                       // flipOutAnimatorSet3.start();
                     } else {
                         flipInAnimatorSet3.start();
                     }
+                    /*flipInAnimatorSet.start();
+                    flipInAnimatorSet2.start();
+                    flipInAnimatorSet3.start();*/
 
 
-                    findViewById(R.id.et_1).setBackgroundResource(R.drawable.bg_green_box);
                 }
 
                 @Override
@@ -794,6 +872,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
 
             flipOutAnimatorSet.start();
+            flipOutAnimatorSet2.start();
+            flipOutAnimatorSet3.start();
+
 
 
             flipOutAnimatorSet.addListener(animatorListener);
@@ -805,6 +886,22 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
     }
+
+    /*private void flipCardAnimation(){
+        final ObjectAnimator oa1 = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 0f);
+        final ObjectAnimator oa2 = ObjectAnimator.ofFloat(imageView, "scaleX", 0f, 1f);
+        oa1.setInterpolator(new DecelerateInterpolator());
+        oa2.setInterpolator(new AccelerateDecelerateInterpolator());
+        oa1.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                imageView.setImageResource(R.drawable.frontSide);
+                oa2.start();
+            }
+        });
+        oa1.start();
+    }*/
 
 
     @Override
@@ -864,7 +961,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 GetWordRequest getWordRequest = new GetWordRequest();
                 getWordRequest.setUserId(String.valueOf(data.getId()));
                 getWordRequest.setWordId(list);
-                gamePresenter.fetchNewWord(getWordRequest);
+                gamePresenter.fetchNewWord(GameActivity.this, getWordRequest);
             }
         }
 
@@ -884,11 +981,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (hintCount == 2) {
                 btnIdList.add(getKeyId(String.valueOf(word_array[0])));
                 ((TextView) findViewById(getId(pos - 1))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
+                ((TextView)findViewById(getId(0))).setBackgroundResource(R.color.green);
                 entered_word_array[0] = word_array[0];
 
             }
 
             ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[hintCount - 1]).append(matra[hintCount - 1]));
+            ((TextView)findViewById(getId(hintCount))).setBackgroundResource(R.color.green);
             updateWordCharArray(String.valueOf(word_array[hintCount - 1]));
             int id = getKeyId(String.valueOf(word_array[hintCount - 1]));
             if (id != -1) {
@@ -926,12 +1025,81 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             // shake attempted layout
             submitText();
         } else {
-            ToastUtils.show(GameActivity.this, "शब्द शब्दकोश में नहीं है। ");
+            shakeAnimation();
+            for (int i = 1; i < MAX_CHAR_LENGTH +1; i++) {
+                ((TextView)findViewById(getId((currentAttempt-1)*3+i))).setBackgroundResource(R.drawable.bg_red);
+                ((TextView)findViewById(getId((currentAttempt-1)*3+i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+            }
+            findViewById(R.id.fl_dic_error).setVisibility(View.VISIBLE);
+
+            shakeAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    for (int i = 1; i < MAX_CHAR_LENGTH +1; i++) {
+                        ((TextView)findViewById(getId((currentAttempt-1)*3+i))).setBackgroundResource(R.drawable.bg_answer);
+                        ((TextView)findViewById(getId((currentAttempt-1)*3+i))).setText("");
+                        ((TextView)findViewById(getId((currentAttempt-1)*3+i))).setTextColor(ContextCompat.getColor(GameActivity.this,R.color.black));
+                    }
+                    updateCurrentAttempt();
+                    index=(currentAttempt-1)*3;
+                    findViewById(R.id.fl_dic_error).setVisibility(View.GONE);
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                   // shakeAnimation.reset();
+
+
+                }
+            }, 1000);
+           // ToastUtils.show(GameActivity.this, "शब्द शब्दकोश में नहीं है। ");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(gamePresenter != null){
+            gamePresenter.onDestroy();
+        }
+        super.onDestroy();
     }
 
     @Override
     public void onGameSubmit() {
         openLeaderBoardOnGameEnd();
     }
+
+    private void shakeAnimation(){
+        shakeAnimation = AnimationUtils.loadAnimation(GameActivity.this, R.anim.shake);
+        getGrid().setAnimation(shakeAnimation);
+    }
+
+    public View getGrid(){
+        if(currentAttempt == 1){
+            return findViewById(R.id.ll_grid_one);
+        }else if(currentAttempt == 2){
+            return findViewById(R.id.ll_grid_two);
+        }else if(currentAttempt == 3){
+            return findViewById(R.id.ll_grid_three);
+        }else if(currentAttempt == 4){
+            return findViewById(R.id.ll_grid_four);
+        }else if(currentAttempt == 5){
+            return findViewById(R.id.ll_grid_five);
+        }
+
+        return null;
+    }
+
 }
