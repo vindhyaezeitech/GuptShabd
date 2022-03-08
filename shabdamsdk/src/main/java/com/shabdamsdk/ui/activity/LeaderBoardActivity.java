@@ -37,11 +37,6 @@ import java.util.List;
 
 public class LeaderBoardActivity extends AppCompatActivity implements GameView, View.OnClickListener {
 
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static final String[] PERMISSION_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    };
     private String type;
     private GamePresenter gamePresenter;
     private GetLeaderboardListAdapter adapter;
@@ -49,23 +44,10 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     private RelativeLayout rl_one, rl_two, rl_three, rl_share_btn;
     private TextView tv_name_one, tv_name_two, tv_name_three;
 
-    public static void verifyStoragePermission(LeaderBoardActivity activity) {
-
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSION_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
-        verifyStoragePermission(LeaderBoardActivity.this);
         inIt();
     }
 
@@ -154,12 +136,12 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     private void shareScreenShot(File imageFile) {
         Uri uri = FileProvider.getUriForFile(
                 this,
-                "com.shabdamsdk.LeaderBoardActivity.provider",
+                "com.guptshabd.LeaderBoardActivity.provider",
                 imageFile);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("image/*");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from Instagram");
+        //intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from Instagram");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
 
         try {

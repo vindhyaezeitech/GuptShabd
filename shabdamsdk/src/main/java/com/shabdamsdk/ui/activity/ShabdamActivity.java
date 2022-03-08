@@ -37,13 +37,6 @@ import java.util.Date;
 
 public class ShabdamActivity extends AppCompatActivity implements GameView, View.OnClickListener {
 
-
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static final String[] PERMISSION_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    };
-
     char[] word_array = new char[3];
     char[] entered_word_array = new char[3];
     StringBuilder[] matra = new StringBuilder[3];
@@ -53,7 +46,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     private String correctWord;
     private TextView tvOne, tvTwo, tvThree;
     private RelativeLayout agla_shabd_btn, rl_share_btn;
-    private String minute, second;
+    private String minute, second, currentAttempt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +56,11 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
             correctWord = getIntent().getStringExtra("word");
             minute = getIntent().getStringExtra("minute");
             second = getIntent().getStringExtra("second");
+            currentAttempt = getIntent().getStringExtra("currentAttempt");
             Log.d("time_", minute);
             Log.d("time_", second);
             showMatraText();
         }
-        verifyStoragePermission(ShabdamActivity.this);
         inIt();
     }
 
@@ -175,6 +168,33 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         rl_share_btn = dialogView.findViewById(R.id.rl_share_btn);
         tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
         tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
+
+        if(currentAttempt.equals("1")){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }else if(currentAttempt.equals("2")){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }else if(currentAttempt.equals("3")){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }else if( currentAttempt.equals("4")){
+            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_three).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_four).setVisibility(View.VISIBLE);
+            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
+        }
+
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
         cancel_btn.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +207,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         rl_share_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takeScreenShot(getWindow().getDecorView());
+                takeScreenShot(dialogView);
             }
         });
         agla_shabd_btn.setOnClickListener(new View.OnClickListener() {
@@ -240,29 +260,18 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     private void shareScreenShot(File imageFile) {
         Uri uri = FileProvider.getUriForFile(
                 this,
-                "com.shabdamsdk.ShabdamActivity.provider",
+                "com.guptshabd.ShabdamActivity.provider",
                 imageFile);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("image/*");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from Instagram");
+        //intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from Instagram");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
 
         try {
             this.startActivity(Intent.createChooser(intent, "Share With"));
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "No App Available", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void verifyStoragePermission(ShabdamActivity activity) {
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSION_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE);
         }
     }
 
