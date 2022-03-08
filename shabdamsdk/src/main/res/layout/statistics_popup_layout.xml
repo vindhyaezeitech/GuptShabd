@@ -616,6 +616,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_share_btn"
             android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_alignParentRight="true"

@@ -13,11 +13,14 @@ import com.shabdamsdk.R;
 import com.shabdamsdk.model.leaderboard.LeaderboardListModel;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class GetLeaderboardListAdapter extends RecyclerView.Adapter<GetLeaderboardListAdapter.ViewHolder> {
     private Context context;
     private List<LeaderboardListModel> list;
+    private long minutes, seconds;
+    private String minute, second;
 
 
     public GetLeaderboardListAdapter(Context context, List<LeaderboardListModel> listData) {
@@ -36,8 +39,11 @@ public class GetLeaderboardListAdapter extends RecyclerView.Adapter<GetLeaderboa
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_rank.setText(list.get(position).getRank());
         holder.tv_name.setText(list.get(position).getName());
-        holder.tv_time.setText(list.get(position).getTime());
-
+        minutes = TimeUnit.MILLISECONDS.toMinutes(Long.parseLong(list.get(position).getTime()));
+        seconds = TimeUnit.MILLISECONDS.toSeconds(Long.parseLong(list.get(position).getTime())) % 60;
+        minute = String.format("%02d", minutes);
+        second = String.format("%02d", seconds);
+        holder.tv_time.setText(minute + " " + ":" + " " + second);
     }
 
     @Override

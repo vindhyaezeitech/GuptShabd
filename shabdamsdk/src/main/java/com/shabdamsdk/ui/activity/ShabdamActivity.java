@@ -1,8 +1,15 @@
 package com.shabdamsdk.ui.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +17,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import com.shabdamsdk.GameActivity;
 import com.shabdamsdk.GamePresenter;
@@ -20,7 +30,20 @@ import com.shabdamsdk.R;
 import com.shabdamsdk.model.statistics.Data;
 import com.shabdamsdk.pref.CommonPreference;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
+
 public class ShabdamActivity extends AppCompatActivity implements GameView, View.OnClickListener {
+
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final String[] PERMISSION_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    };
+
     char[] word_array = new char[3];
     char[] entered_word_array = new char[3];
     StringBuilder[] matra = new StringBuilder[3];
@@ -29,7 +52,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     private TextView tv_played, tv_win, tv_current_streak, tv_max_streak, tv_timer_counter_text;
     private String correctWord;
     private TextView tvOne, tvTwo, tvThree;
-    private RelativeLayout agla_shabd_btn;
+    private RelativeLayout agla_shabd_btn, rl_share_btn;
     private String minute, second;
 
     @Override
@@ -44,6 +67,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
             Log.d("time_", second);
             showMatraText();
         }
+        verifyStoragePermission(ShabdamActivity.this);
         inIt();
     }
 
@@ -148,6 +172,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         tv_current_streak = dialogView.findViewById(R.id.tv_current_streak);
         tv_max_streak = dialogView.findViewById(R.id.tv_max_streak);
         agla_shabd_btn = dialogView.findViewById(R.id.rl_agla_shabd_btn);
+        rl_share_btn = dialogView.findViewById(R.id.rl_share_btn);
         tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
         tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
         builder.setView(dialogView);
@@ -159,6 +184,12 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
             }
         });
 
+        rl_share_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takeScreenShot(getWindow().getDecorView());
+            }
+        });
         agla_shabd_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -178,6 +209,61 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
 
         callgetStreakAPI();
         alertDialog.show();
+    }
+
+    private void takeScreenShot(View view) {
+        Date date = new Date();
+        CharSequence format = DateFormat.format("MM-dd-yyyy_hh:mm:ss", date);
+
+        try {
+            File mainDir = new File(
+                    this.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "FilShare");
+            if (!mainDir.exists()) {
+                boolean mkdir = mainDir.mkdir();
+            }
+            String path = mainDir + "/" + "TrendOceans" + "-" + format + ".jpeg";
+            view.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+            view.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(path);
+            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            shareScreenShot(imageFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void shareScreenShot(File imageFile) {
+        Uri uri = FileProvider.getUriForFile(
+                this,
+                "com.shabdamsdk.ShabdamActivity.provider",
+                imageFile);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from Instagram");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+
+        try {
+            this.startActivity(Intent.createChooser(intent, "Share With"));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No App Available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void verifyStoragePermission(ShabdamActivity activity) {
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSION_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE);
+        }
     }
 
     private void callgetStreakAPI() {
