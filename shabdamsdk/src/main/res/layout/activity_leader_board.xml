@@ -184,7 +184,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_14sdp"
             android:text="@string/aapka_leaderboard_text"
             android:textColor="@color/text_color_black"
             android:textSize="@dimen/_13sdp"
@@ -198,46 +198,111 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp" />
 
+
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_12sdp"
+            android:layout_marginRight="@dimen/_12sdp">
 
             <RelativeLayout
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/_35sdp"
-                android:background="@drawable/box_radius"
-                android:backgroundTint="@color/text_color_black">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/leaderboard_background_radius">
+
+                <RelativeLayout
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:background="@drawable/box_radius"
+                    android:backgroundTint="@color/text_color_black">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_agla_shabd_btn"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:background="@drawable/box_radius"
+                    android:backgroundTint="@color/yellow">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/agla_shabd_text"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:src="@drawable/forward_arrow_icon" />
+                </RelativeLayout>
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_share_btn"
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/_32sdp"
-                android:background="@drawable/button_radius">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/share_text"
-                    android:textColor="@color/text_color_black"
-                    android:textSize="@dimen/_13sdp" />
+                <RelativeLayout
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:background="@drawable/box_radius"
+                    android:backgroundTint="@color/text_color_black">
 
-                <ImageView
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginRight="@dimen/_20sdp"
-                    android:src="@drawable/share_icon" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_share_btn"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:background="@drawable/button_radius">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/share_text"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:src="@drawable/share_icon" />
+                </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="@dimen/_16sdp"
+            android:text="अपना समय सुधारे। "
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_4sdp"></TextView>
 
 
         <!--<LinearLayout

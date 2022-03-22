@@ -14,6 +14,9 @@ public class GetWordResponse implements Parcelable
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("woord_status")
+    @Expose
+    private String woord_status;
     @SerializedName("status_message")
     @Expose
     private String statusMessage;
@@ -40,6 +43,8 @@ public class GetWordResponse implements Parcelable
     protected GetWordResponse(android.os.Parcel in) {
         this.status = ((String) in.readValue((String.class.getClassLoader())));
         this.statusMessage = ((String) in.readValue((String.class.getClassLoader())));
+        this.woord_status = ((String) in.readValue((String.class.getClassLoader())));
+
         in.readList(this.data, (Datum.class.getClassLoader()));
     }
 
@@ -62,6 +67,14 @@ public class GetWordResponse implements Parcelable
         this.statusMessage = statusMessage;
     }
 
+    public String getWoord_status() {
+        return woord_status;
+    }
+
+    public void setWoord_status(String woord_status) {
+        this.woord_status = woord_status;
+    }
+
     public List<Datum> getData() {
         return data;
     }
@@ -74,6 +87,7 @@ public class GetWordResponse implements Parcelable
         dest.writeValue(status);
         dest.writeValue(statusMessage);
         dest.writeList(data);
+        dest.writeValue(woord_status);
     }
 
     public int describeContents() {

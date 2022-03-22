@@ -15,12 +15,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.shabdamsdk.Constants;
 import com.shabdamsdk.GameActivity;
 import com.shabdamsdk.GamePresenter;
 import com.shabdamsdk.GameView;
@@ -43,11 +51,14 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     private RecyclerView recyclerView;
     private RelativeLayout rl_one, rl_two, rl_three, rl_share_btn;
     private TextView tv_name_one, tv_name_two, tv_name_three;
+    private InterstitialAd mInterstitialAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
+        interstitialAdd();
         inIt();
     }
 
@@ -61,6 +72,8 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
         tv_name_two = findViewById(R.id.tv_name_two);
         tv_name_three = findViewById(R.id.tv_name_three);
         rl_share_btn = findViewById(R.id.rl_share_btn);
+        findViewById(R.id.rl_agla_shabd_btn).setOnClickListener(this);
+
         Intent intent = getIntent();
         type = intent.getStringExtra("type");
 
@@ -78,7 +91,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     private void callGetLeaderBoardListAPI() {
         String game_id = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
 
-        gamePresenter = new GamePresenter(this);
+        gamePresenter = new GamePresenter(this, LeaderBoardActivity.this);
         //  compositeDisposable = interestPresenter.loadCategoryData();
         gamePresenter.fetchLeaderBoardList(game_id);
     }
@@ -104,6 +117,8 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
             } else {
                 finish();
             }
+        }else if (view.getId() == R.id.rl_agla_shabd_btn) {
+            loadAdd();
         }
     }
 
@@ -215,6 +230,83 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
             intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
             startActivity(intent);
             finish();
+        }
+    }
+
+    private void interstitialAdd() {
+
+       /* MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });*/
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(this, Constants.INTRESTITIAL_AD_ID, adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        mInterstitialAd = interstitialAd;
+                        //Log.i(TAG, "onAdLoaded");
+                        // loadAdd();
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        //Log.i(TAG, loadAdError.getMessage());
+                        mInterstitialAd = null;
+                    }
+
+
+                });
+
+    }
+
+
+
+    private void loadAdd() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd.show(this);
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+                    startGame();
+                    interstitialAdd();
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    super.onAdFailedToShowFullScreenContent(adError);
+                    startGame();
+                    interstitialAdd();
+                }
+            });
+        } else {
+            startGame();
+           // Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void startGame() {
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+        intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
+        intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
+        intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
+        intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(gamePresenter != null){
+            gamePresenter.onDestroy();
         }
     }
 }

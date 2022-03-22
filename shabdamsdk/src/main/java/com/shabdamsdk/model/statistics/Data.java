@@ -1,9 +1,15 @@
+
 package com.shabdamsdk.model.statistics;
 
+import android.os.Parcelable;
+import android.os.Parcelable.Creator;
+import android.os.Parcelable.Creator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Data {
+public class Data implements Parcelable
+{
+
     @SerializedName("game_user_id")
     @Expose
     private Integer gameUserId;
@@ -28,6 +34,40 @@ public class Data {
     @SerializedName("last_game_status")
     @Expose
     private String lastGameStatus;
+    @SerializedName("no_of_attempts")
+    @Expose
+    private NoOfAttempts noOfAttempts;
+    public final static Creator<Data> CREATOR = new Creator<Data>() {
+
+
+        @SuppressWarnings({
+            "unchecked"
+        })
+        public Data createFromParcel(android.os.Parcel in) {
+            return new Data(in);
+        }
+
+        public Data[] newArray(int size) {
+            return (new Data[size]);
+        }
+
+    }
+    ;
+
+    protected Data(android.os.Parcel in) {
+        this.gameUserId = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.userId = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.win = ((String) in.readValue((String.class.getClassLoader())));
+        this.loss = ((String) in.readValue((String.class.getClassLoader())));
+        this.played = ((String) in.readValue((String.class.getClassLoader())));
+        this.currentStreak = ((String) in.readValue((String.class.getClassLoader())));
+        this.maxStreak = ((String) in.readValue((String.class.getClassLoader())));
+        this.lastGameStatus = ((String) in.readValue((String.class.getClassLoader())));
+        this.noOfAttempts = ((NoOfAttempts) in.readValue((NoOfAttempts.class.getClassLoader())));
+    }
+
+    public Data() {
+    }
 
     public Integer getGameUserId() {
         return gameUserId;
@@ -92,4 +132,29 @@ public class Data {
     public void setLastGameStatus(String lastGameStatus) {
         this.lastGameStatus = lastGameStatus;
     }
+
+    public NoOfAttempts getNoOfAttempts() {
+        return noOfAttempts;
+    }
+
+    public void setNoOfAttempts(NoOfAttempts noOfAttempts) {
+        this.noOfAttempts = noOfAttempts;
+    }
+
+    public void writeToParcel(android.os.Parcel dest, int flags) {
+        dest.writeValue(gameUserId);
+        dest.writeValue(userId);
+        dest.writeValue(win);
+        dest.writeValue(loss);
+        dest.writeValue(played);
+        dest.writeValue(currentStreak);
+        dest.writeValue(maxStreak);
+        dest.writeValue(lastGameStatus);
+        dest.writeValue(noOfAttempts);
+    }
+
+    public int describeContents() {
+        return  0;
+    }
+
 }

@@ -4,11 +4,13 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,10 +42,18 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.shabdamsdk.db.Task;
 import com.shabdamsdk.model.GetWordRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
@@ -72,8 +83,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public static final int MAX_CHAR_LENGTH = 3;
     public static final int MAX_ATTEMPT = 5;
     private final int MAX_INDEX = 16;
-    private final ArrayList<Integer> btnIdList = new ArrayList<>();
-    private final int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
+    private  ArrayList<Integer> btnIdList = new ArrayList<>();
+    private  int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
             R.id.tv_cha, R.id.tv_chah, R.id.tv_ja, R.id.tv_jha, R.id.tv_ea,
             R.id.tv_ta, R.id.tdha, R.id.tv_da, R.id.tv_dha, R.id.tv_ada,
             R.id.tv_tea, R.id.tv_tha, R.id.tv_dea, R.id.tv_dhea, R.id.tv_na,
@@ -101,7 +112,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private GamePresenter gamePresenter;
     private FrameLayout flLoading;
     private boolean mTimingRunning;
-    private String userId, name, u_name, email, profile_image;
     private TextView tv_played, tv_win, tv_current_streak, tv_max_streak, tv_timer_counter_text;
     private Chronometer tv_timer_text;
     private long pauseOffset, minutes, seconds;
@@ -109,6 +119,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Datum datumCorrectWord;
     private InterstitialAd mInterstitialAd;
     private Animation shakeAnimation;
+    private boolean isUttarDekheClicked;
+    private RewardedAd mRewardedAd;
+
+
 
 
     @Override
@@ -116,43 +130,25 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         interstitialAdd();
+        initRewardAdd();
 
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
 
-        // load the animation
-        if (getIntent().getExtras() != null) {
-            userId = getIntent().getStringExtra("user_id");
-            name = getIntent().getStringExtra("name");
-            u_name = getIntent().getStringExtra("uname");
-            email = getIntent().getStringExtra("email");
-            profile_image = getIntent().getStringExtra("profile_image");
-
-            if (!TextUtils.isEmpty(userId)) {
-                CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.USER_ID, userId);
-            }
-
-            if (!TextUtils.isEmpty(name)) {
-                CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.NAME, name);
-            }
-            if (!TextUtils.isEmpty(u_name)) {
-                CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.UNAME, u_name);
-            }
-            if (!TextUtils.isEmpty(email)) {
-                CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.EMAIL, email);
-            }
-            if (!TextUtils.isEmpty(profile_image)) {
-                CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.PROFILE_IMAGE, profile_image);
-            }
-        } else {
-            return;
-        }
+        AdView mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         animBlink = AnimationUtils.loadAnimation(this,
                 R.anim.blink);
         initViewClick();
 
-        gamePresenter = new GamePresenter(this);
+        gamePresenter = new GamePresenter(this, GameActivity.this);
 
-        if (!TextUtils.isEmpty(userId)) {
+       /* if (!TextUtils.isEmpty(userId)) {
             AddUserRequest request = new AddUserRequest();
             request.setUserId(userId);
             request.setName(name);
@@ -160,6 +156,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             request.setEmail(email);
             request.setProfileimage(profile_image);
             gamePresenter.addUser(request);
+        }*/
+
+        if (gamePresenter != null) {
+            GetWordRequest getWordRequest = new GetWordRequest();
+            getWordRequest.setUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
+            gamePresenter.fetchNewWord(GameActivity.this, getWordRequest);
         }
 
         if (!CommonPreference.getInstance(GameActivity.this).getBoolean(CommonPreference.Key.IS_FIRST_TIME)) {
@@ -176,7 +178,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });*/
 
         AdRequest adRequest = new AdRequest.Builder().build();
-        InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest,
+        InterstitialAd.load(this, Constants.INTRESTITIAL_AD_ID, adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
@@ -199,6 +201,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
+
     private void loadAdd() {
         if (mInterstitialAd != null) {
             mInterstitialAd.show(this);
@@ -206,20 +210,99 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent();
-                    showHint();
-                    interstitialAdd();
+                    openAglaShabd();
+                   // interstitialAdd();
                 }
 
                 @Override
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     super.onAdFailedToShowFullScreenContent(adError);
-                    showHint();
-                    interstitialAdd();
+                    openAglaShabd();
+                    //interstitialAdd();
                 }
             });
         } else {
+            openAglaShabd();
             Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void openAglaShabd(){
+        Intent intent = new Intent(GameActivity.this, GameActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("user_id", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.USER_ID));
+        intent.putExtra("name", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME));
+        intent.putExtra("uname", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.UNAME));
+        intent.putExtra("email", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.EMAIL));
+        intent.putExtra("profile_image", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.PROFILE_IMAGE));
+        startActivity(intent);
+        finish();
+    }
+
+    private void  initRewardAdd(){
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        RewardedAd.load(this, "ca-app-pub-3940256099942544/5224354917",
+                adRequest, new RewardedAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error.
+                       // Log.d(TAG, loadAdError.getMessage());
+                        mRewardedAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                        mRewardedAd = rewardedAd;
+                       // Log.d(TAG, "Ad was loaded.");
+                    }
+                });
+    }
+
+    private void  showRewardAdd(){
+        if (mRewardedAd != null) {
+            Activity activityContext = GameActivity.this;
+            mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+                @Override
+                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                    // Handle the reward.
+                  //  Log.d(TAG, "The user earned the reward.");
+                    int rewardAmount = rewardItem.getAmount();
+                    String rewardType = rewardItem.getType();
+                }
+            });
+            mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    // Called when ad is shown.
+                    // Log.d(TAG, "Ad was shown.");
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(AdError adError) {
+                    // Called when ad fails to show.
+                    // Log.d(TAG, "Ad failed to show.");
+                    showHint();
+                    initRewardAdd();
+                }
+
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    // Called when ad is dismissed.
+                    // Set the ad reference to null so you don't show the ad a second time.
+                    // Log.d(TAG, "Ad was dismissed.");
+                    mRewardedAd = null;
+                    showHint();
+                    initRewardAdd();
+                }
+            });
+
+        } else {
+           // Log.d(TAG, "The rewarded ad wasn't ready yet.");
+            showHint();
+            initRewardAdd();
+        }
+
     }
 
 
@@ -229,6 +312,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             public void onChronometerTick(Chronometer chronometer) {
                 if ((SystemClock.elapsedRealtime() - tv_timer_text.getBase() >= 3600000)) {
                     tv_timer_text.setBase(SystemClock.elapsedRealtime());
+
+                    SubmitGameRequest submitGameRequest = new SubmitGameRequest();
+                    submitGameRequest.setGameUserId(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID));
+                    submitGameRequest.setGameStatus(Constants.LOSS);
+                    submitGameRequest.setNoOfAttempt(currentAttempt);
+                    submitGameRequest.setTime(String.valueOf(3600000 / 1000));
+                    gamePresenter.submitGame(submitGameRequest);
+
                     Toast.makeText(GameActivity.this, "Game Finished!", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -359,35 +450,31 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
             //submitText();
         } else if (id == R.id.rl_uttar_dekho_btn) {
-            if (mTimingRunning) {
-                tv_timer_text.stop();
-                pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
-                mTimingRunning = false;
-                minutes = TimeUnit.MILLISECONDS.toMinutes(pauseOffset);
-                seconds = TimeUnit.MILLISECONDS.toSeconds(pauseOffset) % 60;
-                minute = String.format("%02d", minutes);
-                second = String.format("%02d", seconds);
-            }
+
             if (!TextUtils.isEmpty(correctWord)) {
-                Intent intent = new Intent(this, ShabdamActivity.class);
-                intent.putExtra("word", correctWord);
-                intent.putExtra("minute", minute);
-                intent.putExtra("second", second);
-                intent.putExtra("currentAttempt", String.valueOf(currentAttempt));
-                startActivity(intent);
+                isUttarDekheClicked = true;
+                SubmitGameRequest submitGameRequest = new SubmitGameRequest();
+                submitGameRequest.setGameUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
+                submitGameRequest.setGameStatus(Constants.LOSS);
+                submitGameRequest.setNoOfAttempt(currentAttempt);
+                submitGameRequest.setTime(String.valueOf(pauseOffset / 1000));
+                gamePresenter.submitGame(submitGameRequest);
+
+
             }
         } else if (id == R.id.iv_question_mark_btn) {
             kaiseKhelePopup();
         } else if (id == R.id.iv_trophy_btn) {
             startActivity(new Intent(this, LeaderBoardActivity.class));
         } else if (id == R.id.iv_statistics_btn) {
-            statisticsPopup();
+            callgetStreakAPI();
         } else if (id == R.id.iv_settings_btn) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (id == R.id.rl_hint) {
             // showHint();
             if (hintCount < 2) {
-                loadAdd();
+               // loadAdd();
+                showRewardAdd();
             }
         }
     }
@@ -402,7 +489,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         return builder.toString();
     }
 
-    private void statisticsPopup() {
+    private void statisticsPopup(Data data) {
         if (mTimingRunning) {
             tv_timer_text.stop();
             pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
@@ -425,31 +512,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
         tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
 
-        if (currentAttempt == 1) {
-            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
-            dialogView.findViewById(R.id.ll_two).setVisibility(View.GONE);
-            dialogView.findViewById(R.id.ll_three).setVisibility(View.GONE);
-            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
-            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
-        } else if (currentAttempt == 2) {
-            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
-            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
-            dialogView.findViewById(R.id.ll_three).setVisibility(View.GONE);
-            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
-            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
-        } else if (currentAttempt == 3) {
-            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
-            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
-            dialogView.findViewById(R.id.ll_three).setVisibility(View.VISIBLE);
-            dialogView.findViewById(R.id.ll_four).setVisibility(View.GONE);
-            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
-        } else if (currentAttempt == 4) {
-            dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
-            dialogView.findViewById(R.id.ll_two).setVisibility(View.VISIBLE);
-            dialogView.findViewById(R.id.ll_three).setVisibility(View.VISIBLE);
-            dialogView.findViewById(R.id.ll_four).setVisibility(View.VISIBLE);
-            dialogView.findViewById(R.id.ll_five).setVisibility(View.GONE);
-        }
+
 
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
@@ -471,21 +534,109 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         agla_shabd_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GameActivity.this, GameActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("user_id", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.USER_ID));
-                intent.putExtra("name", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME));
-                intent.putExtra("uname", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.UNAME));
-                intent.putExtra("email", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.EMAIL));
-                intent.putExtra("profile_image", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.PROFILE_IMAGE));
-                startActivity(intent);
-                finish();
+                loadAdd();
             }
         });
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setCancelable(false);
 
-        callgetStreakAPI();
+        tv_played.setText(data.getPlayed());
+        tv_current_streak.setText(data.getCurrentStreak());
+        tv_max_streak.setText(data.getMaxStreak());
+
+        if (data.getWin().equals("0") || data.getPlayed().equals("0")) {
+            tv_win.setText("0");
+        } else {
+            float win = Integer.parseInt(data.getWin());
+            float total_played = Integer.parseInt(data.getPlayed());
+            int percent = (int)((win / total_played) * 100f);
+            tv_win.setText(String.valueOf(percent));
+        }
+
+        if(data != null && data.getNoOfAttempts() != null){
+
+            int progressOne =0, progressTwo = 0, progressThree = 0, progressFour = 0, progressFive = 0, progressSix=0;
+            try{
+                progressOne = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get1())? (Integer.parseInt(data.getNoOfAttempts().get1())*100)/Integer.parseInt(data.getPlayed()):0;
+                progressTwo = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get2())? (Integer.parseInt(data.getNoOfAttempts().get2())*100)/Integer.parseInt(data.getPlayed()):0;
+                progressThree = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get3())? (Integer.parseInt(data.getNoOfAttempts().get3())*100)/Integer.parseInt(data.getPlayed()):0;
+                progressFour = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get4())? (Integer.parseInt(data.getNoOfAttempts().get4())*100)/Integer.parseInt(data.getPlayed()):0;
+                progressFive = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get5())? (Integer.parseInt(data.getNoOfAttempts().get5())*100)/Integer.parseInt(data.getPlayed()):0;
+                progressSix = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get6())? (Integer.parseInt(data.getNoOfAttempts().get6())*100)/Integer.parseInt(data.getPlayed()):0;
+
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            if(!TextUtils.isEmpty(data.getNoOfAttempts().get1())
+                    && !data.getNoOfAttempts().get1().equalsIgnoreCase("0")){
+                dialogView.findViewById(R.id.rl_layout1).setVisibility(View.GONE);
+                dialogView.findViewById(R.id.rl_layout_one).setVisibility(View.VISIBLE);
+                ((TextView)dialogView.findViewById(R.id.tv_pb_1)).setText(data.getNoOfAttempts().get1());
+                ((ProgressBar)dialogView.findViewById(R.id.p_bar_1)).setProgress(progressOne);
+            }else {
+                dialogView.findViewById(R.id.rl_layout1).setVisibility(View.VISIBLE);
+            }
+
+            if(!TextUtils.isEmpty(data.getNoOfAttempts().get2())
+                    && !data.getNoOfAttempts().get2().equalsIgnoreCase("0")){
+                dialogView.findViewById(R.id.rl_layout2).setVisibility(View.GONE);
+                dialogView.findViewById(R.id.rl_layout_two).setVisibility(View.VISIBLE);
+                ((TextView)dialogView.findViewById(R.id.tv_pb_2)).setText(data.getNoOfAttempts().get2());
+                ((ProgressBar)dialogView.findViewById(R.id.p_bar_2)).setProgress(progressTwo);
+
+            }else {
+                dialogView.findViewById(R.id.rl_layout2).setVisibility(View.VISIBLE);
+            }
+
+            if(!TextUtils.isEmpty(data.getNoOfAttempts().get3())
+                    && !data.getNoOfAttempts().get3().equalsIgnoreCase("0")){
+                dialogView.findViewById(R.id.rl_layout3).setVisibility(View.GONE);
+                dialogView.findViewById(R.id.rl_layout_three).setVisibility(View.VISIBLE);
+                ((TextView)dialogView.findViewById(R.id.tv_pb_3)).setText(data.getNoOfAttempts().get3());
+                ((ProgressBar)dialogView.findViewById(R.id.p_bar_3)).setProgress(progressThree);
+
+            }else {
+                dialogView.findViewById(R.id.rl_layout3).setVisibility(View.VISIBLE);
+
+            }
+
+            if(!TextUtils.isEmpty(data.getNoOfAttempts().get4())
+                    && !data.getNoOfAttempts().get4().equalsIgnoreCase("0")){
+                dialogView.findViewById(R.id.rl_layout4).setVisibility(View.GONE);
+                dialogView.findViewById(R.id.rl_layout_four).setVisibility(View.VISIBLE);
+                ((TextView)dialogView.findViewById(R.id.tv_pb_4)).setText(data.getNoOfAttempts().get4());
+                ((ProgressBar)dialogView.findViewById(R.id.p_bar_4)).setProgress(progressFour);
+
+            }else {
+                dialogView.findViewById(R.id.rl_layout4).setVisibility(View.VISIBLE);
+
+            }
+
+            if(!TextUtils.isEmpty(data.getNoOfAttempts().get5())
+                    && !data.getNoOfAttempts().get5().equalsIgnoreCase("0")){
+                dialogView.findViewById(R.id.rl_layout5).setVisibility(View.GONE);
+                dialogView.findViewById(R.id.rl_layout_five).setVisibility(View.VISIBLE);
+                ((TextView)dialogView.findViewById(R.id.tv_pb_5)).setText(data.getNoOfAttempts().get5());
+                ((ProgressBar)dialogView.findViewById(R.id.p_bar_5)).setProgress(progressFive);
+
+            }else {
+                dialogView.findViewById(R.id.rl_layout5).setVisibility(View.VISIBLE);
+
+            }
+
+            if(!TextUtils.isEmpty(data.getNoOfAttempts().get6())
+                    && !data.getNoOfAttempts().get6().equalsIgnoreCase("0")){
+                dialogView.findViewById(R.id.rl_layout6).setVisibility(View.GONE);
+                dialogView.findViewById(R.id.rl_layout_six).setVisibility(View.VISIBLE);
+                ((TextView)dialogView.findViewById(R.id.tv_pb_6)).setText(data.getNoOfAttempts().get6());
+                ((ProgressBar)dialogView.findViewById(R.id.p_bar_6)).setProgress(progressSix);
+            }else {
+
+            }
+        }
+
         alertDialog.show();
     }
 
@@ -535,7 +686,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void callgetStreakAPI() {
         String game_id = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
-        gamePresenter = new GamePresenter(this);
+        gamePresenter = new GamePresenter(this, GameActivity.this);
         gamePresenter.fetchStatisticsData(game_id);
     }
 
@@ -569,6 +720,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             index = index + 1;
             if (getId(index) != 0) {
                 updateWordCharArray(s);
+                ((TextView) findViewById(getId(index))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.black));
                 ((TextView) findViewById(getId(index))).setText(new StringBuilder().append(s).append(getTextIndex(index)));
             }
         }
@@ -591,6 +743,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
             updateWordCharArray("x");
             findViewById(getId(index)).setBackgroundResource(R.drawable.bg_answer);
+            ((TextView) findViewById(getId(index))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.black));
             ((TextView) findViewById(getId(index))).setText(matra[index % MAX_CHAR_LENGTH == 0 ? MAX_CHAR_LENGTH - 1 : (index % MAX_CHAR_LENGTH) - 1]);
 
             index = index - 1;
@@ -601,7 +754,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         animate();
 
 
-        new Handler().postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (index % MAX_CHAR_LENGTH == 0) {
@@ -619,7 +772,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                     if (index == MAX_ATTEMPT * MAX_CHAR_LENGTH) {
                         if (!Arrays.equals(word_array, entered_word_array)) {
-                            openLeaderBoardOnGameEnd();
+                            SubmitGameRequest submitGameRequest = new SubmitGameRequest();
+                            submitGameRequest.setGameUserId(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID));
+                            submitGameRequest.setGameStatus(Constants.LOSS);
+                            submitGameRequest.setNoOfAttempt(currentAttempt);
+                            submitGameRequest.setTime(String.valueOf(pauseOffset / 1000));
+                            gamePresenter.submitGame(submitGameRequest);
+                            //openLeaderBoardOnGameEnd();
                         }
 
                     }
@@ -638,8 +797,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateCurrentAttempt() {
         //Update Matra
+        if(btnIdList != null){
+            btnIdList.clear();
+        }
         for (int i = 1; i < MAX_CHAR_LENGTH + 1; i++) {
             ((TextView) findViewById(getId((currentAttempt - 1) * 3 + i))).setText(matra[i - 1].toString());
+        }
+
+        if(hintCount == 1){
+            hintOne();
+        }else if(hintCount == 2){
+            hintTwo();
         }
 
     }
@@ -717,6 +885,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("", matra.toString());
         } catch (Exception e) {
             if (gamePresenter != null) {
+                btnIdList.clear();
                 GetWordRequest getWordRequest = new GetWordRequest();
                 getWordRequest.setUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
                 getWordRequest.setWordId(list);
@@ -764,6 +933,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 SubmitGameRequest submitGameRequest = new SubmitGameRequest();
                 submitGameRequest.setGameUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
                 submitGameRequest.setGameStatus(Constants.WIN);
+                submitGameRequest.setNoOfAttempt(currentAttempt);
                 submitGameRequest.setTime(String.valueOf(pauseOffset / 1000));
                 gamePresenter.submitGame(submitGameRequest);
                 // save correct word id
@@ -813,9 +983,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         gamePresenter.saveIDLocalDB(GameActivity.this, task);
 
     }
-
+    private Handler handler = new Handler();
     private void openLeaderBoardOnGameEnd() {
-        new Handler().postDelayed(new Runnable() {
+       handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
@@ -994,40 +1164,32 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onStatisticsDataFetched(Data data) {
         GameView.super.onStatisticsDataFetched(data);
-        tv_played.setText(data.getPlayed());
-        tv_current_streak.setText(data.getCurrentStreak());
-        tv_max_streak.setText(data.getMaxStreak());
+        statisticsPopup(data);
 
-        if (data.getWin().equals("0") || data.getPlayed().equals("0")) {
-            tv_win.setText("0");
-        } else {
-            int win = Integer.parseInt(data.getWin());
-            int total_played = Integer.parseInt(data.getPlayed());
-            float percent = (win / total_played) * 100f;
-            tv_win.setText(String.valueOf(percent));
-        }
-    }
-
-    @Override
-    public void onAddUser(com.shabdamsdk.model.adduser.Data data) {
-        if (data != null) {
-            if (data.getId() != 0) {
-                CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
-                GetWordRequest getWordRequest = new GetWordRequest();
-                getWordRequest.setUserId(String.valueOf(data.getId()));
-                getWordRequest.setWordId(list);
-                gamePresenter.fetchNewWord(GameActivity.this, getWordRequest);
-            }
-        }
 
     }
+
 
 
     /**
      * Hard coded log-- can make it dynamic but not in mood
      */
     void showHint() {
-        if (hintCount < 2) {
+        if(hintCount< 2){
+            btnIdList.clear();
+            if(hintCount == 0){
+                hintCount ++;
+                hintOne();
+
+            }else {
+                //First Text
+                hintCount ++;
+                hintTwo();
+            }
+        }
+
+
+      /*  if (hintCount < 2) {
             btnIdList.clear();
             entered_word_array[hintCount] = word_array[hintCount];
             hintCount++;
@@ -1036,8 +1198,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (hintCount == 2) {
                 btnIdList.add(getKeyId(String.valueOf(word_array[0])));
                 ((TextView) findViewById(getId(pos - 1))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
-                findViewById(getId(0)).setBackgroundResource(R.color.green);
+                findViewById(getId(pos-1)).setBackgroundResource(R.color.green);
                 entered_word_array[0] = word_array[0];
+                updateWordCharArray(String.valueOf(word_array[hintCount - 1]));
 
             }
 
@@ -1053,7 +1216,66 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
 
             clearNextBoxesAfterHint();
+        }*/
+    }
+
+    private void hintTwo() {
+       // hintCount ++;
+        entered_word_array[0] = word_array[0];
+        int pos = ((currentAttempt - 1) * 3) + 1;
+        ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
+        ((TextView) findViewById(getId(pos))).setBackgroundResource(R.drawable.bg_green_box);
+        ((TextView) findViewById(getId(pos))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+
+        int id = getKeyId(String.valueOf(word_array[0]));
+        if (id != -1) {
+            btnIdList.add(id);
+            findViewById(id).setBackgroundResource(R.drawable.bg_green_box);
+            ((TextView) findViewById(id)).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
         }
+
+        ((TextView) findViewById(getId(pos + 1))).setText(matra[1]);
+        ((TextView) findViewById(getId(pos + 2))).setText(matra[2]);
+
+        // Second Text
+
+        entered_word_array[1] = word_array[1];
+        int pos2 = ((currentAttempt - 1) * 3) + 2;
+        ((TextView) findViewById(getId(pos2))).setText(new StringBuilder().append(word_array[1]).append(matra[1]));
+        ((TextView) findViewById(getId(pos2))).setBackgroundResource(R.drawable.bg_green_box);
+        ((TextView) findViewById(getId(pos2))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+
+        int id2 = getKeyId(String.valueOf(word_array[1]));
+        if (id2 != -1) {
+            btnIdList.add(id2);
+            findViewById(id2).setBackgroundResource(R.drawable.bg_green_box);
+            ((TextView) findViewById(id2)).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+        }
+
+        ((TextView) findViewById(getId(pos + 2))).setText(matra[2]);
+        index = pos2;
+
+    }
+
+    private void hintOne() {
+       // hintCount ++;
+        entered_word_array[0] = word_array[0];
+        int pos = ((currentAttempt - 1) * 3) + 1;
+        ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
+        ((TextView) findViewById(getId(pos))).setBackgroundResource(R.drawable.bg_green_box);
+        ((TextView) findViewById(getId(pos))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+
+        int id = getKeyId(String.valueOf(word_array[0]));
+        if (id != -1) {
+            btnIdList.add(id);
+            findViewById(id).setBackgroundResource(R.drawable.bg_green_box);
+            ((TextView) findViewById(id)).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+        }
+
+        ((TextView) findViewById(getId(pos + 1))).setText(matra[1]);
+        ((TextView) findViewById(getId(pos + 2))).setText(matra[2]);
+
+        index = pos;
     }
 
     private void clearNextBoxesAfterHint() {
@@ -1100,8 +1322,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         ((TextView) findViewById(getId((currentAttempt - 1) * 3 + i))).setText("");
                         ((TextView) findViewById(getId((currentAttempt - 1) * 3 + i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.black));
                     }
-                    updateCurrentAttempt();
                     index = (currentAttempt - 1) * 3;
+                    updateCurrentAttempt();
                     findViewById(R.id.fl_dic_error).setVisibility(View.GONE);
 
                 }
@@ -1111,14 +1333,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
             });
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // shakeAnimation.reset();
 
-
-                }
-            }, 1000);
             // ToastUtils.show(GameActivity.this, "शब्द शब्दकोश में नहीं है। ");
         }
     }
@@ -1128,12 +1343,42 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (gamePresenter != null) {
             gamePresenter.onDestroy();
         }
+        tv_timer_text = null;
+        handler = null;
+
+        keyIdArray = null;
+        matra = null;
+        btnIdList =null;
+        entered_word_array = null;
+        datumCorrectWord = null;
+        word_array = null;
+        charArray = null;
+        gamePresenter = null;
         super.onDestroy();
     }
 
     @Override
     public void onGameSubmit() {
-        openLeaderBoardOnGameEnd();
+        if(isUttarDekheClicked){
+            if (mTimingRunning) {
+                tv_timer_text.stop();
+                pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
+                mTimingRunning = false;
+                minutes = TimeUnit.MILLISECONDS.toMinutes(pauseOffset);
+                seconds = TimeUnit.MILLISECONDS.toSeconds(pauseOffset) % 60;
+                minute = String.format("%02d", minutes);
+                second = String.format("%02d", seconds);
+            }
+
+            Intent intent = new Intent(this, ShabdamActivity.class);
+            intent.putExtra("word", correctWord);
+            intent.putExtra("minute", minute);
+            intent.putExtra("second", second);
+            intent.putExtra("currentAttempt", String.valueOf(currentAttempt));
+            startActivity(intent);
+        }else {
+            openLeaderBoardOnGameEnd();
+        }
     }
 
     private void shakeAnimation() {

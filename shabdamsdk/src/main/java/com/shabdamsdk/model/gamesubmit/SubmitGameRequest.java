@@ -18,6 +18,12 @@ public class SubmitGameRequest implements Parcelable
     @SerializedName("game_status")
     @Expose
     private String gameStatus;
+
+
+
+    @SerializedName("no_of_attempt")
+    @Expose
+    private Integer noOfAttempt;
     public final static Creator<SubmitGameRequest> CREATOR = new Creator<SubmitGameRequest>() {
 
 
@@ -39,6 +45,8 @@ public class SubmitGameRequest implements Parcelable
         this.gameUserId = ((String) in.readValue((String.class.getClassLoader())));
         this.time = ((String) in.readValue((String.class.getClassLoader())));
         this.gameStatus = ((String) in.readValue((String.class.getClassLoader())));
+        this.noOfAttempt = ((Integer) in.readValue((Integer.class.getClassLoader())));
+
     }
 
     public SubmitGameRequest() {
@@ -68,10 +76,19 @@ public class SubmitGameRequest implements Parcelable
         this.gameStatus = gameStatus;
     }
 
+    public Integer getNoOfAttempt() {
+        return noOfAttempt;
+    }
+
+    public void setNoOfAttempt(Integer noOfAttempt) {
+        this.noOfAttempt = noOfAttempt;
+    }
+
     public void writeToParcel(android.os.Parcel dest, int flags) {
         dest.writeValue(gameUserId);
         dest.writeValue(time);
         dest.writeValue(gameStatus);
+        dest.writeValue(noOfAttempt);
     }
 
     public int describeContents() {

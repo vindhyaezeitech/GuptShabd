@@ -37,4 +37,6 @@ public class StatisticsMainModel {
     public void setData(Data data) {
         this.data = data;
     }
+
+
 }

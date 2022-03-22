@@ -39,8 +39,8 @@ public class GetLeaderboardListAdapter extends RecyclerView.Adapter<GetLeaderboa
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_rank.setText(list.get(position).getRank());
         holder.tv_name.setText(list.get(position).getName());
-        minutes = TimeUnit.MILLISECONDS.toMinutes(Long.parseLong(list.get(position).getTime()));
-        seconds = TimeUnit.MILLISECONDS.toSeconds(Long.parseLong(list.get(position).getTime())) % 60;
+        minutes = Long.parseLong(list.get(position).getTime())/60;
+        seconds = Integer.parseInt(list.get(position).getTime())% 60;
         minute = String.format("%02d", minutes);
         second = String.format("%02d", seconds);
         holder.tv_time.setText(minute + " " + ":" + " " + second);

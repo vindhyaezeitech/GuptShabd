@@ -19,10 +19,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.shabdamsdk.Constants;
 import com.shabdamsdk.GameActivity;
 import com.shabdamsdk.GamePresenter;
 import com.shabdamsdk.GameView;
@@ -47,11 +55,14 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     private TextView tvOne, tvTwo, tvThree;
     private RelativeLayout agla_shabd_btn, rl_share_btn;
     private String minute, second, currentAttempt;
+    private InterstitialAd mInterstitialAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shabdam);
+        interstitialAdd();
         if (getIntent().getExtras() != null) {
             correctWord = getIntent().getStringExtra("word");
             minute = getIntent().getStringExtra("minute");
@@ -142,15 +153,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
             intent1.putExtra("type", "1");
             startActivity(intent1);
         } else if (id == R.id.rl_agla_shabd_btn) {
-            Intent intent = new Intent(this, GameActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
-            intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
-            intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
-            intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
-            intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
-            startActivity(intent);
-            finish();
+            loadAdd();
         }
     }
 
@@ -277,7 +280,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
 
     private void callgetStreakAPI() {
         String game_id = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
-        gamePresenter = new GamePresenter(this);
+        gamePresenter = new GamePresenter(this, ShabdamActivity.this);
         gamePresenter.fetchStatisticsData(game_id);
     }
 
@@ -334,6 +337,83 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+        intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
+        intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
+        intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
+        intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(gamePresenter != null){
+            gamePresenter.onDestroy();
+        }
+    }
+
+    private void interstitialAdd() {
+
+       /* MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });*/
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(this, Constants.INTRESTITIAL_AD_ID, adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        mInterstitialAd = interstitialAd;
+                        //Log.i(TAG, "onAdLoaded");
+                        // loadAdd();
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        //Log.i(TAG, loadAdError.getMessage());
+                        mInterstitialAd = null;
+                    }
+
+
+                });
+
+    }
+
+
+
+    private void loadAdd() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd.show(this);
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+                    startGame();
+                    interstitialAdd();
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                    super.onAdFailedToShowFullScreenContent(adError);
+                    startGame();
+                    interstitialAdd();
+                }
+            });
+        } else {
+            startGame();
+           // Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));

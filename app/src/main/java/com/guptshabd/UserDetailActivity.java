@@ -8,7 +8,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
-import com.shabdamsdk.GameActivity;
+import com.shabdamsdk.Constants;
+import com.shabdamsdk.MainActivity;
 
 public class UserDetailActivity extends AppCompatActivity {
 

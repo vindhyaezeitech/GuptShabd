@@ -13,6 +13,7 @@ import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
 import com.shabdamsdk.network.ApiService;
 import com.shabdamsdk.network.RetrofitClient;
+import com.shabdamsdk.pref.CommonPreference;
 
 import java.util.ArrayList;
 
@@ -25,35 +26,45 @@ public class GamePresenter {
     private GameView gameView;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private ApiService apiService = RetrofitClient.getInstance();
+    private Context context;
 
 
-    public GamePresenter(GameView gameView){
+    public GamePresenter(GameView gameView, Context context){
         this.gameView = gameView;
     }
 
     public void fetchNewWord(Context context,GetWordRequest request){
-        if(gameView != null){
-            gameView.showProgress();
-        }
+        if(GameDataManager.getInstance().getDataList() != null && GameDataManager.getInstance().getDataList().size()>0){
+            if(gameView != null){
+                gameView.hideProgress();
+            }
+            gameView.onWordFetched(GameDataManager.getInstance().getDataList().get(0));
+        }else {
+            if(gameView != null){
+                gameView.showProgress();
+            }
 
-        compositeDisposable.add(DatabaseClient.getInstance(context).getAppDatabase().taskDao().getAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    ArrayList<String> wordIdList = new ArrayList<>();
-                    if(response != null ){
-                        if(response.size() > 0){
-                            for (int i = 0; i <response.size() ; i++) {
-                                wordIdList.add(response.get(i).getWordId());
+            compositeDisposable.add(DatabaseClient.getInstance(context).getAppDatabase().taskDao().getAll()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                        ArrayList<String> wordIdList = new ArrayList<>();
+                        if(response != null ){
+                            if(response.size() > 0){
+                                for (int i = 0; i <response.size() ; i++) {
+                                    wordIdList.add(response.get(i).getWordId());
+                                }
                             }
                         }
-                    }
 
-                    request.setWordId(wordIdList);
-                    callWordAPI(request);
-                }, throwable -> {
-                    callWordAPI(request);
-                }));
+                        request.setWordId(wordIdList);
+                        callWordAPI(request);
+                    }, throwable -> {
+                        callWordAPI(request);
+                    }));
+        }
+
+
 
     }
 
@@ -66,6 +77,10 @@ public class GamePresenter {
                         if(gameView != null){
                             gameView.hideProgress();
                         }
+                        if(!response.getWoord_status().equalsIgnoreCase("true")){
+                            CommonPreference.getInstance(context).clear();
+                        }
+                        GameDataManager.getInstance().addData(response.getData());
                         gameView.onWordFetched(response.getData().get(0));
                     }
                 }, throwable -> {
@@ -147,6 +162,7 @@ public class GamePresenter {
         if(gameView != null){
             gameView.showProgress();
         }
+        GameDataManager.getInstance().removeData();
         compositeDisposable.add(apiService.submitGame(submitGameRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -195,10 +211,12 @@ public class GamePresenter {
     }
 
     public void onDestroy(){
+
         if(compositeDisposable != null){
             compositeDisposable.clear();
             compositeDisposable.dispose();
         }
+        context = null;
 
     }
 }
