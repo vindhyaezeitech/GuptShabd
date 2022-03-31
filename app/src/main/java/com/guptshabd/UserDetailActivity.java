@@ -1,8 +1,10 @@
 package com.guptshabd;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -28,12 +31,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.shabdamsdk.ShabdamSplashActivity;
 import com.shabdamsdk.ToastUtils;
 
-public class UserDetailActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class UserDetailActivity extends AppCompatActivity{
     private static final int RC_SIGN_IN = 1;
     private TextView tv_google_sign_in;
-    private GoogleApiClient googleApiClient;
-    private GoogleSignInOptions gso;
-    private FirebaseAuth mAuth;
+    GoogleSignInClient mGoogleSignInClient;
+
 
 
     @Override
@@ -48,6 +50,14 @@ public class UserDetailActivity extends AppCompatActivity implements GoogleApiCl
 
     }
 
+    private void googleSignIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+    }
+
     private void inIt() {
         tv_google_sign_in = findViewById(R.id.tv_google_sign_in);
 
@@ -56,7 +66,7 @@ public class UserDetailActivity extends AppCompatActivity implements GoogleApiCl
             public void onClick(View view) {
                 if (UserDetailActivity.this != null) {
                     if (ToastUtils.checkInternetConnection(UserDetailActivity.this)) {
-                        googleSignInFunctionality();
+                        signIn();
 
                     } else {
                         Toast.makeText(UserDetailActivity.this, getString(com.shabdamsdk.R.string.ensure_internet), Toast.LENGTH_SHORT).show();
@@ -65,131 +75,52 @@ public class UserDetailActivity extends AppCompatActivity implements GoogleApiCl
             }
         });
     }
-
-    private void googleSignInFunctionality() {
-        try {
-            if (googleApiClient != null) {
-                if (!googleApiClient.isConnected()) {
-                    googleApiClient.connect();
-                }
-                if (googleApiClient.isConnected()) {
-                    Auth.GoogleSignInApi.signOut(googleApiClient);
-                    Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-                    startActivityForResult(intent, RC_SIGN_IN);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void googleSignIn() {
-        try {
-            if (gso == null)
-                gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestEmail()
-                        .build();
-            if (googleApiClient == null && UserDetailActivity.this != null) {
-                googleApiClient = new GoogleApiClient.Builder(this)
-                        .enableAutoManage(this, this)
-                        .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                        .build();
-                googleApiClient.connect();
-            }
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
     }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (googleApiClient!=null && UserDetailActivity.this!=null){
-            googleApiClient.stopAutoManage(this);
-            googleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (googleApiClient != null && googleApiClient.isConnected()) {
-            googleApiClient.disconnect();
-        }
-
-    }
-
-
-  /*  private void gotoMainActivity() {
-        Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
-        intent.putExtra("user_id", etId.getText().toString());
-        intent.putExtra("name",etUserName.getText().toString());
-        intent.putExtra("uname","vikash");
-        intent.putExtra("email","vikash@mailinator.com");
-        intent.putExtra("profile_image","");
-        startActivity(intent);
-        finish();
-    }*/
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            firebaseAuthWithGoogle(result);
-        }
 
-       /* // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
-        }*/
-    }
-
-    /*private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-            // Signed in successfully, show authenticated UI.
-            Toast.makeText(this, ""+account, Toast.LENGTH_SHORT).show();
-            //updateUI(account);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            //Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            //updateUI(null);
         }
     }
-*/
-    private void firebaseAuthWithGoogle(GoogleSignInResult result) {
-        Toast.makeText(this, ""+result, Toast.LENGTH_SHORT).show();
 
-        if (mAuth != null) {
-            if (mAuth.getCurrentUser() == null) {
-                mAuth.signInAnonymously().addOnCompleteListener(task -> {
-                    Toast.makeText(this, ""+result, Toast.LENGTH_SHORT).show();
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+            if (acct != null) {
+                String personName = acct.getDisplayName();
+                String personGivenName = acct.getGivenName();
+                String personFamilyName = acct.getFamilyName();
+                String personEmail = acct.getEmail();
+                String personId = acct.getId();
+                Uri personPhoto = acct.getPhotoUrl();
 
-                    if (mAuth.getCurrentUser() != null) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        //loginPresenter.handleGoogleResult(result, user.getUid());
-                        //  Toast.makeText(getActivity(), "" + user.getUid(), Toast.LENGTH_SHORT).show();
-                    } else {
-                        //loginPresenter.handleGoogleResult(result, "");
-                    }
-                });
-            } else {
-                FirebaseUser user = mAuth.getCurrentUser();
-                //loginPresenter.handleGoogleResult(result, user.getUid());
+                Toast.makeText(this, ""+personEmail, Toast.LENGTH_SHORT).show();
+
+
             }
+            //startActivity(new Intent(this, ShabdamSplashActivity.class));
+
+        } catch (ApiException e) {
+            Log.d("Message", e.toString());
         }
     }
 }

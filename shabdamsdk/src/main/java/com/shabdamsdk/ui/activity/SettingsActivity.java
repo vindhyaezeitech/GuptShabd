@@ -7,14 +7,21 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.shabdamsdk.R;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
     private String type;
     private RelativeLayout rl_feedback_btn;
+    GoogleSignInClient mGoogleSignInClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private void inIt() {
         findViewById(R.id.iv_back_btn).setOnClickListener(this);
         findViewById(R.id.rl_feedback_btn).setOnClickListener(this);
+        findViewById(R.id.iv_logout_btn).setOnClickListener(this);
 
         Intent intent = getIntent();
         type = intent.getStringExtra("type");
@@ -57,5 +65,22 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
             //startActivity(Intent.createChooser(email, "Choose an Email client :"));
         }
+        if (view.getId() == R.id.iv_logout_btn)
+        {
+            signOut();
+        }
+    }
+
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+
+                        Toast.makeText(SettingsActivity.this, "Logout successfully", Toast.LENGTH_SHORT).show();
+                        finishAffinity();
+                    }
+                });
     }
 }
