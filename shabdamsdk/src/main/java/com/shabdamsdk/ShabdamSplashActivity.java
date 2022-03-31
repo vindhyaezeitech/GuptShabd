@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.shabdamsdk.model.SignupRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.pref.CommonPreference;
 
@@ -56,6 +57,12 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
             request.setEmail(email);
             request.setProfileimage(profile_image);
             gamePresenter.addUser(request);
+        }else if(email != null){
+            SignupRequest signupRequest = new SignupRequest();
+            signupRequest.setEmail(email);
+            signupRequest.setName(name);
+            signupRequest.setUname(name);
+            signupRequest.setProfileimage(profile_image);
         }
        /* Handler handler= new Handler();
         handler.postDelayed(new Runnable() {

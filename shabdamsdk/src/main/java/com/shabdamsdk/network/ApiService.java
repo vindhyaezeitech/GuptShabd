@@ -1,5 +1,6 @@
 package com.shabdamsdk.network;
 
+import com.shabdamsdk.model.SignupRequest;
 import com.shabdamsdk.model.dictionary.CheckWordDicRequest;
 import com.shabdamsdk.model.GetWordRequest;
 import com.shabdamsdk.model.gamesubmit.GameSubmitResponse;
@@ -35,5 +36,8 @@ public interface ApiService {
 
     @POST("game_submit")
     Observable<GameSubmitResponse> submitGame(@Body SubmitGameRequest body);
+
+    @POST("signup_gameuser")
+    Observable<AddUserResponse> signUpUser(@Body SignupRequest body);
 
 }

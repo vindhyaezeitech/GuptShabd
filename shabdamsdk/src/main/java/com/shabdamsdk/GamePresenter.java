@@ -6,6 +6,7 @@ import android.os.Handler;
 import com.shabdamsdk.db.AppDatabase;
 import com.shabdamsdk.db.DatabaseClient;
 import com.shabdamsdk.db.Task;
+import com.shabdamsdk.model.SignupRequest;
 import com.shabdamsdk.model.dictionary.CheckWordDicRequest;
 import com.shabdamsdk.model.GetWordRequest;
 import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
@@ -172,6 +173,27 @@ public class GamePresenter {
                             gameView.hideProgress();
                         }
                         gameView.onGameSubmit();
+                    }
+                }, throwable -> {
+
+                }));
+
+    }
+
+    public void signUpUser(SignupRequest addUserRequest){
+
+        if(gameView != null){
+            gameView.showProgress();
+        }
+        compositeDisposable.add(apiService.signUpUser(addUserRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if(response != null ){
+                        if(gameView != null){
+                            gameView.hideProgress();
+                        }
+                        gameView.onAddUser(response.getData());
                     }
                 }, throwable -> {
 

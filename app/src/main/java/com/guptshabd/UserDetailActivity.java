@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.shabdamsdk.Constants;
 import com.shabdamsdk.ShabdamSplashActivity;
 import com.shabdamsdk.ToastUtils;
 
@@ -112,6 +113,15 @@ public class UserDetailActivity extends AppCompatActivity{
                 String personEmail = acct.getEmail();
                 String personId = acct.getId();
                 Uri personPhoto = acct.getPhotoUrl();
+
+                Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
+                intent.putExtra("user_id", "");
+                intent.putExtra("name",acct.getDisplayName());
+                intent.putExtra("uname",personName);
+                intent.putExtra("email",personEmail);
+                intent.putExtra("profile_image",personPhoto);
+                startActivity(intent);
+                finish();
 
                 Toast.makeText(this, ""+personEmail, Toast.LENGTH_SHORT).show();
 
