@@ -195,8 +195,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         //Log.i(TAG, loadAdError.getMessage());
                         mInterstitialAd = null;
                     }
-
-
                 });
 
     }
