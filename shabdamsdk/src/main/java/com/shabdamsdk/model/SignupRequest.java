@@ -1,13 +1,11 @@
 
 package com.shabdamsdk.model;
 
-import javax.annotation.Generated;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-@Generated("jsonschema2pojo")
 public class SignupRequest implements Parcelable
 {
 

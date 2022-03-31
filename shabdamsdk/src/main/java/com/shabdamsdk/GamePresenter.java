@@ -2,6 +2,7 @@ package com.shabdamsdk;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import com.shabdamsdk.db.AppDatabase;
 import com.shabdamsdk.db.DatabaseClient;
@@ -196,6 +197,7 @@ public class GamePresenter {
                         gameView.onAddUser(response.getData());
                     }
                 }, throwable -> {
+                    Log.d("Error",""+throwable);
 
                 }));
 

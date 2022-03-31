@@ -79,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         // ...
 
                         Toast.makeText(SettingsActivity.this, "Logout successfully", Toast.LENGTH_SHORT).show();
-                        finishAffinity();
+                        finish();
                     }
                 });
     }
