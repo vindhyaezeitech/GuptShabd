@@ -152,7 +152,7 @@
             android:layout_marginRight="@dimen/_2sdp"
             android:layout_weight="1"
             android:background="@drawable/box_radius"
-            android:backgroundTint="@color/red">
+            android:backgroundTint="#6BAA64">
 
             <TextView
                 android:id="@+id/tv_one"
@@ -173,7 +173,7 @@
             android:layout_marginRight="@dimen/_2sdp"
             android:layout_weight="1"
             android:background="@drawable/box_radius"
-            android:backgroundTint="@color/red">
+            android:backgroundTint="#6BAA64">
 
             <TextView
                 android:id="@+id/tv_two"
@@ -194,7 +194,7 @@
             android:layout_marginRight="@dimen/_2sdp"
             android:layout_weight="1"
             android:background="@drawable/box_radius"
-            android:backgroundTint="@color/red">
+            android:backgroundTint="#6BAA64">
 
             <TextView
                 android:id="@+id/tv_three"

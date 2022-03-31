@@ -2,16 +2,14 @@ package com.shabdamsdk;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.shabdamsdk.model.GetWordRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.pref.CommonPreference;
 
-public  class MainActivity extends AppCompatActivity implements GameView {
+public  class ShabdamSplashActivity extends AppCompatActivity implements GameView {
     private GamePresenter gamePresenter;
     private String userId, name, u_name, email, profile_image;
 
@@ -19,32 +17,32 @@ public  class MainActivity extends AppCompatActivity implements GameView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        gamePresenter = new GamePresenter(this, MainActivity.this);
+        setContentView(R.layout.activity_splash_shabdam_main);
+        gamePresenter = new GamePresenter(this, ShabdamSplashActivity.this);
 
         // load the animation
         if (getIntent().getExtras() != null) {
             userId = getIntent().getStringExtra("user_id");
-            name = getIntent().getStringExtra("name");
-            u_name = getIntent().getStringExtra("uname");
-            email = getIntent().getStringExtra("email");
-            profile_image = getIntent().getStringExtra("profile_image");
+            name = !TextUtils.isEmpty(getIntent().getStringExtra("name"))? getIntent().getStringExtra("name") : " ";
+            u_name = !TextUtils.isEmpty(getIntent().getStringExtra("uname")) ? getIntent().getStringExtra("uname") : " ";
+            email = !TextUtils.isEmpty(getIntent().getStringExtra("email"))? getIntent().getStringExtra("email") : " ";
+            profile_image = !TextUtils.isEmpty(getIntent().getStringExtra("profile_image")) ? getIntent().getStringExtra("profile_image") :" ";
 
             if (!TextUtils.isEmpty(userId)) {
-                CommonPreference.getInstance(MainActivity.this).put(CommonPreference.Key.USER_ID, userId);
+                CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.USER_ID, userId);
             }
 
             if (!TextUtils.isEmpty(name)) {
-                CommonPreference.getInstance(MainActivity.this).put(CommonPreference.Key.NAME, name);
+                CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.NAME, name);
             }
             if (!TextUtils.isEmpty(u_name)) {
-                CommonPreference.getInstance(MainActivity.this).put(CommonPreference.Key.UNAME, u_name);
+                CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.UNAME, u_name);
             }
             if (!TextUtils.isEmpty(email)) {
-                CommonPreference.getInstance(MainActivity.this).put(CommonPreference.Key.EMAIL, email);
+                CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.EMAIL, email);
             }
             if (!TextUtils.isEmpty(profile_image)) {
-                CommonPreference.getInstance(MainActivity.this).put(CommonPreference.Key.PROFILE_IMAGE, profile_image);
+                CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.PROFILE_IMAGE, profile_image);
             }
         } else {
             return;
@@ -95,7 +93,7 @@ public  class MainActivity extends AppCompatActivity implements GameView {
         if (data != null) {
             if (data.getId() != 0) {
                 CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
-                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                Intent intent = new Intent(ShabdamSplashActivity.this, GameActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -12,16 +12,16 @@ public class AddUserRequest implements Parcelable
     private String userId;
     @SerializedName("name")
     @Expose
-    private String name;
+    private String name = " ";
     @SerializedName("uname")
     @Expose
-    private String uname;
+    private String uname = " ";
     @SerializedName("email")
     @Expose
-    private String email;
+    private String email = " ";
     @SerializedName("profileimage")
     @Expose
-    private String profileimage;
+    private String profileimage = " ";
     public final static Creator<AddUserRequest> CREATOR = new Creator<AddUserRequest>() {
 
 
