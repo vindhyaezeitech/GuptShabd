@@ -112,6 +112,7 @@ public class UserDetailActivity extends AppCompatActivity{
                 String personEmail = acct.getEmail();
                 String personId = acct.getId();
                 Uri personPhoto = acct.getPhotoUrl();
+
                 Toast.makeText(this, ""+personEmail, Toast.LENGTH_SHORT).show();
 
 
