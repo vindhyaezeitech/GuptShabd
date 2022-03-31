@@ -8,40 +8,82 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/login_icon"
+        tools:src="@tools:sample/avatars" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Detail"
-        android:textSize="30sp"
+        android:text="Welcome"
+        android:textSize="25sp"
         android:textColor="@color/black"></TextView>
 
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:textColor="@color/black"
-        android:id="@+id/etUserName"
-        android:hint="Enter User Name"
-        android:layout_marginTop="50dp"></EditText>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:textColor="@color/black"
-        android:id="@+id/etID"
-        android:layout_marginTop="12dp"
-        android:hint="Enter User Id eg. 123"
-        android:inputType="number"></EditText>
-
-    <Button
-        android:id="@+id/btnSubmit"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="submit"
-        android:layout_marginTop="12dp"></Button>
+        android:text="@string/please_login"
+        android:textColor="@color/text_gray_color"
+        android:textSize="18sp"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="24dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="40dp"
+            android:src="@drawable/google_login" />
+
+        <TextView
+            android:id="@+id/tv_google_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/rect_blue"
+            android:gravity="center"
+            android:text="@string/login_with_google"
+            android:textColor="@color/text_gray_dark"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+
+    <!-- <EditText
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="40dp"
+         android:layout_marginRight="40dp"
+         android:textColor="@color/black"
+         android:id="@+id/etUserName"
+         android:hint="Enter User Name"
+         android:layout_marginTop="50dp"></EditText>
+
+     <EditText
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="40dp"
+         android:layout_marginRight="40dp"
+         android:textColor="@color/black"
+         android:id="@+id/etID"
+         android:layout_marginTop="12dp"
+         android:hint="Enter User Id eg. 123"
+         android:inputType="number"></EditText>
+
+     <Button
+         android:id="@+id/btnSubmit"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="submit"
+         android:layout_marginTop="12dp"></Button>-->
 
 </LinearLayout>

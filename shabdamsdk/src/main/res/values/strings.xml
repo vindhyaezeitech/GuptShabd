@@ -50,4 +50,10 @@
     <string name="name1">शेखर</string>
     <string name="name2">मयंक</string>
     <string name="aap_text">आप</string>
+    <string name="please_login">Sign in</string>
+    <string name="login_with_google">Sign in with google</string>
+    <string name="ensure_internet">Please ensure internet connectivity.</string>
+
+
+
 </resources>

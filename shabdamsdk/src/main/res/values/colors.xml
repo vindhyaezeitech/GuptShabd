@@ -20,4 +20,8 @@
     <color name="line_color">#DFDFE6</color>
     <color name="line_color_grey">#E5E5E5</color>
     <color name="leaderboard_box_text_color">#F0BB17</color>
+    <color name="text_gray_color">#838383</color>
+    <color name="text_gray_dark">#4D4F5C</color>
+
+
 </resources>
