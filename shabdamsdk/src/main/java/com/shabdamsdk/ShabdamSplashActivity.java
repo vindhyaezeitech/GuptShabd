@@ -63,6 +63,7 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
             signupRequest.setName(name);
             signupRequest.setUname(name);
             signupRequest.setProfileimage(profile_image);
+            gamePresenter.signUpUser(signupRequest);
         }
        /* Handler handler= new Handler();
         handler.postDelayed(new Runnable() {
