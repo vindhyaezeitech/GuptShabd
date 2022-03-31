@@ -132,8 +132,8 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         int id = view.getId();
         if (id == R.id.iv_back_btn) {
             Intent intent = new Intent(this, GameActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+           // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
             intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
             intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
             intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
@@ -146,6 +146,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
             Intent intent = new Intent(this, LeaderBoardActivity.class);
             intent.putExtra("type", "1");
             startActivity(intent);
+            finish();
         } else if (id == R.id.iv_statistics_btn) {
             statisticsPopup();
         } else if (id == R.id.iv_settings_btn) {
@@ -213,20 +214,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
                 takeScreenShot(dialogView);
             }
         });
-        agla_shabd_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ShabdamActivity.this, GameActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("user_id", CommonPreference.getInstance(ShabdamActivity.this).getString(CommonPreference.Key.USER_ID));
-                intent.putExtra("name", CommonPreference.getInstance(ShabdamActivity.this).getString(CommonPreference.Key.NAME));
-                intent.putExtra("uname", CommonPreference.getInstance(ShabdamActivity.this).getString(CommonPreference.Key.UNAME));
-                intent.putExtra("email", CommonPreference.getInstance(ShabdamActivity.this).getString(CommonPreference.Key.EMAIL));
-                intent.putExtra("profile_image", CommonPreference.getInstance(ShabdamActivity.this).getString(CommonPreference.Key.PROFILE_IMAGE));
-                startActivity(intent);
-                finish();
-            }
-        });
+
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setCancelable(false);
 
@@ -338,8 +326,8 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(this, GameActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+       // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
         intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
         intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
         intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
@@ -415,8 +403,8 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
 
     private void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+      //  intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
         intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
         intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
         intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));

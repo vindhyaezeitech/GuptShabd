@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.shabdamsdk.Constants;
-import com.shabdamsdk.MainActivity;
+import com.shabdamsdk.ShabdamSplashActivity;
 
 public class UserDetailActivity extends AppCompatActivity {
 
@@ -31,7 +31,7 @@ public class UserDetailActivity extends AppCompatActivity {
                 if(TextUtils.isEmpty(etId.getText().toString())){
                     etUserName.setError("Invalid User Id");
                 }
-                Intent intent = new Intent(UserDetailActivity.this, MainActivity.class);
+                Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
                 intent.putExtra("user_id", etId.getText().toString());
                 intent.putExtra("name",etUserName.getText().toString());
                 intent.putExtra("uname","vikash");

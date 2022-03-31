@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_background_img"
-    tools:context="com.shabdamsdk.Constants$MainActivity">
+    android:background="@color/white"
+    >
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/splash_background_img"></androidx.appcompat.widget.AppCompatImageView>
 
     <TextView
         android:layout_width="wrap_content"

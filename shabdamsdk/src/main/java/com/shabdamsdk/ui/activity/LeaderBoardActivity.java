@@ -107,7 +107,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
             } else if (!TextUtils.isEmpty(type) && type.equals("2")) {
                 Intent intent = new Intent(this, GameActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+                intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
                 intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
                 intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
                 intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
@@ -223,7 +223,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
         if (!TextUtils.isEmpty(type) && type.equals("2")) {
             Intent intent = new Intent(this, GameActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+            intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
             intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
             intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
             intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
@@ -293,7 +293,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     private void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.USER_ID));
+        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
         intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
         intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
         intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
