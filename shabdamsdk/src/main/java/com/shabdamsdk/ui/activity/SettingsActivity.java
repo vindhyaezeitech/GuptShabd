@@ -1,5 +1,6 @@
 package com.shabdamsdk.ui.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -82,6 +83,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.setComponent(new ComponentName("com.guptshabd","com.guptshabd.UserDetailActivity"));
+                        startActivity(intent);
                         Toast.makeText(SettingsActivity.this, "Logout successfully", Toast.LENGTH_SHORT).show();
                         finish();
                     }

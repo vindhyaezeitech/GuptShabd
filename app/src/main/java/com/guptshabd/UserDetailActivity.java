@@ -123,9 +123,7 @@ public class UserDetailActivity extends AppCompatActivity{
                 startActivity(intent);
                 finish();
 
-                Toast.makeText(this, ""+personEmail, Toast.LENGTH_SHORT).show();
-
-
+                //Toast.makeText(this, ""+personEmail, Toast.LENGTH_SHORT).show();
             }
             //startActivity(new Intent(this, ShabdamSplashActivity.class));
 
