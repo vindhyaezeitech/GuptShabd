@@ -2,6 +2,7 @@ package com.shabdamsdk;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,9 +47,14 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
                 CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.PROFILE_IMAGE, profile_image);
             }
         }else if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSplashActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
-            Intent intent = new Intent(ShabdamSplashActivity.this, GameActivity.class);
-            startActivity(intent);
-            finish();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(ShabdamSplashActivity.this, GameActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }, 2000);
         }
         else {
             return;
