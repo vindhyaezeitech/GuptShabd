@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.shabdamsdk.Constants;
+import com.shabdamsdk.GameActivity;
 import com.shabdamsdk.ShabdamSplashActivity;
 import com.shabdamsdk.ToastUtils;
 import com.shabdamsdk.pref.CommonPreference;
@@ -44,15 +45,23 @@ public class UserDetailActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
-        Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
+        String email =  CommonPreference.getInstance(UserDetailActivity.this).getString(CommonPreference.Key.EMAIL);;
+        if(!TextUtils.isEmpty(email)){
+            CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, CommonPreference.getInstance(UserDetailActivity.this).getString(CommonPreference.Key.GAME_USER_ID));
+            Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
+            startActivity(intent);
+            finish();
+        }else {
+            inIt();
+            googleSignIn();
+        }
+       /* Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
         intent.putExtra("user_id", "1123444");
 
         startActivity(intent);
-        finish();
+        finish();*/
 
-        inIt();
 
-        googleSignIn();
 
 
     }
@@ -119,7 +128,7 @@ public class UserDetailActivity extends AppCompatActivity{
                 String personEmail = acct.getEmail();
                 String personId = acct.getId();
                 Uri personPhoto = acct.getPhotoUrl();
-              //  CommonPreference.getInstance(UserDetailActivity.this).put(CommonPreference.Key.);
+                CommonPreference.getInstance(UserDetailActivity.this).put(CommonPreference.Key.EMAIL, personEmail);
 
                 Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
                 intent.putExtra("user_id", "1123444");

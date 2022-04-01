@@ -17,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.shabdamsdk.R;
+import com.shabdamsdk.pref.CommonPreference;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
     private String type;
@@ -83,6 +84,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...
+                        CommonPreference.getInstance(SettingsActivity.this).clear();
                         Intent intent = new Intent(Intent.ACTION_MAIN);
                         intent.setComponent(new ComponentName("com.guptshabd","com.guptshabd.UserDetailActivity"));
                         startActivity(intent);

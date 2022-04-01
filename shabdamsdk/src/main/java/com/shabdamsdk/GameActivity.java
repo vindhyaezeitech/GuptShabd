@@ -125,6 +125,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private RewardedAd mRewardedAd;
     private final int UPDATE_REQUEST_CODE = 1612;
     private Handler handler = new Handler();
+    private boolean isHintPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +134,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         interstitialAdd();
         initRewardAdd();
         callInAppupdate();
+
+        if(!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME))){
+            ((TextView)findViewById(R.id.tv_uname)).setText(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME));
+        }
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -248,19 +253,34 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent();
-                    openAglaShabd();
-                    // interstitialAdd();
+                   if(isHintPressed){
+                       isHintPressed = false;
+                       showHint();
+                   }else {
+                       openAglaShabd();
+                   }
+                     interstitialAdd();
                 }
 
                 @Override
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     super.onAdFailedToShowFullScreenContent(adError);
-                    openAglaShabd();
-                    //interstitialAdd();
+                    if(isHintPressed){
+                        isHintPressed = false;
+                        showHint();
+                    }else {
+                        openAglaShabd();
+                    }
+                    interstitialAdd();
                 }
             });
         } else {
-            openAglaShabd();
+            if(isHintPressed){
+                isHintPressed = false;
+                showHint();
+            }else {
+                openAglaShabd();
+            }
             Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
         }
     }
@@ -512,7 +532,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             // showHint();
             if (hintCount < 2) {
                 // loadAdd();
-                showRewardAdd();
+                isHintPressed = true;
+               // showRewardAdd();
+                loadAdd();
             }
         }
     }
