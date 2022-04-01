@@ -1,6 +1,5 @@
 package com.shabdamsdk;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
@@ -8,9 +7,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.IntentSender;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,9 +32,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
@@ -54,9 +52,13 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.shabdamsdk.db.Task;
 import com.shabdamsdk.model.GetWordRequest;
-import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.model.dictionary.CheckWordDicRequest;
 import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
 import com.shabdamsdk.model.getwordresp.Datum;
@@ -83,16 +85,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public static final int MAX_CHAR_LENGTH = 3;
     public static final int MAX_ATTEMPT = 5;
     private final int MAX_INDEX = 16;
-    private  ArrayList<Integer> btnIdList = new ArrayList<>();
-    private  int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
-            R.id.tv_cha, R.id.tv_chah, R.id.tv_ja, R.id.tv_jha, R.id.tv_ea,
-            R.id.tv_ta, R.id.tdha, R.id.tv_da, R.id.tv_dha, R.id.tv_ada,
-            R.id.tv_tea, R.id.tv_tha, R.id.tv_dea, R.id.tv_dhea, R.id.tv_na,
-            R.id.tv_pa, R.id.tv_fa, R.id.tv_ba, R.id.tv_ma, R.id.tv_ya,
-            R.id.tv_ra, R.id.tv_la, R.id.tv_va, R.id.tv_sha, R.id.tv_skha,
-            R.id.tv_sa, R.id.tv_ha, R.id.tv_chota_a, R.id.tv_bada_a, R.id.tv_choti_e,
-            R.id.tv_badi_e, R.id.tv_chota_u, R.id.tv_bada_u, R.id.tv_rishi, R.id.tv_lira,
-            R.id.tv_chot_ae, R.id.tv_bada_ae, R.id.tv_chota_o, R.id.tv_bada_o};
     char[] word_array = new char[3];
     char[] entered_word_array = new char[3];
     StringBuilder[] matra = new StringBuilder[3];
@@ -101,6 +93,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     int blinkCount;
     Animator.AnimatorListener animatorListener;
     List<String> list = new ArrayList<>();
+    private ArrayList<Integer> btnIdList = new ArrayList<>();
+    private int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
+            R.id.tv_cha, R.id.tv_chah, R.id.tv_ja, R.id.tv_jha, R.id.tv_ea,
+            R.id.tv_ta, R.id.tdha, R.id.tv_da, R.id.tv_dha, R.id.tv_ada,
+            R.id.tv_tea, R.id.tv_tha, R.id.tv_dea, R.id.tv_dhea, R.id.tv_na,
+            R.id.tv_pa, R.id.tv_fa, R.id.tv_ba, R.id.tv_ma, R.id.tv_ya,
+            R.id.tv_ra, R.id.tv_la, R.id.tv_va, R.id.tv_sha, R.id.tv_skha,
+            R.id.tv_sa, R.id.tv_ha, R.id.tv_chota_a, R.id.tv_bada_a, R.id.tv_choti_e,
+            R.id.tv_badi_e, R.id.tv_chota_u, R.id.tv_bada_u, R.id.tv_rishi, R.id.tv_lira,
+            R.id.tv_chot_ae, R.id.tv_bada_ae, R.id.tv_chota_o, R.id.tv_bada_o};
     private int index = 0;
     private int currentAttempt = 1;
     private String correctWord = "संदेश";
@@ -121,9 +123,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Animation shakeAnimation;
     private boolean isUttarDekheClicked;
     private RewardedAd mRewardedAd;
-
-
-
+    private final int UPDATE_REQUEST_CODE = 1612;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +132,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_game);
         interstitialAdd();
         initRewardAdd();
+        callInAppupdate();
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -170,6 +172,46 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void callInAppupdate() {
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(this);
+
+// Returns an intent object that you use to check for an update.
+        com.google.android.play.core.tasks.Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+// Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    // This example applies an immediate update. To apply a flexible update
+                    // instead, pass in AppUpdateType.FLEXIBLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                // Request the update.
+
+                try {
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, UPDATE_REQUEST_CODE);
+
+                } catch (IntentSender.SendIntentException exception) {
+                    Log.d("Error_Message", "" + exception.getMessage());
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data == null) return;
+
+        if (requestCode == UPDATE_REQUEST_CODE) {
+            Toast.makeText(this, "Download Start", Toast.LENGTH_SHORT).show();
+
+            if (resultCode != RESULT_OK) {
+                Log.d("Error_Message", "" + resultCode);
+
+            }
+        }
+    }
+
     private void interstitialAdd() {
 
        /* MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -199,8 +241,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
-
     private void loadAdd() {
         if (mInterstitialAd != null) {
             mInterstitialAd.show(this);
@@ -209,7 +249,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 public void onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent();
                     openAglaShabd();
-                   // interstitialAdd();
+                    // interstitialAdd();
                 }
 
                 @Override
@@ -225,7 +265,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void openAglaShabd(){
+    private void openAglaShabd() {
         Intent intent = new Intent(GameActivity.this, GameActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("user_id", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID));
@@ -237,7 +277,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
-    private void  initRewardAdd(){
+    private void initRewardAdd() {
         AdRequest adRequest = new AdRequest.Builder().build();
 
         RewardedAd.load(this, Constants.REWARD_AD_ID,
@@ -245,26 +285,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                         // Handle the error.
-                       // Log.d(TAG, loadAdError.getMessage());
+                        // Log.d(TAG, loadAdError.getMessage());
                         mRewardedAd = null;
                     }
 
                     @Override
                     public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
                         mRewardedAd = rewardedAd;
-                       // Log.d(TAG, "Ad was loaded.");
+                        // Log.d(TAG, "Ad was loaded.");
                     }
                 });
     }
 
-    private void  showRewardAdd(){
+    private void showRewardAdd() {
         if (mRewardedAd != null) {
             Activity activityContext = GameActivity.this;
             mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
                 @Override
                 public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                     // Handle the reward.
-                  //  Log.d(TAG, "The user earned the reward.");
+                    //  Log.d(TAG, "The user earned the reward.");
                     int rewardAmount = rewardItem.getAmount();
                     String rewardType = rewardItem.getType();
                 }
@@ -296,13 +336,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             });
 
         } else {
-           // Log.d(TAG, "The rewarded ad wasn't ready yet.");
+            // Log.d(TAG, "The rewarded ad wasn't ready yet.");
             showHint();
             initRewardAdd();
         }
 
     }
-
 
     private void gameTimer() {
         tv_timer_text.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
@@ -472,7 +511,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.rl_hint) {
             // showHint();
             if (hintCount < 2) {
-               // loadAdd();
+                // loadAdd();
                 showRewardAdd();
             }
         }
@@ -512,7 +551,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
 
 
-
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
         cancel_btn.setOnClickListener(new View.OnClickListener() {
@@ -548,90 +586,90 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             float win = Integer.parseInt(data.getWin());
             float total_played = Integer.parseInt(data.getPlayed());
-            int percent = (int)((win / total_played) * 100f);
+            int percent = (int) ((win / total_played) * 100f);
             tv_win.setText(String.valueOf(percent));
         }
 
-        if(data != null && data.getNoOfAttempts() != null){
+        if (data != null && data.getNoOfAttempts() != null) {
 
-            int progressOne =0, progressTwo = 0, progressThree = 0, progressFour = 0, progressFive = 0, progressSix=0;
-            try{
-                progressOne = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get1())? (Integer.parseInt(data.getNoOfAttempts().get1())*100)/Integer.parseInt(data.getPlayed()):0;
-                progressTwo = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get2())? (Integer.parseInt(data.getNoOfAttempts().get2())*100)/Integer.parseInt(data.getPlayed()):0;
-                progressThree = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get3())? (Integer.parseInt(data.getNoOfAttempts().get3())*100)/Integer.parseInt(data.getPlayed()):0;
-                progressFour = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get4())? (Integer.parseInt(data.getNoOfAttempts().get4())*100)/Integer.parseInt(data.getPlayed()):0;
-                progressFive = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get5())? (Integer.parseInt(data.getNoOfAttempts().get5())*100)/Integer.parseInt(data.getPlayed()):0;
-                progressSix = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get6())? (Integer.parseInt(data.getNoOfAttempts().get6())*100)/Integer.parseInt(data.getPlayed()):0;
+            int progressOne = 0, progressTwo = 0, progressThree = 0, progressFour = 0, progressFive = 0, progressSix = 0;
+            try {
+                progressOne = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get1()) ? (Integer.parseInt(data.getNoOfAttempts().get1()) * 100) / Integer.parseInt(data.getPlayed()) : 0;
+                progressTwo = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get2()) ? (Integer.parseInt(data.getNoOfAttempts().get2()) * 100) / Integer.parseInt(data.getPlayed()) : 0;
+                progressThree = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get3()) ? (Integer.parseInt(data.getNoOfAttempts().get3()) * 100) / Integer.parseInt(data.getPlayed()) : 0;
+                progressFour = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get4()) ? (Integer.parseInt(data.getNoOfAttempts().get4()) * 100) / Integer.parseInt(data.getPlayed()) : 0;
+                progressFive = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get5()) ? (Integer.parseInt(data.getNoOfAttempts().get5()) * 100) / Integer.parseInt(data.getPlayed()) : 0;
+                progressSix = !TextUtils.isEmpty(data.getPlayed()) && !TextUtils.isEmpty(data.getNoOfAttempts().get6()) ? (Integer.parseInt(data.getNoOfAttempts().get6()) * 100) / Integer.parseInt(data.getPlayed()) : 0;
 
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            if(!TextUtils.isEmpty(data.getNoOfAttempts().get1())
-                    && !data.getNoOfAttempts().get1().equalsIgnoreCase("0")){
+            if (!TextUtils.isEmpty(data.getNoOfAttempts().get1())
+                    && !data.getNoOfAttempts().get1().equalsIgnoreCase("0")) {
                 dialogView.findViewById(R.id.rl_layout1).setVisibility(View.GONE);
                 dialogView.findViewById(R.id.rl_layout_one).setVisibility(View.VISIBLE);
-                ((TextView)dialogView.findViewById(R.id.tv_pb_1)).setText(data.getNoOfAttempts().get1());
-                ((ProgressBar)dialogView.findViewById(R.id.p_bar_1)).setProgress(progressOne);
-            }else {
+                ((TextView) dialogView.findViewById(R.id.tv_pb_1)).setText(data.getNoOfAttempts().get1());
+                ((ProgressBar) dialogView.findViewById(R.id.p_bar_1)).setProgress(progressOne);
+            } else {
                 dialogView.findViewById(R.id.rl_layout1).setVisibility(View.VISIBLE);
             }
 
-            if(!TextUtils.isEmpty(data.getNoOfAttempts().get2())
-                    && !data.getNoOfAttempts().get2().equalsIgnoreCase("0")){
+            if (!TextUtils.isEmpty(data.getNoOfAttempts().get2())
+                    && !data.getNoOfAttempts().get2().equalsIgnoreCase("0")) {
                 dialogView.findViewById(R.id.rl_layout2).setVisibility(View.GONE);
                 dialogView.findViewById(R.id.rl_layout_two).setVisibility(View.VISIBLE);
-                ((TextView)dialogView.findViewById(R.id.tv_pb_2)).setText(data.getNoOfAttempts().get2());
-                ((ProgressBar)dialogView.findViewById(R.id.p_bar_2)).setProgress(progressTwo);
+                ((TextView) dialogView.findViewById(R.id.tv_pb_2)).setText(data.getNoOfAttempts().get2());
+                ((ProgressBar) dialogView.findViewById(R.id.p_bar_2)).setProgress(progressTwo);
 
-            }else {
+            } else {
                 dialogView.findViewById(R.id.rl_layout2).setVisibility(View.VISIBLE);
             }
 
-            if(!TextUtils.isEmpty(data.getNoOfAttempts().get3())
-                    && !data.getNoOfAttempts().get3().equalsIgnoreCase("0")){
+            if (!TextUtils.isEmpty(data.getNoOfAttempts().get3())
+                    && !data.getNoOfAttempts().get3().equalsIgnoreCase("0")) {
                 dialogView.findViewById(R.id.rl_layout3).setVisibility(View.GONE);
                 dialogView.findViewById(R.id.rl_layout_three).setVisibility(View.VISIBLE);
-                ((TextView)dialogView.findViewById(R.id.tv_pb_3)).setText(data.getNoOfAttempts().get3());
-                ((ProgressBar)dialogView.findViewById(R.id.p_bar_3)).setProgress(progressThree);
+                ((TextView) dialogView.findViewById(R.id.tv_pb_3)).setText(data.getNoOfAttempts().get3());
+                ((ProgressBar) dialogView.findViewById(R.id.p_bar_3)).setProgress(progressThree);
 
-            }else {
+            } else {
                 dialogView.findViewById(R.id.rl_layout3).setVisibility(View.VISIBLE);
 
             }
 
-            if(!TextUtils.isEmpty(data.getNoOfAttempts().get4())
-                    && !data.getNoOfAttempts().get4().equalsIgnoreCase("0")){
+            if (!TextUtils.isEmpty(data.getNoOfAttempts().get4())
+                    && !data.getNoOfAttempts().get4().equalsIgnoreCase("0")) {
                 dialogView.findViewById(R.id.rl_layout4).setVisibility(View.GONE);
                 dialogView.findViewById(R.id.rl_layout_four).setVisibility(View.VISIBLE);
-                ((TextView)dialogView.findViewById(R.id.tv_pb_4)).setText(data.getNoOfAttempts().get4());
-                ((ProgressBar)dialogView.findViewById(R.id.p_bar_4)).setProgress(progressFour);
+                ((TextView) dialogView.findViewById(R.id.tv_pb_4)).setText(data.getNoOfAttempts().get4());
+                ((ProgressBar) dialogView.findViewById(R.id.p_bar_4)).setProgress(progressFour);
 
-            }else {
+            } else {
                 dialogView.findViewById(R.id.rl_layout4).setVisibility(View.VISIBLE);
 
             }
 
-            if(!TextUtils.isEmpty(data.getNoOfAttempts().get5())
-                    && !data.getNoOfAttempts().get5().equalsIgnoreCase("0")){
+            if (!TextUtils.isEmpty(data.getNoOfAttempts().get5())
+                    && !data.getNoOfAttempts().get5().equalsIgnoreCase("0")) {
                 dialogView.findViewById(R.id.rl_layout5).setVisibility(View.GONE);
                 dialogView.findViewById(R.id.rl_layout_five).setVisibility(View.VISIBLE);
-                ((TextView)dialogView.findViewById(R.id.tv_pb_5)).setText(data.getNoOfAttempts().get5());
-                ((ProgressBar)dialogView.findViewById(R.id.p_bar_5)).setProgress(progressFive);
+                ((TextView) dialogView.findViewById(R.id.tv_pb_5)).setText(data.getNoOfAttempts().get5());
+                ((ProgressBar) dialogView.findViewById(R.id.p_bar_5)).setProgress(progressFive);
 
-            }else {
+            } else {
                 dialogView.findViewById(R.id.rl_layout5).setVisibility(View.VISIBLE);
 
             }
 
-            if(!TextUtils.isEmpty(data.getNoOfAttempts().get6())
-                    && !data.getNoOfAttempts().get6().equalsIgnoreCase("0")){
+            if (!TextUtils.isEmpty(data.getNoOfAttempts().get6())
+                    && !data.getNoOfAttempts().get6().equalsIgnoreCase("0")) {
                 dialogView.findViewById(R.id.rl_layout6).setVisibility(View.GONE);
                 dialogView.findViewById(R.id.rl_layout_six).setVisibility(View.VISIBLE);
-                ((TextView)dialogView.findViewById(R.id.tv_pb_6)).setText(data.getNoOfAttempts().get6());
-                ((ProgressBar)dialogView.findViewById(R.id.p_bar_6)).setProgress(progressSix);
-            }else {
+                ((TextView) dialogView.findViewById(R.id.tv_pb_6)).setText(data.getNoOfAttempts().get6());
+                ((ProgressBar) dialogView.findViewById(R.id.p_bar_6)).setProgress(progressSix);
+            } else {
 
             }
         }
@@ -796,16 +834,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateCurrentAttempt() {
         //Update Matra
-        if(btnIdList != null){
+        if (btnIdList != null) {
             btnIdList.clear();
         }
         for (int i = 1; i < MAX_CHAR_LENGTH + 1; i++) {
             ((TextView) findViewById(getId((currentAttempt - 1) * 3 + i))).setText(matra[i - 1].toString());
         }
 
-        if(hintCount == 1){
+        if (hintCount == 1) {
             hintOne();
-        }else if(hintCount == 2){
+        } else if (hintCount == 2) {
             hintTwo();
         }
 
@@ -917,65 +955,65 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
      * @return
      */
     private boolean mapWord() {
-       try{
-           if (Arrays.equals(word_array, entered_word_array)) {
-               updateGreenBoxes();
-               if (gamePresenter != null) {
-                   if (tv_timer_text != null) {
-                       tv_timer_text.stop();
-                       pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
-                       mTimingRunning = false;
+        try {
+            if (Arrays.equals(word_array, entered_word_array)) {
+                updateGreenBoxes();
+                if (gamePresenter != null) {
+                    if (tv_timer_text != null) {
+                        tv_timer_text.stop();
+                        pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
+                        mTimingRunning = false;
 
-                   }
-                   if (!TextUtils.isEmpty(datumCorrectWord.getId())) {
-                       saveID(datumCorrectWord.getId());
-                   }
-                   SubmitGameRequest submitGameRequest = new SubmitGameRequest();
-                   submitGameRequest.setGameUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
-                   submitGameRequest.setGameStatus(Constants.WIN);
-                   submitGameRequest.setNoOfAttempt(currentAttempt);
-                   submitGameRequest.setTime(String.valueOf(pauseOffset / 1000));
-                   gamePresenter.submitGame(submitGameRequest);
-                   // save correct word id
-                   //datumCorrectWord.getId()
+                    }
+                    if (!TextUtils.isEmpty(datumCorrectWord.getId())) {
+                        saveID(datumCorrectWord.getId());
+                    }
+                    SubmitGameRequest submitGameRequest = new SubmitGameRequest();
+                    submitGameRequest.setGameUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
+                    submitGameRequest.setGameStatus(Constants.WIN);
+                    submitGameRequest.setNoOfAttempt(currentAttempt);
+                    submitGameRequest.setTime(String.valueOf(pauseOffset / 1000));
+                    gamePresenter.submitGame(submitGameRequest);
+                    // save correct word id
+                    //datumCorrectWord.getId()
 
-               }
-               return true;
-           }// dictionary check is pending
-           else {//check is letter are in word_array
-               for (int i = 0; i < entered_word_array.length; i++) {
-                   boolean isExist = false;
-                   for (int j = 0; j < word_array.length; j++) {
-                       if (entered_word_array[i] == word_array[j]) {
-                           isExist = true;
-                           if (i == j) {//same postion green
-                               findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_green_box);
-                               findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_green_box);
-                               ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
-                               ((TextView) findViewById(btnIdList.get(i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+                }
+                return true;
+            }// dictionary check is pending
+            else {//check is letter are in word_array
+                for (int i = 0; i < entered_word_array.length; i++) {
+                    boolean isExist = false;
+                    for (int j = 0; j < word_array.length; j++) {
+                        if (entered_word_array[i] == word_array[j]) {
+                            isExist = true;
+                            if (i == j) {//same postion green
+                                findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_green_box);
+                                findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_green_box);
+                                ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+                                ((TextView) findViewById(btnIdList.get(i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
 
-                           } else {// yellow
-                               findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_yellow);
-                               findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_yellow);
-                               ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
-                               ((TextView) findViewById(btnIdList.get(i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+                            } else {// yellow
+                                findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_yellow);
+                                findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_yellow);
+                                ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+                                ((TextView) findViewById(btnIdList.get(i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
 
-                           }
-                       }
-                   }
-                   if (!isExist) {//Not in word
-                       findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_grey);
-                       findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_grey);
-                       ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
-                       ((TextView) findViewById(btnIdList.get(i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+                            }
+                        }
+                    }
+                    if (!isExist) {//Not in word
+                        findViewById(getId((currentAttempt - 1) * 3 + 1 + i)).setBackgroundResource(R.drawable.bg_grey);
+                        findViewById(btnIdList.get(i)).setBackgroundResource(R.drawable.bg_grey);
+                        ((TextView) findViewById(getId((currentAttempt - 1) * 3 + 1 + i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
+                        ((TextView) findViewById(btnIdList.get(i))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
 
-                   }
-               }
+                    }
+                }
 
-           }
-       }catch (Exception e){
-           e.printStackTrace();
-       }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -986,9 +1024,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         gamePresenter.saveIDLocalDB(GameActivity.this, task);
 
     }
-    private Handler handler = new Handler();
+
     private void openLeaderBoardOnGameEnd() {
-       handler.postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
@@ -1160,7 +1198,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onWordFetched(Datum datumCorrectWord) {
         this.datumCorrectWord = datumCorrectWord;
         this.correctWord = datumCorrectWord.getWords();
-       // ToastUtils.show(GameActivity.this, correctWord);
+        // ToastUtils.show(GameActivity.this, correctWord);
         showMatraText();
         updateCurrentAttempt();
     }
@@ -1174,20 +1212,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     /**
      * Hard coded log-- can make it dynamic but not in mood
      */
     void showHint() {
-        if(hintCount< 2){
+        if (hintCount < 2) {
             btnIdList.clear();
-            if(hintCount == 0){
-                hintCount ++;
+            if (hintCount == 0) {
+                hintCount++;
                 hintOne();
 
-            }else {
+            } else {
                 //First Text
-                hintCount ++;
+                hintCount++;
                 hintTwo();
             }
         }
@@ -1224,7 +1261,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void hintTwo() {
-       // hintCount ++;
+        // hintCount ++;
         entered_word_array[0] = word_array[0];
         int pos = ((currentAttempt - 1) * 3) + 1;
         ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
@@ -1262,7 +1299,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void hintOne() {
-       // hintCount ++;
+        // hintCount ++;
         entered_word_array[0] = word_array[0];
         int pos = ((currentAttempt - 1) * 3) + 1;
         ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
@@ -1352,7 +1389,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         keyIdArray = null;
         matra = null;
-        btnIdList =null;
+        btnIdList = null;
         entered_word_array = null;
         datumCorrectWord = null;
         word_array = null;
@@ -1363,7 +1400,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onGameSubmit() {
-        if(isUttarDekheClicked){
+        if (isUttarDekheClicked) {
             if (mTimingRunning) {
                 tv_timer_text.stop();
                 pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
@@ -1381,7 +1418,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             intent.putExtra("currentAttempt", String.valueOf(currentAttempt));
             startActivity(intent);
             finish();
-        }else {
+        } else {
             openLeaderBoardOnGameEnd();
         }
     }
