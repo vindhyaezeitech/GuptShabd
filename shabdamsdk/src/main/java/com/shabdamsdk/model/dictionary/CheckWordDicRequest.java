@@ -12,6 +12,18 @@ public class CheckWordDicRequest implements Parcelable
     @SerializedName("word")
     @Expose
     private String word;
+
+    public String getWord_id() {
+        return word_id;
+    }
+
+    public void setWord_id(String word_id) {
+        this.word_id = word_id;
+    }
+
+    @SerializedName("word_id")
+    @Expose
+    private String word_id;
     public final static Creator<CheckWordDicRequest> CREATOR = new Creator<CheckWordDicRequest>() {
 
 
@@ -31,6 +43,8 @@ public class CheckWordDicRequest implements Parcelable
 
     protected CheckWordDicRequest(android.os.Parcel in) {
         this.word = ((String) in.readValue((String.class.getClassLoader())));
+        this.word_id = ((String) in.readValue((String.class.getClassLoader())));
+
     }
 
     public CheckWordDicRequest() {
@@ -46,6 +60,8 @@ public class CheckWordDicRequest implements Parcelable
 
     public void writeToParcel(android.os.Parcel dest, int flags) {
         dest.writeValue(word);
+        dest.writeValue(word_id);
+
     }
 
     public int describeContents() {

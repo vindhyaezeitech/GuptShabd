@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.shabdamsdk.Constants;
 import com.shabdamsdk.ShabdamSplashActivity;
 import com.shabdamsdk.ToastUtils;
+import com.shabdamsdk.pref.CommonPreference;
 
 public class UserDetailActivity extends AppCompatActivity{
     private static final int RC_SIGN_IN = 1;
@@ -43,6 +44,11 @@ public class UserDetailActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
+        Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
+        intent.putExtra("user_id", "1123444");
+
+        startActivity(intent);
+        finish();
 
         inIt();
 
@@ -113,9 +119,10 @@ public class UserDetailActivity extends AppCompatActivity{
                 String personEmail = acct.getEmail();
                 String personId = acct.getId();
                 Uri personPhoto = acct.getPhotoUrl();
+              //  CommonPreference.getInstance(UserDetailActivity.this).put(CommonPreference.Key.);
 
                 Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
-                intent.putExtra("user_id", "");
+                intent.putExtra("user_id", "1123444");
                 intent.putExtra("name",acct.getDisplayName());
                 intent.putExtra("uname",personName);
                 intent.putExtra("email",personEmail);

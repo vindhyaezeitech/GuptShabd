@@ -12,6 +12,7 @@ import com.shabdamsdk.model.getwordresp.GetWordResponse;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardList;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
 import com.shabdamsdk.model.statistics.StatisticsMainModel;
+import com.shabdamsdk.model.word.WordResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -39,5 +40,8 @@ public interface ApiService {
 
     @POST("signup_gameuser")
     Observable<AddUserResponse> signUpUser(@Body SignupRequest body);
+
+    @POST("get_gamewordsid")
+    Observable<WordResponse> fetchWordFromWordId(@Body CheckWordDicRequest body);
 
 }
