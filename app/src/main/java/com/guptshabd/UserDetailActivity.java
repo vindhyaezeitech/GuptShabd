@@ -47,7 +47,6 @@ public class UserDetailActivity extends AppCompatActivity{
         setContentView(R.layout.activity_user_detail);
         String email =  CommonPreference.getInstance(UserDetailActivity.this).getString(CommonPreference.Key.EMAIL);;
         if(!TextUtils.isEmpty(email)){
-            CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, CommonPreference.getInstance(UserDetailActivity.this).getString(CommonPreference.Key.GAME_USER_ID));
             Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
             startActivity(intent);
             finish();
