@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "563094630518",
+    "project_id": "shabdal-2001",
+    "storage_bucket": "shabdal-2001.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563094630518:android:77a18e3c3e6f3c00276f57",
+        "android_client_info": {
+          "package_name": "com.guptshabd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563094630518-75q6fvh11n5e5bm87dprdmliptli5l54.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnB5mfXBUZdkM_btgE12fC4d0hMQwf9v0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563094630518-75q6fvh11n5e5bm87dprdmliptli5l54.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
