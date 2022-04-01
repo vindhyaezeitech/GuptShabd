@@ -1,8 +1,6 @@
 package com.shabdamsdk.ui.activity;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,7 +10,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.shabdamsdk.R;
@@ -20,7 +20,7 @@ import com.shabdamsdk.R;
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
     private String type;
     private RelativeLayout rl_feedback_btn;
-    GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInClient mGoogleSignInClient;
 
 
     @Override
@@ -28,6 +28,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         inIt();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
     private void inIt() {
@@ -65,8 +71,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
             //startActivity(Intent.createChooser(email, "Choose an Email client :"));
         }
-        if (view.getId() == R.id.iv_logout_btn)
-        {
+        if (view.getId() == R.id.iv_logout_btn) {
             signOut();
         }
     }
@@ -77,9 +82,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...
-
                         Toast.makeText(SettingsActivity.this, "Logout successfully", Toast.LENGTH_SHORT).show();
-                        finishAffinity();
+                        finish();
                     }
                 });
     }
