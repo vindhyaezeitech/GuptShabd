@@ -523,7 +523,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             kaiseKhelePopup();
         } else if (id == R.id.iv_trophy_btn) {
             startActivity(new Intent(this, LeaderBoardActivity.class));
-            finish();
+            //finish();
+            //onBackPressed();
         } else if (id == R.id.iv_statistics_btn) {
             callgetStreakAPI();
         } else if (id == R.id.iv_settings_btn) {
