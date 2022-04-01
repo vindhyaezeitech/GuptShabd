@@ -94,6 +94,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     Animator.AnimatorListener animatorListener;
     List<String> list = new ArrayList<>();
     private ArrayList<Integer> btnIdList = new ArrayList<>();
+
+    private enum CLICK_ITEM{HINT, UTTAR_DEKHO, AGLA_SHABD};
+    private CLICK_ITEM click_item;
     private int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
             R.id.tv_cha, R.id.tv_chah, R.id.tv_ja, R.id.tv_jha, R.id.tv_ea,
             R.id.tv_ta, R.id.tdha, R.id.tv_da, R.id.tv_dha, R.id.tv_ada,
@@ -253,11 +256,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent();
-                   if(isHintPressed){
-                       isHintPressed = false;
+                   if(click_item == CLICK_ITEM.HINT){
                        showHint();
-                   }else {
+                   }else if(click_item == CLICK_ITEM.AGLA_SHABD) {
                        openAglaShabd();
+                   }else if(click_item == CLICK_ITEM.UTTAR_DEKHO){
+                       openUttarDekho();
                    }
                      interstitialAdd();
                 }
@@ -265,24 +269,46 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     super.onAdFailedToShowFullScreenContent(adError);
-                    if(isHintPressed){
-                        isHintPressed = false;
+                    if(click_item == CLICK_ITEM.HINT){
                         showHint();
-                    }else {
+                    }else if(click_item == CLICK_ITEM.AGLA_SHABD) {
                         openAglaShabd();
+                    }else if(click_item == CLICK_ITEM.UTTAR_DEKHO){
+                        openUttarDekho();
                     }
                     interstitialAdd();
                 }
             });
         } else {
-            if(isHintPressed){
-                isHintPressed = false;
+            if(click_item == CLICK_ITEM.HINT){
                 showHint();
-            }else {
+            }else if(click_item == CLICK_ITEM.AGLA_SHABD) {
                 openAglaShabd();
+            }else if(click_item == CLICK_ITEM.UTTAR_DEKHO){
+                openUttarDekho();
             }
             Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void openUttarDekho() {
+        if (mTimingRunning) {
+            tv_timer_text.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
+            mTimingRunning = false;
+            minutes = TimeUnit.MILLISECONDS.toMinutes(pauseOffset);
+            seconds = TimeUnit.MILLISECONDS.toSeconds(pauseOffset) % 60;
+            minute = String.format("%02d", minutes);
+            second = String.format("%02d", seconds);
+        }
+
+        Intent intent = new Intent(this, ShabdamActivity.class);
+        intent.putExtra("word", correctWord);
+        intent.putExtra("minute", minute);
+        intent.putExtra("second", second);
+        intent.putExtra("currentAttempt", String.valueOf(currentAttempt));
+        startActivity(intent);
+        finish();
     }
 
     private void openAglaShabd() {
@@ -507,7 +533,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
             //submitText();
         } else if (id == R.id.rl_uttar_dekho_btn) {
-
+            click_item = CLICK_ITEM.UTTAR_DEKHO;
             if (!TextUtils.isEmpty(correctWord)) {
                 isUttarDekheClicked = true;
                 SubmitGameRequest submitGameRequest = new SubmitGameRequest();
@@ -533,7 +559,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             // showHint();
             if (hintCount < 2) {
                 // loadAdd();
-                isHintPressed = true;
+               // isHintPressed = true;
+                click_item = CLICK_ITEM.HINT;
                // showRewardAdd();
                 loadAdd();
             }
@@ -594,6 +621,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         agla_shabd_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                click_item = CLICK_ITEM.AGLA_SHABD;
                 loadAdd();
             }
         });
@@ -1424,23 +1452,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onGameSubmit() {
         if (isUttarDekheClicked) {
-            if (mTimingRunning) {
-                tv_timer_text.stop();
-                pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
-                mTimingRunning = false;
-                minutes = TimeUnit.MILLISECONDS.toMinutes(pauseOffset);
-                seconds = TimeUnit.MILLISECONDS.toSeconds(pauseOffset) % 60;
-                minute = String.format("%02d", minutes);
-                second = String.format("%02d", seconds);
-            }
+            loadAdd();
 
-            Intent intent = new Intent(this, ShabdamActivity.class);
-            intent.putExtra("word", correctWord);
-            intent.putExtra("minute", minute);
-            intent.putExtra("second", second);
-            intent.putExtra("currentAttempt", String.valueOf(currentAttempt));
-            startActivity(intent);
-            finish();
         } else {
             openLeaderBoardOnGameEnd();
         }
