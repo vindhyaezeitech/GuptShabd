@@ -45,7 +45,12 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
             if (!TextUtils.isEmpty(profile_image)) {
                 CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.PROFILE_IMAGE, profile_image);
             }
-        } else {
+        }else if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSplashActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
+            Intent intent = new Intent(ShabdamSplashActivity.this, GameActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else {
             return;
         }
 
