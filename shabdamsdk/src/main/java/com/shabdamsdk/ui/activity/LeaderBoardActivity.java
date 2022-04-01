@@ -115,7 +115,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
                 startActivity(intent);
                 finish();
             } else {
-                finish();
+                onBackPressed();
             }
         }else if (view.getId() == R.id.rl_agla_shabd_btn) {
             loadAdd();
