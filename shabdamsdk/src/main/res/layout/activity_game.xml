@@ -8,19 +8,18 @@
     android:orientation="vertical"
     tools:context=".GameActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
         android:background="@drawable/radius_background"
-        android:elevation="@dimen/_10sdp"
-        android:orientation="horizontal">
+        android:elevation="@dimen/_10sdp">
 
         <TextView
+            android:id="@+id/tv_shabdam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/_15sdp"
-            android:layout_toRightOf="@id/iv_back_btn"
             android:text="@string/shabdam_text"
             android:textColor="@color/text_color_black"
             android:textSize="@dimen/_20sdp"
@@ -30,56 +29,49 @@
             android:id="@+id/iv_question_mark_btn"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_toRightOf="@id/tv_shabdam"
             android:src="@drawable/question_mark_icon" />
 
 
+        <TextView
+            android:id="@+id/tv_uname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="sans-serif-medium"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="12sp"></TextView>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/iv_settings_btn"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:src="@drawable/settings_icon" />
 
-            <TextView
-                android:id="@+id/tv_uname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:text=""
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/_44sdp"
-                android:fontFamily="sans-serif-medium"></TextView>
+        <ImageView
+            android:id="@+id/iv_statistics_btn"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:layout_toLeftOf="@id/iv_settings_btn"
+            android:src="@drawable/statistics_icon" />
 
-            <ImageView
-                android:id="@+id/iv_settings_btn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/_15sdp"
-                android:src="@drawable/settings_icon" />
-
-            <ImageView
-                android:id="@+id/iv_statistics_btn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/_15sdp"
-                android:layout_toLeftOf="@id/iv_settings_btn"
-                android:src="@drawable/statistics_icon" />
-
-            <ImageView
-                android:id="@+id/iv_trophy_btn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/_15sdp"
-                android:layout_toLeftOf="@id/iv_statistics_btn"
-                android:src="@drawable/trophy_icon" />
-        </RelativeLayout>
-
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_trophy_btn"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:layout_toLeftOf="@id/iv_statistics_btn"
+            android:src="@drawable/trophy_icon" />
+    </RelativeLayout>
 
 
     <FrameLayout
