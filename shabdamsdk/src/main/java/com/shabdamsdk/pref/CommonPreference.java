@@ -9,8 +9,8 @@ public class CommonPreference {
     private static final String SETTINGS_NAME = "shabdam_pref";
     private static CommonPreference sSharedPrefs;
     private final SharedPreferences mPref;
-    private SharedPreferences.Editor mEditor;
     private final boolean mBulkUpdate = false;
+    private SharedPreferences.Editor mEditor;
 
     private CommonPreference(Context context) {
         mPref = context.getSharedPreferences(SETTINGS_NAME, Context.MODE_PRIVATE);
@@ -139,6 +139,14 @@ public class CommonPreference {
         return isProfileImage() ? "" : getString(Key.PROFILE_IMAGE);
     }
 
+    private boolean isType() {
+        return TextUtils.isEmpty(getString(Key.TYPE));
+    }
+
+    public String getType() {
+        return isType() ? "" : getString(Key.TYPE);
+    }
+
     public void remove(String... keys) {
         doEdit();
         for (String key : keys) {
@@ -186,6 +194,7 @@ public class CommonPreference {
         public static final String EMAIL = "email";
         public static final String PROFILE_IMAGE = "profile_image";
         public static final String GAME_USER_ID = "game_user_id";
+        public static final String TYPE = "type";
     }
 
 }

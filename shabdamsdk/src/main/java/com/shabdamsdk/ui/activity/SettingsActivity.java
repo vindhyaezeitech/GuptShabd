@@ -41,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private void inIt() {
         findViewById(R.id.iv_back_btn).setOnClickListener(this);
         findViewById(R.id.rl_feedback_btn).setOnClickListener(this);
-        findViewById(R.id.iv_logout_btn).setOnClickListener(this);
+        findViewById(R.id.rl_logout_btn).setOnClickListener(this);
 
         Intent intent = getIntent();
         type = intent.getStringExtra("type");
@@ -73,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
             //startActivity(Intent.createChooser(email, "Choose an Email client :"));
         }
-        if (view.getId() == R.id.iv_logout_btn) {
+        if (view.getId() == R.id.rl_logout_btn) {
             signOut();
         }
     }

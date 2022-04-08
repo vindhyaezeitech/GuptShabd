@@ -1,9 +1,8 @@
 package com.shabdamsdk.ui.activity;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,13 +10,14 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,11 +28,17 @@ import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.Task;
 import com.shabdamsdk.Constants;
 import com.shabdamsdk.GameActivity;
 import com.shabdamsdk.GamePresenter;
 import com.shabdamsdk.GameView;
 import com.shabdamsdk.R;
+import com.shabdamsdk.ToastUtils;
 import com.shabdamsdk.model.leaderboard.LeaderboardListModel;
 import com.shabdamsdk.pref.CommonPreference;
 import com.shabdamsdk.ui.adapter.GetLeaderboardListAdapter;
@@ -45,6 +51,8 @@ import java.util.List;
 
 public class LeaderBoardActivity extends AppCompatActivity implements GameView, View.OnClickListener {
 
+    private static final int RC_SIGN_IN = 1;
+    GoogleSignInClient mGoogleSignInClient;
     private String type;
     private GamePresenter gamePresenter;
     private GetLeaderboardListAdapter adapter;
@@ -52,6 +60,8 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     private RelativeLayout rl_one, rl_two, rl_three, rl_share_btn;
     private TextView tv_name_one, tv_name_two, tv_name_three;
     private InterstitialAd mInterstitialAd;
+    private LinearLayout ll_google_sign_in;
+    private TextView tv_google_sign_in;
 
 
     @Override
@@ -60,8 +70,11 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
         setContentView(R.layout.activity_leader_board);
         interstitialAdd();
         inIt();
+        googleSignIn();
+
     }
 
+    @SuppressLint("WrongViewCast")
     private void inIt() {
         findViewById(R.id.iv_back_btn).setOnClickListener(this);
         recyclerView = findViewById(R.id.rv_getLeaderboard_List);
@@ -72,6 +85,8 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
         tv_name_two = findViewById(R.id.tv_name_two);
         tv_name_three = findViewById(R.id.tv_name_three);
         rl_share_btn = findViewById(R.id.rl_share_btn);
+        ll_google_sign_in = findViewById(R.id.ll_google_sign_in);
+        tv_google_sign_in = findViewById(R.id.tv_google_sign_in);
         findViewById(R.id.rl_agla_shabd_btn).setOnClickListener(this);
 
         Intent intent = getIntent();
@@ -84,8 +99,89 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
             }
         });
 
+        String email = CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL);
+        if (!TextUtils.isEmpty(email)) {
+            ll_google_sign_in.setVisibility(View.GONE);
+        } else {
+            ll_google_sign_in.setVisibility(View.VISIBLE);
+        }
+
+
+        tv_google_sign_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (LeaderBoardActivity.this != null) {
+                    if (ToastUtils.checkInternetConnection(LeaderBoardActivity.this)) {
+                        signIn();
+
+                    } else {
+                        Toast.makeText(LeaderBoardActivity.this, getString(com.shabdamsdk.R.string.ensure_internet), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
         callGetLeaderBoardListAPI();
 
+    }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            //handleSignInResult(task);
+        }
+    }
+
+/*
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+            if (acct != null) {
+                String personName = acct.getDisplayName();
+                String personGivenName = acct.getGivenName();
+                String personFamilyName = acct.getFamilyName();
+                String personEmail = acct.getEmail();
+                String personId = acct.getId();
+                Uri personPhoto = acct.getPhotoUrl();
+                CommonPreference.getInstance(LeaderBoardActivity.this).put(CommonPreference.Key.EMAIL, personEmail);
+
+                Intent intent = new Intent(LeaderBoardActivity.this, ShabdamSplashActivity.class);
+                intent.putExtra("user_id", "1123444");
+                intent.putExtra("name",acct.getDisplayName());
+                intent.putExtra("uname",personName);
+                intent.putExtra("email",personEmail);
+                intent.putExtra("profile_image",personPhoto);
+                startActivity(intent);
+                finish();
+
+                //Toast.makeText(this, ""+personEmail, Toast.LENGTH_SHORT).show();
+            }
+            //startActivity(new Intent(this, ShabdamSplashActivity.class));
+
+        } catch (ApiException e) {
+            Log.d("Message", e.toString());
+        }
+    }
+*/
+
+    private void googleSignIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
     private void callGetLeaderBoardListAPI() {
@@ -117,7 +213,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
             } else {
                 onBackPressed();
             }
-        }else if (view.getId() == R.id.rl_agla_shabd_btn) {
+        } else if (view.getId() == R.id.rl_agla_shabd_btn) {
             loadAdd();
         }
     }
@@ -265,7 +361,6 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     }
 
 
-
     private void loadAdd() {
         if (mInterstitialAd != null) {
             mInterstitialAd.show(this);
@@ -286,7 +381,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
             });
         } else {
             startGame();
-           // Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -305,7 +400,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(gamePresenter != null){
+        if (gamePresenter != null) {
             gamePresenter.onDestroy();
         }
     }

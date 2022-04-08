@@ -22,6 +22,9 @@
     <color name="leaderboard_box_text_color">#F0BB17</color>
     <color name="text_gray_color">#838383</color>
     <color name="text_gray_dark">#4D4F5C</color>
+    <color name="bg_gray_dark">#363636</color>
+    <color name="play_as_guest_btn_color">#5A5A5A</color>
+    <color name="red_color">#008F17</color>
 
 
 </resources>

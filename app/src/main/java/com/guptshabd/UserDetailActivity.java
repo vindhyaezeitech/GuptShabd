@@ -6,51 +6,48 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.shabdamsdk.Constants;
-import com.shabdamsdk.GameActivity;
 import com.shabdamsdk.ShabdamSplashActivity;
-import com.shabdamsdk.ToastUtils;
 import com.shabdamsdk.pref.CommonPreference;
+import com.shabdamsdk.ui.activity.TutorialActivity;
 
-public class UserDetailActivity extends AppCompatActivity{
+public class UserDetailActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
-    private TextView tv_google_sign_in;
     GoogleSignInClient mGoogleSignInClient;
-
+    private TextView tv_google_sign_in;
+    private Button play_guest_btn;
+    private LinearLayout ll_welcome;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
-        String email =  CommonPreference.getInstance(UserDetailActivity.this).getString(CommonPreference.Key.EMAIL);;
-        if(!TextUtils.isEmpty(email)){
+        ll_welcome = findViewById(R.id.ll_welcome_layout);
+        Animation bottomDown = AnimationUtils.loadAnimation(this,
+                com.shabdamsdk.R.anim.bottom_to_up_slide);
+        ll_welcome.startAnimation(bottomDown);
+
+        String email = CommonPreference.getInstance(UserDetailActivity.this).getString(CommonPreference.Key.EMAIL);
+        if (!TextUtils.isEmpty(email)) {
             Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
             startActivity(intent);
             finish();
-        }else {
+        } else {
             inIt();
             googleSignIn();
         }
@@ -59,9 +56,6 @@ public class UserDetailActivity extends AppCompatActivity{
 
         startActivity(intent);
         finish();*/
-
-
-
 
     }
 
@@ -74,8 +68,17 @@ public class UserDetailActivity extends AppCompatActivity{
     }
 
     private void inIt() {
-        tv_google_sign_in = findViewById(R.id.tv_google_sign_in);
+        play_guest_btn = findViewById(R.id.play_guest_btn);
 
+        play_guest_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(UserDetailActivity.this, TutorialActivity.class));
+            }
+        });
+        //tv_google_sign_in = findViewById(R.id.tv_google_sign_in);
+
+/*
         tv_google_sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,7 +92,9 @@ public class UserDetailActivity extends AppCompatActivity{
                 }
             }
         });
+*/
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -131,10 +136,10 @@ public class UserDetailActivity extends AppCompatActivity{
 
                 Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
                 intent.putExtra("user_id", "1123444");
-                intent.putExtra("name",acct.getDisplayName());
-                intent.putExtra("uname",personName);
-                intent.putExtra("email",personEmail);
-                intent.putExtra("profile_image",personPhoto);
+                intent.putExtra("name", acct.getDisplayName());
+                intent.putExtra("uname", personName);
+                intent.putExtra("email", personEmail);
+                intent.putExtra("profile_image", personPhoto);
                 startActivity(intent);
                 finish();
 

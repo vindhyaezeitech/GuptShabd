@@ -38,6 +38,18 @@
     <string name="gas_distribution_text">गेस डिस्ट्रीब्यूशन</string>
     <string name="hint_text">हिंट</string>
     <string name="answer_dekho_text">उत्तर देखो</string>
+    <string name="logout_text">लॉग आउट</string>
+    <string name="start_kare_text">आएँ शुरू करें</string>
+    <string name="new_paheli_text">हर बार एक नई पहेली</string>
+    <string name="welcome_text">स्वागत है</string>
+    <string name="play_as_guest_text">Play as Guest</string>
+    <string name="aage_bade_button_text">आगे बढ़ें</string>
+    <string name="checkbox_text">अगली बार ना दिखाएँ</string>
+    <string name="namaste_text">नमस्ते</string>
+    <string name="leaderboard_sign_in_text">आज का लीडरबॉर्ड देखने के लिए</string>
+    <string name="leaderboard_sign_in_text1">कृपया साइन इन करें</string>
+    <string name="statistics_sign_in_text">आंकड़े देखने के लिए कृपया</string>
+    <string name="statistics_sign_in_text1">साइन इन करें</string>
 
     // Right Answer Text
     <string name="right_answer">व</string>
@@ -53,7 +65,6 @@
     <string name="please_login">Sign in</string>
     <string name="login_with_google">Sign in with google</string>
     <string name="ensure_internet">Please ensure internet connectivity.</string>
-
 
 
 </resources>

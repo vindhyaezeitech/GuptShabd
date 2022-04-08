@@ -182,7 +182,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginRight="@dimen/_15sdp"
-                android:src="@drawable/forward_icon" />
+                android:src="@drawable/fast_forward_icon" />
         </RelativeLayout>
 
     </LinearLayout>

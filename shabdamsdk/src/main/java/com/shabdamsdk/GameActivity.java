@@ -26,6 +26,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -85,6 +86,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public static final int MAX_CHAR_LENGTH = 3;
     public static final int MAX_ATTEMPT = 5;
     private final int MAX_INDEX = 16;
+    private final int UPDATE_REQUEST_CODE = 1612;
     char[] word_array = new char[3];
     char[] entered_word_array = new char[3];
     StringBuilder[] matra = new StringBuilder[3];
@@ -95,7 +97,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     List<String> list = new ArrayList<>();
     private ArrayList<Integer> btnIdList = new ArrayList<>();
 
-    private enum CLICK_ITEM{HINT, UTTAR_DEKHO, AGLA_SHABD};
     private CLICK_ITEM click_item;
     private int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
             R.id.tv_cha, R.id.tv_chah, R.id.tv_ja, R.id.tv_jha, R.id.tv_ea,
@@ -126,9 +127,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Animation shakeAnimation;
     private boolean isUttarDekheClicked;
     private RewardedAd mRewardedAd;
-    private final int UPDATE_REQUEST_CODE = 1612;
     private Handler handler = new Handler();
     private boolean isHintPressed;
+    private LinearLayout ll_google_sign_in;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +139,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         initRewardAdd();
         callInAppupdate();
 
-        if(!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME))){
-            ((TextView)findViewById(R.id.tv_uname)).setText(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME));
+        if (!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME))) {
+            ((TextView) findViewById(R.id.tv_uname)).setText(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME));
         }
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -173,11 +174,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             getWordRequest.setUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
             gamePresenter.fetchNewWord(GameActivity.this, getWordRequest);
         }
-
-        if (!CommonPreference.getInstance(GameActivity.this).getBoolean(CommonPreference.Key.IS_FIRST_TIME)) {
+      /*  if (!CommonPreference.getInstance(GameActivity.this).getBoolean(CommonPreference.Key.IS_FIRST_TIME)) {
             CommonPreference.getInstance(GameActivity.this).put(CommonPreference.Key.IS_FIRST_TIME, true);
             kaiseKhelePopup();
-        }
+        }*/
     }
 
     private void callInAppupdate() {
@@ -256,35 +256,35 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent();
-                   if(click_item == CLICK_ITEM.HINT){
-                       showHint();
-                   }else if(click_item == CLICK_ITEM.AGLA_SHABD) {
-                       openAglaShabd();
-                   }else if(click_item == CLICK_ITEM.UTTAR_DEKHO){
-                       openUttarDekho();
-                   }
-                     interstitialAdd();
+                    if (click_item == CLICK_ITEM.HINT) {
+                        showHint();
+                    } else if (click_item == CLICK_ITEM.AGLA_SHABD) {
+                        openAglaShabd();
+                    } else if (click_item == CLICK_ITEM.UTTAR_DEKHO) {
+                        openUttarDekho();
+                    }
+                    interstitialAdd();
                 }
 
                 @Override
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     super.onAdFailedToShowFullScreenContent(adError);
-                    if(click_item == CLICK_ITEM.HINT){
+                    if (click_item == CLICK_ITEM.HINT) {
                         showHint();
-                    }else if(click_item == CLICK_ITEM.AGLA_SHABD) {
+                    } else if (click_item == CLICK_ITEM.AGLA_SHABD) {
                         openAglaShabd();
-                    }else if(click_item == CLICK_ITEM.UTTAR_DEKHO){
+                    } else if (click_item == CLICK_ITEM.UTTAR_DEKHO) {
                         openUttarDekho();
                     }
                     interstitialAdd();
                 }
             });
         } else {
-            if(click_item == CLICK_ITEM.HINT){
+            if (click_item == CLICK_ITEM.HINT) {
                 showHint();
-            }else if(click_item == CLICK_ITEM.AGLA_SHABD) {
+            } else if (click_item == CLICK_ITEM.AGLA_SHABD) {
                 openAglaShabd();
-            }else if(click_item == CLICK_ITEM.UTTAR_DEKHO){
+            } else if (click_item == CLICK_ITEM.UTTAR_DEKHO) {
                 openUttarDekho();
             }
             Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
@@ -559,9 +559,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             // showHint();
             if (hintCount < 2) {
                 // loadAdd();
-               // isHintPressed = true;
+                // isHintPressed = true;
                 click_item = CLICK_ITEM.HINT;
-               // showRewardAdd();
+                // showRewardAdd();
                 loadAdd();
             }
         }
@@ -598,11 +598,20 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         agla_shabd_btn = dialogView.findViewById(R.id.rl_agla_shabd_btn);
         rl_share_btn = dialogView.findViewById(R.id.rl_share_btn);
         tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
+        ll_google_sign_in = dialogView.findViewById(R.id.ll_google_sign_in);
         tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
 
 
         builder.setView(dialogView);
         final AlertDialog alertDialog = builder.create();
+
+        String email = CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL);
+        if (!TextUtils.isEmpty(email)) {
+            ll_google_sign_in.setVisibility(View.GONE);
+        } else {
+            ll_google_sign_in.setVisibility(View.VISIBLE);
+        }
+
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1205,6 +1214,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public void showProgress() {
+        if (!isFinishing()) {
+            flLoading.setVisibility(View.VISIBLE);
+        }
+    }
+
     /*private void flipCardAnimation(){
         final ObjectAnimator oa1 = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 0f);
         final ObjectAnimator oa2 = ObjectAnimator.ofFloat(imageView, "scaleX", 0f, 1f);
@@ -1220,14 +1236,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });
         oa1.start();
     }*/
-
-
-    @Override
-    public void showProgress() {
-        if (!isFinishing()) {
-            flLoading.setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
     public void hideProgress() {
@@ -1261,7 +1269,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
 
     /**
      * Hard coded log-- can make it dynamic but not in mood
@@ -1316,7 +1323,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         entered_word_array[0] = word_array[0];
         int pos = ((currentAttempt - 1) * 3) + 1;
         ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
-        ((TextView) findViewById(getId(pos))).setBackgroundResource(R.drawable.bg_green_box);
+        findViewById(getId(pos)).setBackgroundResource(R.drawable.bg_green_box);
         ((TextView) findViewById(getId(pos))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
 
         int id = getKeyId(String.valueOf(word_array[0]));
@@ -1334,7 +1341,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         entered_word_array[1] = word_array[1];
         int pos2 = ((currentAttempt - 1) * 3) + 2;
         ((TextView) findViewById(getId(pos2))).setText(new StringBuilder().append(word_array[1]).append(matra[1]));
-        ((TextView) findViewById(getId(pos2))).setBackgroundResource(R.drawable.bg_green_box);
+        findViewById(getId(pos2)).setBackgroundResource(R.drawable.bg_green_box);
         ((TextView) findViewById(getId(pos2))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
 
         int id2 = getKeyId(String.valueOf(word_array[1]));
@@ -1354,7 +1361,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         entered_word_array[0] = word_array[0];
         int pos = ((currentAttempt - 1) * 3) + 1;
         ((TextView) findViewById(getId(pos))).setText(new StringBuilder().append(word_array[0]).append(matra[0]));
-        ((TextView) findViewById(getId(pos))).setBackgroundResource(R.drawable.bg_green_box);
+        findViewById(getId(pos)).setBackgroundResource(R.drawable.bg_green_box);
         ((TextView) findViewById(getId(pos))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.white));
 
         int id = getKeyId(String.valueOf(word_array[0]));
@@ -1375,7 +1382,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             ((TextView) findViewById(getId(index + i + 1))).setText(matra[i + 1]);
         }
     }
-
 
     public int getKeyId(String str) {
         int id = -1;
@@ -1479,5 +1485,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         return null;
     }
+
+    private enum CLICK_ITEM {HINT, UTTAR_DEKHO, AGLA_SHABD}
 
 }
