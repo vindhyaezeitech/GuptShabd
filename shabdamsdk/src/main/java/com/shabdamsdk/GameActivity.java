@@ -490,6 +490,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             finish();
         }
+        //
     }
 
     private void startTimer() {
