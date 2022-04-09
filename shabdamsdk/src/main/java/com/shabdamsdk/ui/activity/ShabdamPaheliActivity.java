@@ -17,7 +17,6 @@ public class ShabdamPaheliActivity extends AppCompatActivity {
 
     private Button aage_bade_btn;
     private CheckBox checkBox;
-    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +39,10 @@ public class ShabdamPaheliActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (buttonView.isChecked()) {
-                    type = "1";
-                    CommonPreference.getInstance(ShabdamPaheliActivity.this).put(CommonPreference.Key.USER_ID, type);
+                    CommonPreference.getInstance(ShabdamPaheliActivity.this).put(CommonPreference.Key.IS_RULE_SHOWN, true);
 
                 } else {
-                    type = "0";
-                    CommonPreference.getInstance(ShabdamPaheliActivity.this).put(CommonPreference.Key.USER_ID, type);
+                    CommonPreference.getInstance(ShabdamPaheliActivity.this).put(CommonPreference.Key.IS_RULE_SHOWN, false);
 
                 }
             }

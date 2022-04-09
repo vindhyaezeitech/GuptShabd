@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -32,6 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.shabdamsdk.Constants;
 import com.shabdamsdk.GameActivity;
@@ -39,6 +41,9 @@ import com.shabdamsdk.GamePresenter;
 import com.shabdamsdk.GameView;
 import com.shabdamsdk.R;
 import com.shabdamsdk.ToastUtils;
+import com.shabdamsdk.Utils;
+import com.shabdamsdk.model.SignupRequest;
+import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
 import com.shabdamsdk.model.leaderboard.LeaderboardListModel;
 import com.shabdamsdk.pref.CommonPreference;
 import com.shabdamsdk.ui.adapter.GetLeaderboardListAdapter;
@@ -62,12 +67,15 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     private InterstitialAd mInterstitialAd;
     private LinearLayout ll_google_sign_in;
     private TextView tv_google_sign_in;
+    private String gameStatus, gameTime;
+    private int noOfattempt;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
+        gamePresenter = new GamePresenter(this, LeaderBoardActivity.this);
         interstitialAdd();
         inIt();
         googleSignIn();
@@ -86,11 +94,26 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
         tv_name_three = findViewById(R.id.tv_name_three);
         rl_share_btn = findViewById(R.id.rl_share_btn);
         ll_google_sign_in = findViewById(R.id.ll_google_sign_in);
+        ll_google_sign_in.setOnClickListener(this);
         tv_google_sign_in = findViewById(R.id.tv_google_sign_in);
         findViewById(R.id.rl_agla_shabd_btn).setOnClickListener(this);
 
         Intent intent = getIntent();
         type = intent.getStringExtra("type");
+
+        if(intent != null && intent.getExtras() != null){
+            if(!TextUtils.isEmpty(getIntent().getStringExtra(Constants.GAME_STATUS))){
+                gameStatus = getIntent().getStringExtra(Constants.GAME_STATUS);
+            }
+
+            if(!TextUtils.isEmpty(getIntent().getStringExtra(Constants.TIME))){
+                gameTime = getIntent().getStringExtra(Constants.TIME);
+            }
+
+            if(getIntent().getIntExtra(Constants.NUMBER_OF_ATTEMPT, 0) != 0){
+                noOfattempt = getIntent().getIntExtra(Constants.NUMBER_OF_ATTEMPT, 1);
+            }
+        }
 
         rl_share_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,29 +122,29 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
             }
         });
 
-        String email = CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL);
-        if (!TextUtils.isEmpty(email)) {
+        String gameId = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
+        if (!TextUtils.isEmpty(gameId)) {
             ll_google_sign_in.setVisibility(View.GONE);
+            callGetLeaderBoardListAPI();
+
         } else {
             ll_google_sign_in.setVisibility(View.VISIBLE);
+            tv_google_sign_in.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (LeaderBoardActivity.this != null) {
+                        if (ToastUtils.checkInternetConnection(LeaderBoardActivity.this)) {
+                            signIn();
+
+                        } else {
+                            Toast.makeText(LeaderBoardActivity.this, getString(com.shabdamsdk.R.string.ensure_internet), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
         }
 
 
-        tv_google_sign_in.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (LeaderBoardActivity.this != null) {
-                    if (ToastUtils.checkInternetConnection(LeaderBoardActivity.this)) {
-                        signIn();
-
-                    } else {
-                        Toast.makeText(LeaderBoardActivity.this, getString(com.shabdamsdk.R.string.ensure_internet), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-
-        callGetLeaderBoardListAPI();
 
     }
 
@@ -139,11 +162,10 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            //handleSignInResult(task);
+            handleSignInResult(task);
         }
     }
 
-/*
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -155,16 +177,20 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
                 String personEmail = acct.getEmail();
                 String personId = acct.getId();
                 Uri personPhoto = acct.getPhotoUrl();
-                CommonPreference.getInstance(LeaderBoardActivity.this).put(CommonPreference.Key.EMAIL, personEmail);
+                // CommonPreference.getInstance(UserDetailActivity.this).put(CommonPreference.Key.EMAIL, personEmail);
 
-                Intent intent = new Intent(LeaderBoardActivity.this, ShabdamSplashActivity.class);
-                intent.putExtra("user_id", "1123444");
-                intent.putExtra("name",acct.getDisplayName());
-                intent.putExtra("uname",personName);
-                intent.putExtra("email",personEmail);
-                intent.putExtra("profile_image",personPhoto);
-                startActivity(intent);
-                finish();
+                SignupRequest signupRequest = new SignupRequest();
+                signupRequest.setEmail(personEmail);
+                signupRequest.setProfileimage(String.valueOf(personPhoto));
+                signupRequest.setName(personName);
+                signupRequest.setUname(personName);
+                signupRequest.setUserId("");
+
+                Utils.saveUserData(LeaderBoardActivity.this,personName, personName, personEmail, String.valueOf(personPhoto));
+
+                if (gamePresenter != null) {
+                    gamePresenter.signUpUser(signupRequest);
+                }
 
                 //Toast.makeText(this, ""+personEmail, Toast.LENGTH_SHORT).show();
             }
@@ -174,7 +200,37 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
             Log.d("Message", e.toString());
         }
     }
-*/
+
+    @Override
+    public void onAddUser(com.shabdamsdk.model.adduser.Data data) {
+        if (data != null) {
+            if (data.getId() != 0) {
+                CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
+                ll_google_sign_in.setVisibility(View.GONE);
+
+                if(!TextUtils.isEmpty(gameTime)){
+                    SubmitGameRequest submitGameRequest = new SubmitGameRequest();
+                    submitGameRequest.setGameUserId(CommonPreference.getInstance(LeaderBoardActivity.this).getString(CommonPreference.Key.GAME_USER_ID));
+                    submitGameRequest.setGameStatus(gameStatus);
+                    submitGameRequest.setNoOfAttempt(noOfattempt);
+                    submitGameRequest.setTime(gameTime);
+                    gamePresenter.submitGame(submitGameRequest);
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void onGameSubmit() {
+        GameView.super.onGameSubmit();
+        String game_id = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
+
+
+        //  compositeDisposable = interestPresenter.loadCategoryData();
+        if(gamePresenter != null)
+            gamePresenter.fetchLeaderBoardList(game_id);
+    }
 
     private void googleSignIn() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -187,8 +243,9 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
     private void callGetLeaderBoardListAPI() {
         String game_id = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
 
-        gamePresenter = new GamePresenter(this, LeaderBoardActivity.this);
+
         //  compositeDisposable = interestPresenter.loadCategoryData();
+        if(gamePresenter != null)
         gamePresenter.fetchLeaderBoardList(game_id);
     }
 

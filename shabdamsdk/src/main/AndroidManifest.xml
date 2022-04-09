@@ -9,13 +9,24 @@
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        >
+        <activity
+            android:name=".ui.activity.UserDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
+
         <activity
             android:name=".ui.activity.ShabdamPaheliActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ui.activity.TutorialActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ui.activity.ShabdamActivity"
             android:exported="false"
@@ -37,12 +48,14 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.SettingsActivity"
+            android:name=".ui.activity.ShabdamSettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
+       <!-- <activity
             android:name=".ShabdamSplashActivity"
-            android:exported="false" /> <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+            android:exported="false" /> -->
+
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />

@@ -9,6 +9,7 @@ import android.widget.ViewFlipper;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.shabdamsdk.R;
+import com.shabdamsdk.pref.CommonPreference;
 
 public class TutorialActivity extends AppCompatActivity {
     private ViewFlipper viewFlipper;
@@ -45,14 +46,19 @@ public class TutorialActivity extends AppCompatActivity {
         skip_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CommonPreference.getInstance(TutorialActivity.this).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, true);
                 startActivity(new Intent(TutorialActivity.this, ShabdamPaheliActivity.class));
+                finish();
+
             }
         });
 
         start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CommonPreference.getInstance(TutorialActivity.this).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, true);
                 startActivity(new Intent(TutorialActivity.this, ShabdamPaheliActivity.class));
+                finish();
             }
         });
     }

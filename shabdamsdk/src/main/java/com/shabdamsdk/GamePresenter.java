@@ -75,10 +75,11 @@ public class GamePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                     if(response != null && response.getData() != null &&response.getData() != null && response.getData().size() > 0){
-                        if(gameView != null){
-                            gameView.hideProgress();
-                        }
+
                         if(!response.getWoord_status().equalsIgnoreCase("true")){
                             CommonPreference.getInstance(context).clear();
                         }
@@ -104,14 +105,17 @@ public class GamePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                     if(response != null ){
-                        if(gameView != null){
-                            gameView.hideProgress();
-                        }
+
                         gameView.onGetLeaderBoardListFetched(response.getData());
                     }
                 }, throwable -> {
-
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                 }));
 
     }
@@ -126,14 +130,17 @@ public class GamePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                     if(response != null ){
-                        if(gameView != null){
-                            gameView.hideProgress();
-                        }
+
                         gameView.onStatisticsDataFetched(response.getData());
                     }
                 }, throwable -> {
-
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                 }));
 
     }
@@ -147,14 +154,16 @@ public class GamePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                     if(response != null ){
-                        if(gameView != null){
-                            gameView.hideProgress();
-                        }
                         gameView.onAddUser(response.getData());
                     }
                 }, throwable -> {
-
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                 }));
 
     }
@@ -169,14 +178,16 @@ public class GamePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                     if(response != null ){
-                        if(gameView != null){
-                            gameView.hideProgress();
-                        }
                         gameView.onGameSubmit();
                     }
                 }, throwable -> {
-
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                 }));
 
     }
@@ -190,13 +201,18 @@ public class GamePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                     if(response != null ){
-                        if(gameView != null){
-                            gameView.hideProgress();
-                        }
+
                         gameView.onAddUser(response.getData());
                     }
+
                 }, throwable -> {
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                     Log.d("Error",""+throwable);
 
                 }));
@@ -212,14 +228,16 @@ public class GamePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                     if(response != null ){
-                        if(gameView != null){
-                            gameView.hideProgress();
-                        }
                         gameView.onWordCheckDic(response.getStatus().equalsIgnoreCase("true")?true:false);
                     }
                 }, throwable -> {
-
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
                 }));
 
     }

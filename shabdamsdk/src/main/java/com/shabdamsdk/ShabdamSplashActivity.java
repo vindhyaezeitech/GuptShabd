@@ -1,19 +1,49 @@
 package com.shabdamsdk;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.shabdamsdk.model.SignupRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.pref.CommonPreference;
+import com.shabdamsdk.ui.activity.TutorialActivity;
+import com.shabdamsdk.ui.activity.UserDetailActivity;
 
 public  class ShabdamSplashActivity extends AppCompatActivity implements GameView {
     private GamePresenter gamePresenter;
     private String userId, name, u_name, email, profile_image;
+
+    public static void startShabdam(@NonNull Context context, @NonNull String userId, @NonNull String name, String uName, String email, String profile_image, String rewardAdId, String interstitialsAdId, String bannerAdId){
+        if(context == null){
+            Log.e(Constants.SHABDAM_TAG, "context cannot be null");
+            return;
+        }
+
+        if(!TextUtils.isEmpty(userId)){
+            Log.e(Constants.SHABDAM_TAG, "User Id cannot be null");
+            return;
+        }
+
+        if(!TextUtils.isEmpty(name)){
+            Log.e(Constants.SHABDAM_TAG, "Name cannot be null");
+            return;
+        }
+
+        Intent intent = new Intent(context, ShabdamSplashActivity.class);
+        intent.putExtra("user_id", userId);
+        intent.putExtra("name", name);
+        intent.putExtra("uname", uName);
+        intent.putExtra("email", email);
+        intent.putExtra("profile_image", profile_image);
+        context.startActivity(intent);
+    }
 
 
     @Override
@@ -23,7 +53,7 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
         gamePresenter = new GamePresenter(this, ShabdamSplashActivity.this);
 
         // load the animation
-        if (getIntent().getExtras() != null) {
+        if (getIntent().getExtras() != null && !TextUtils.isEmpty(getIntent().getStringExtra("user_id"))) {
             userId = getIntent().getStringExtra("user_id");
             name = !TextUtils.isEmpty(getIntent().getStringExtra("name"))? getIntent().getStringExtra("name") : " ";
             u_name = !TextUtils.isEmpty(getIntent().getStringExtra("uname")) ? getIntent().getStringExtra("uname") : " ";
@@ -46,6 +76,16 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
             if (!TextUtils.isEmpty(profile_image)) {
                 CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.PROFILE_IMAGE, profile_image);
             }
+
+            if (!TextUtils.isEmpty(userId)) {
+                AddUserRequest request = new AddUserRequest();
+                request.setUserId(userId);
+                request.setName(name);
+                request.setUname(u_name);
+                request.setEmail(email);
+                request.setProfileimage(profile_image);
+                gamePresenter.addUser(request);
+            }
         }else if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSplashActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -57,10 +97,17 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
             }, 2000);
         }
         else {
-            return;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(ShabdamSplashActivity.this, UserDetailActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }, 3000);
         }
 
-        if (!TextUtils.isEmpty(userId)) {
+        /*if (!TextUtils.isEmpty(userId)) {
             AddUserRequest request = new AddUserRequest();
             request.setUserId(userId);
             request.setName(name);
@@ -75,21 +122,8 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
             signupRequest.setUname(name);
             signupRequest.setProfileimage(profile_image);
             gamePresenter.signUpUser(signupRequest);
-        }
-       /* Handler handler= new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                intent.putExtra("user_id",getIntent().getStringExtra("user_id"));
-                intent.putExtra("name",getIntent().getStringExtra("name"));
-                intent.putExtra("uname","vikash");
-                intent.putExtra("email","vikash@mailinator.com");
-                intent.putExtra("profile_image","");
-                startActivity(intent);
-                finish();
-            }
-        },2000);*/
+        }*/
+
     }
 
     @Override
@@ -112,7 +146,7 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
         if (data != null) {
             if (data.getId() != 0) {
                 CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
-                Intent intent = new Intent(ShabdamSplashActivity.this, GameActivity.class);
+                Intent intent = new Intent(ShabdamSplashActivity.this, TutorialActivity.class);
                 startActivity(intent);
                 finish();
             }

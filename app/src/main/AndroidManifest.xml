@@ -19,7 +19,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".UserDetailActivity"
+            android:name="com.shabdamsdk.ShabdamSplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

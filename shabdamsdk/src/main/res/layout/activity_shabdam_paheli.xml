@@ -14,7 +14,8 @@
         android:layout_marginTop="@dimen/_15sdp"
         android:src="@drawable/back_icon"
         android:tint="@color/white"
-        tools:ignore="UseAppTint" />
+        tools:ignore="UseAppTint"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/aage_bade_btn"

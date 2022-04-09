@@ -9,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Constants {
     public static final String WIN = "1";
     public static final String LOSS = "0";
+    public static final String SHABDAM_TAG = "shabdam";
+    public static final String GAME_STATUS = "game_status";
+    public static final String TIME = "time";
+    public static final String NUMBER_OF_ATTEMPT = "number_of_attempt";
 
     public static String INTRESTITIAL_AD_ID = "/1007232/Tak_Shabdam_320x480";
     public static final String BANNER_AD = "/1007232/Tak_Shabdam_320x50";

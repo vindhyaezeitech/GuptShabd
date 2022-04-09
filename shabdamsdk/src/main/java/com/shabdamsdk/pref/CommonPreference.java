@@ -195,6 +195,9 @@ public class CommonPreference {
         public static final String PROFILE_IMAGE = "profile_image";
         public static final String GAME_USER_ID = "game_user_id";
         public static final String TYPE = "type";
+        public static final String IS_TUTORIAL_SHOWN = "is_tut_shown";
+        public static final String IS_RULE_SHOWN = "is_rule_shown";
+
     }
 
 }

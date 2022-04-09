@@ -1,10 +1,8 @@
 package com.shabdamsdk.ui.activity;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.google.android.gms.ads.AdError;
@@ -150,7 +147,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         } else if (id == R.id.iv_statistics_btn) {
             statisticsPopup();
         } else if (id == R.id.iv_settings_btn) {
-            Intent intent1 = new Intent(this, SettingsActivity.class);
+            Intent intent1 = new Intent(this, ShabdamSettingsActivity.class);
             intent1.putExtra("type", "1");
             startActivity(intent1);
         } else if (id == R.id.rl_agla_shabd_btn) {
