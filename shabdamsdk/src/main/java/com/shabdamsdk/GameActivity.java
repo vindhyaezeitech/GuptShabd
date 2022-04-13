@@ -104,6 +104,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<Integer> btnIdList = new ArrayList<>();
     private static final int RC_SIGN_IN = 1;
     GoogleSignInClient mGoogleSignInClient;
+    private String gameResult;
 
     private CLICK_ITEM click_item;
     private int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
@@ -474,6 +475,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void endGame(String gameStatus, String time, int attempt) {
+        gameResult = gameStatus;
         if(!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
             SubmitGameRequest submitGameRequest = new SubmitGameRequest();
             submitGameRequest.setGameUserId(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID));
@@ -482,6 +484,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             submitGameRequest.setTime(time);
             gamePresenter.submitGame(submitGameRequest);
         }else {
+            GameDataManager.getInstance().removeData();
             Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
             intent.putExtra(Constants.NUMBER_OF_ATTEMPT, attempt);
             intent.putExtra(Constants.TIME, time);
@@ -851,7 +854,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
+        if(gameResult != null && gameResult.equalsIgnoreCase(Constants.LOSS)){
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.setCancelable(false);
+            cancel_btn.setVisibility(View.GONE);
+            TextView tvOne = dialogView.findViewById(R.id.tv_one);
+            TextView tvTwo = dialogView.findViewById(R.id.tv_two);
+            TextView tvThree = dialogView.findViewById(R.id.tv_three);
 
+            try {
+                tvOne.setText(new StringBuilder().append(word_array[0]).append(matra[0]));
+                tvTwo.setText(new StringBuilder().append(word_array[1]).append(matra[1]));
+                tvThree.setText(new StringBuilder().append(word_array[2]).append(matra[2]));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            dialogView.findViewById(R.id.ll_sahi_jawab).setVisibility(View.GONE);
+
+        }
         alertDialog.show();
     }
 
@@ -884,7 +906,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void shareScreenShot(File imageFile) {
         Uri uri = FileProvider.getUriForFile(
                 this,
-                "com.guptshabd.GameActivity.provider",
+                "com.shabdamsdk.GameActivity.provider",
                 imageFile);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
@@ -937,6 +959,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 updateWordCharArray(s);
                 ((TextView) findViewById(getId(index))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.black));
                 ((TextView) findViewById(getId(index))).setText(new StringBuilder().append(s).append(getTextIndex(index)));
+
+
             }
         }
 
@@ -962,6 +986,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             ((TextView) findViewById(getId(index))).setText(matra[index % MAX_CHAR_LENGTH == 0 ? MAX_CHAR_LENGTH - 1 : (index % MAX_CHAR_LENGTH) - 1]);
 
             index = index - 1;
+
+
         }
     }
 
@@ -1020,6 +1046,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else if (hintCount == 2) {
             hintTwo();
         }
+
+
 
     }
 
@@ -1571,7 +1599,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             loadAdd();
 
         } else {
-            openLeaderBoardOnGameEnd();
+            if(gameResult != null && gameResult.equalsIgnoreCase(Constants.LOSS)){
+                callgetStreakAPI();
+            }else {
+                openLeaderBoardOnGameEnd();
+            }
         }
     }
 

@@ -10,9 +10,7 @@ public class Data implements Parcelable
     @SerializedName("id")
     @Expose
     private Integer id;
-    @SerializedName("user_id")
-    @Expose
-    private Integer userId;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -50,7 +48,6 @@ public class Data implements Parcelable
 
     protected Data(android.os.Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        this.userId = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.name = ((String) in.readValue((String.class.getClassLoader())));
         this.uname = ((String) in.readValue((String.class.getClassLoader())));
         this.email = ((String) in.readValue((String.class.getClassLoader())));
@@ -70,13 +67,7 @@ public class Data implements Parcelable
         this.id = id;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     public String getName() {
         return name;
@@ -128,7 +119,6 @@ public class Data implements Parcelable
 
     public void writeToParcel(android.os.Parcel dest, int flags) {
         dest.writeValue(id);
-        dest.writeValue(userId);
         dest.writeValue(name);
         dest.writeValue(uname);
         dest.writeValue(email);

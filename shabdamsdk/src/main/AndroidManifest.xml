@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.shabdamsdk">
+    package="com.shabdamsdk"
+    >
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
         >
         <activity
             android:name=".ui.activity.UserDetailActivity"
@@ -51,14 +57,24 @@
             android:name=".ui.activity.ShabdamSettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-       <!-- <activity
+        <activity
             android:name=".ShabdamSplashActivity"
-            android:exported="false" /> -->
+            android:exported="true" />
 
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
-        <meta-data
+       <!-- <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-3940256099942544~3347511713" />-->
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.shabdamsdk.LeaderBoardActivity.provider;com.shabdamsdk.ShabdamActivity.provider;com.shabdamsdk.GameActivity.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
     </application>
 
 </manifest>

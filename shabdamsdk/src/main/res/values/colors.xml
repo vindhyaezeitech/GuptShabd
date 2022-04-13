@@ -25,6 +25,7 @@
     <color name="bg_gray_dark">#363636</color>
     <color name="play_as_guest_btn_color">#5A5A5A</color>
     <color name="red_color">#008F17</color>
+    <color name="shb_blue_enter">#3C5998</color>
 
 
 </resources>
