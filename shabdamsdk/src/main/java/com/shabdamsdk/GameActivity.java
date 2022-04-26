@@ -906,7 +906,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void shareScreenShot(File imageFile) {
         Uri uri = FileProvider.getUriForFile(
                 this,
-                CommonPreference.getInstance(GameActivity.this).getString("applicationId")+".GameActivity.provider",
+                CommonPreference.getInstance(GameActivity.this).getPackageString("applicationId")+".GameActivity.provider",
                 imageFile);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);

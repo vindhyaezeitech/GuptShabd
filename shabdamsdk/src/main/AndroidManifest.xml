@@ -62,11 +62,11 @@
             android:exported="true" />
 
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
-       <!-- <meta-data
+        <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />-->
+            android:value="ca-app-pub-3940256099942544~3347511713" />
 
-       <!-- <provider
+        <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.shabdamsdk.LeaderBoardActivity.provider;com.shabdamsdk.ShabdamActivity.provider;com.shabdamsdk.GameActivity.provider"
             android:exported="false"
@@ -74,7 +74,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
-        </provider>-->
+        </provider>
     </application>
 
 </manifest>

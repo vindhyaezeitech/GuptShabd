@@ -68,7 +68,11 @@ public class CommonPreference {
     }
 
     public String getString(String key) {
-        return mPref.getString(key, null);
+        return mPref.getString(key, "");
+    }
+
+    public String getPackageString(String key) {
+        return mPref.getString(key, "com.shabdamsdk");
     }
 
     public boolean getBoolean(String key, boolean defaultValue) {
