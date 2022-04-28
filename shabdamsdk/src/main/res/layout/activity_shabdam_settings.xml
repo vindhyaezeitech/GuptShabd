@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.activity.ShabdamSettingsActivity">
+    tools:context=".ui.activity.ShabdamSettingsActivity"
+    android:background="#eee">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -73,7 +74,7 @@
         android:layout_marginLeft="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_25sdp"
         android:layout_marginRight="@dimen/_15sdp"
-        android:background="@color/line_color" />
+        android:background="@color/line_color_shb" />
 
 
     <RelativeLayout
@@ -115,7 +116,7 @@
         android:layout_marginLeft="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_25sdp"
         android:layout_marginRight="@dimen/_15sdp"
-        android:background="@color/line_color" />
+        android:background="@color/line_color_shb" />
 
     <!-- <RelativeLayout
          android:layout_width="match_parent"
@@ -192,7 +193,7 @@
         android:layout_marginLeft="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_25sdp"
         android:layout_marginRight="@dimen/_15sdp"
-        android:background="@color/line_color" />
+        android:background="@color/line_color_shb" />
 
     <RelativeLayout
         android:id="@+id/rl_logout_btn"
@@ -224,5 +225,5 @@
         android:layout_marginLeft="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_25sdp"
         android:layout_marginRight="@dimen/_15sdp"
-        android:background="@color/line_color" />
+        android:background="@color/line_color_shb" />
 </LinearLayout>

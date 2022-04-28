@@ -16,11 +16,13 @@ import com.shabdamsdk.pref.CommonPreference;
 import com.shabdamsdk.ui.activity.TutorialActivity;
 import com.shabdamsdk.ui.activity.UserDetailActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 public  class ShabdamSplashActivity extends AppCompatActivity implements GameView {
     private GamePresenter gamePresenter;
     private String userId, name, u_name, email, profile_image;
 
-    public static void startShabdam(@NonNull Context context, @NonNull String userId, @NonNull String name, String uName, String email, String profile_image, String rewardAdId, String interstitialsAdId, String bannerAdId){
+   /* public static void startShabdam(@NonNull Context context, @NonNull String userId, @NonNull String name, String uName, String email, String profile_image, String rewardAdId, String interstitialsAdId, String bannerAdId){
         if(context == null){
             Log.e(Constants.SHABDAM_TAG, "context cannot be null");
             return;
@@ -43,6 +45,12 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
         intent.putExtra("email", email);
         intent.putExtra("profile_image", profile_image);
         context.startActivity(intent);
+    }*/
+
+    public static void startShabdam(@NotNull Context context, @NotNull String applicationId){
+        Intent intent = new Intent(context, ShabdamSplashActivity.class);
+        intent.putExtra("applicationId", applicationId);
+        context.startActivity(intent);
     }
 
 
@@ -51,6 +59,10 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_shabdam_main);
         gamePresenter = new GamePresenter(this, ShabdamSplashActivity.this);
+
+        if(getIntent() != null && getIntent().getExtras() != null && !TextUtils.isEmpty(getIntent().getStringExtra("applicationId"))){
+            CommonPreference.getInstance(ShabdamSplashActivity.this).put("applicationId", getIntent().getStringExtra("applicationId"));
+        }
 
         // load the animation
         if (getIntent().getExtras() != null && !TextUtils.isEmpty(getIntent().getStringExtra("user_id"))) {

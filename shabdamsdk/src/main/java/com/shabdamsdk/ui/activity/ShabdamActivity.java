@@ -248,7 +248,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     private void shareScreenShot(File imageFile) {
         Uri uri = FileProvider.getUriForFile(
                 this,
-                "com.shabdamsdk.ShabdamActivity.provider",
+                CommonPreference.getInstance(ShabdamActivity.this).getPackageString("applicationId")+".ShabdamActivity.provider",
                 imageFile);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);

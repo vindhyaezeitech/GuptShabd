@@ -303,8 +303,7 @@ public class LeaderBoardActivity extends AppCompatActivity implements GameView, 
 
     private void shareScreenShot(File imageFile) {
         Uri uri = FileProvider.getUriForFile(
-                this,
-                "com.shabdamsdk.LeaderBoardActivity.provider",
+                this, CommonPreference.getInstance(LeaderBoardActivity.this).getPackageString("applicationId")+".LeaderBoardActivity.provider",
                 imageFile);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
