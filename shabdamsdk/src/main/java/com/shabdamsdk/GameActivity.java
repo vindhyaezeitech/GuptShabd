@@ -78,10 +78,12 @@ import com.shabdamsdk.ui.activity.ShabdamActivity;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -146,6 +148,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+
         interstitialAdd();
         initRewardAdd();
         callInAppupdate();

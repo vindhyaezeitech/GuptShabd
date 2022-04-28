@@ -567,14 +567,15 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
                     android:layout_gravity="bottom"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:layout_marginLeft="12dp"
                         android:layout_marginTop="2dp"
                         android:layout_marginRight="12dp"
@@ -627,8 +628,8 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"                        android:layout_marginLeft="12dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="12dp"
                         android:gravity="center_horizontal"
@@ -681,8 +682,8 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"                        android:layout_marginLeft="12dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="12dp"
                         android:gravity="center_horizontal"
@@ -736,8 +737,8 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"                        android:layout_marginLeft="12dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="12dp"
                         android:gravity="center_horizontal"
@@ -791,8 +792,8 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"                        android:layout_marginLeft="12dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="12dp"
                         android:gravity="center_horizontal"
@@ -833,8 +834,8 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"                        android:layout_marginLeft="12dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginRight="12dp"
                         android:gravity="center_horizontal"
@@ -866,6 +867,8 @@
                         <TextView
                             android:id="@+id/tv_chota_u"
                             style="@style/key_style_default"
+                            android:layout_marginLeft="4dp"
+
                             android:text="उ" />
 
                         <TextView
@@ -891,8 +894,8 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"                        android:layout_marginBottom="12dp"
                         android:layout_marginTop="@dimen/_4sdp"
                         android:orientation="horizontal">
 
@@ -911,13 +914,13 @@
 
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:orientation="vertical">
 
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_marginLeft="12dp"
                                 android:layout_marginTop="4dp"
                                 android:layout_marginRight="12dp"
