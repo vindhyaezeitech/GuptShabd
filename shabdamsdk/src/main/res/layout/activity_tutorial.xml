@@ -3,9 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_gray_dark"
     tools:context=".ui.activity.TutorialActivity">
 
-    <ViewFlipper
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_skip_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--<ViewFlipper
         android:id="@+id/view_flipper"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -35,7 +41,7 @@
             android:layout_height="fill_parent"
             android:src="@drawable/fourth_img" />
 
-    </ViewFlipper>
+    </ViewFlipper>-->
 
     <TextView
         android:id="@+id/tv_next_btn"
