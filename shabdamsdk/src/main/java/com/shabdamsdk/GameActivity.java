@@ -695,7 +695,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tv_max_streak = dialogView.findViewById(R.id.tv_max_streak);
         agla_shabd_btn = dialogView.findViewById(R.id.rl_agla_shabd_btn);
         rl_share_btn = dialogView.findViewById(R.id.rl_share_btn);
-        tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
         ll_google_sign_in = dialogView.findViewById(R.id.ll_google_sign_in);
         ll_google_sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -704,7 +703,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         tv_google_sign_in = dialogView.findViewById(R.id.tv_google_sign_in);
-        tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
 
 
         if(TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){

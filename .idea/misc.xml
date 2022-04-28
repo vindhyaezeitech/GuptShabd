@@ -58,7 +58,7 @@
         <entry key="shabdamsdk/src/main/res/layout/activity_shabdam.xml" value="0.165" />
         <entry key="shabdamsdk/src/main/res/layout/kaise_khele_popup_layout.xml" value="0.16847826086956522" />
         <entry key="shabdamsdk/src/main/res/layout/login_activity.xml" value="0.16847826086956522" />
-        <entry key="shabdamsdk/src/main/res/layout/statistics_popup_layout.xml" value="0.18795289855072464" />
+        <entry key="shabdamsdk/src/main/res/layout/statistics_popup_layout.xml" value="0.25" />
       </map>
     </option>
   </component>

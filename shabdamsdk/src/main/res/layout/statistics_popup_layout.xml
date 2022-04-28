@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/rl_top"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_70sdp"
+        android:layout_height="50dp"
         android:background="@drawable/radius_background"
         android:backgroundTint="@color/grey">
 
@@ -17,27 +17,27 @@
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_marginLeft="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:src="@drawable/statistics_icon" />
+            android:src="@drawable/statistics_icon"
+            android:layout_centerVertical="true"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_40sdp"
-            android:layout_marginTop="@dimen/_20sdp"
             android:text="@string/statistics_text"
             android:textColor="@color/text_color_black"
             android:textSize="@dimen/_15sdp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_centerVertical="true"/>
 
         <ImageView
             android:id="@+id/iv_cancel_btn"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginRight="@dimen/_15sdp"
-            android:src="@drawable/cancel_icon" />
+            android:src="@drawable/cancel_icon"
+            android:layout_centerVertical="true"/>
 
     </RelativeLayout>
 
@@ -65,7 +65,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_60sdp"
+                    android:layout_height="match_parent"
+                    android:padding="20dp"
                     android:background="@drawable/box_radius"
                     android:backgroundTint="@color/grey">
 
@@ -74,9 +75,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text=""
+                        android:text="1"
                         android:textColor="@color/text_color_black"
-                        android:textSize="@dimen/_15sdp"
+                        android:textSize="18dp"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
@@ -103,7 +104,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_60sdp"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
                     android:background="@drawable/box_radius"
                     android:backgroundTint="@color/grey">
 
@@ -114,7 +116,7 @@
                         android:layout_centerInParent="true"
                         android:text=""
                         android:textColor="@color/text_color_black"
-                        android:textSize="@dimen/_15sdp"
+                        android:textSize="18dp"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
@@ -141,7 +143,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_60sdp"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
                     android:background="@drawable/box_radius"
                     android:backgroundTint="@color/grey">
 
@@ -152,7 +155,7 @@
                         android:layout_centerInParent="true"
                         android:text=""
                         android:textColor="@color/text_color_black"
-                        android:textSize="@dimen/_15sdp"
+                        android:textSize="18dp"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
@@ -178,7 +181,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_60sdp"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
                     android:background="@drawable/box_radius"
                     android:backgroundTint="@color/grey">
 
@@ -189,7 +193,7 @@
                         android:layout_centerInParent="true"
                         android:text=""
                         android:textColor="@color/text_color_black"
-                        android:textSize="@dimen/_15sdp"
+                        android:textSize="18dp"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
@@ -206,40 +210,6 @@
 
             </LinearLayout>
 
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:weightSum="2">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_15sdp"
-                android:layout_weight="1"
-                android:text="@string/samay_laga_text"
-                android:textColor="@color/text_color_black"
-                android:textSize="@dimen/_15sdp"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tv_time_counter_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/_15sdp"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text=""
-                android:textColor="@color/text_color_black"
-                android:textSize="@dimen/_15sdp"
-                android:textStyle="bold"
-                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -716,7 +686,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_52sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginRight="@dimen/_30sdp"
@@ -725,8 +695,9 @@
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_2sdp"
+                    android:padding="12dp"
                     android:layout_weight="1"
                     android:background="@drawable/box_radius"
                     android:backgroundTint="#6BAA64">
@@ -745,9 +716,10 @@
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_4sdp"
                     android:layout_marginRight="@dimen/_2sdp"
+                    android:padding="12dp"
                     android:layout_weight="1"
                     android:background="@drawable/box_radius"
                     android:backgroundTint="#6BAA64">
@@ -766,9 +738,10 @@
 
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_4sdp"
                     android:layout_marginRight="@dimen/_2sdp"
+                    android:padding="12dp"
                     android:layout_weight="1"
                     android:background="@drawable/box_radius"
                     android:backgroundTint="#6BAA64">

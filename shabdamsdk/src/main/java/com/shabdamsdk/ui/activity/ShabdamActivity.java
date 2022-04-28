@@ -167,8 +167,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         tv_max_streak = dialogView.findViewById(R.id.tv_max_streak);
         agla_shabd_btn = dialogView.findViewById(R.id.rl_agla_shabd_btn);
         rl_share_btn = dialogView.findViewById(R.id.rl_share_btn);
-        tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
-        tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
+
 
         if(currentAttempt.equals("1")){
             dialogView.findViewById(R.id.ll_one).setVisibility(View.VISIBLE);
