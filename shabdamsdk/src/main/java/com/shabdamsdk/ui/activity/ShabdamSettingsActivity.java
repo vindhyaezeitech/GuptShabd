@@ -44,7 +44,7 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
         findViewById(R.id.rl_feedback_btn).setOnClickListener(this);
         findViewById(R.id.rl_logout_btn).setOnClickListener(this);
 
-        if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSettingsActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
+        if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID))){
             findViewById(R.id.rl_logout_btn).setVisibility(View.VISIBLE);
         }else {
             findViewById(R.id.rl_logout_btn).setVisibility(View.GONE);
@@ -82,7 +82,7 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
             //startActivity(Intent.createChooser(email, "Choose an Email client :"));
         }
         if (view.getId() == R.id.rl_logout_btn) {
-            if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSettingsActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
+            if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID))){
                 signOut();
             }
         }
@@ -96,13 +96,13 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // ...
-                        boolean isTutShown = CommonPreference.getInstance(ShabdamSettingsActivity.this).getBoolean(CommonPreference.Key.IS_TUTORIAL_SHOWN, false);
-                        boolean isRuleShown = CommonPreference.getInstance(ShabdamSettingsActivity.this).getBoolean(CommonPreference.Key.IS_RULE_SHOWN, false);
+                        boolean isTutShown = CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_TUTORIAL_SHOWN, false);
+                        boolean isRuleShown = CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_RULE_SHOWN, false);
 
-                        CommonPreference.getInstance(ShabdamSettingsActivity.this).clear();
+                        CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).clear();
 
-                        CommonPreference.getInstance(ShabdamSettingsActivity.this).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, isTutShown);
-                        CommonPreference.getInstance(ShabdamSettingsActivity.this).put(CommonPreference.Key.IS_RULE_SHOWN, isRuleShown);
+                        CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, isTutShown);
+                        CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_RULE_SHOWN, isRuleShown);
 
                         Intent intent = new Intent(Intent.ACTION_MAIN);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

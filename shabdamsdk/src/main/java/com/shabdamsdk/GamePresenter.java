@@ -46,7 +46,7 @@ public class GamePresenter {
                 gameView.showProgress();
             }
 
-            compositeDisposable.add(DatabaseClient.getInstance(context).getAppDatabase().taskDao().getAll()
+            compositeDisposable.add(DatabaseClient.getInstance(context.getApplicationContext()).getAppDatabase().taskDao().getAll()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
@@ -81,7 +81,7 @@ public class GamePresenter {
                     if(response != null && response.getData() != null &&response.getData() != null && response.getData().size() > 0){
 
                         if(!response.getWoord_status().equalsIgnoreCase("true")){
-                            CommonPreference.getInstance(context).clear();
+                            CommonPreference.getInstance(context.getApplicationContext()).clear();
                         }
                         GameDataManager.getInstance().addData(response.getData());
                         gameView.onWordFetched(response.getData().get(0));
@@ -245,7 +245,7 @@ public class GamePresenter {
 
     public void saveIDLocalDB(Context context, Task task){
 
-        compositeDisposable.add(Completable.fromAction(() -> DatabaseClient.getInstance(context).getAppDatabase().taskDao().insert(task))
+        compositeDisposable.add(Completable.fromAction(() -> DatabaseClient.getInstance(context.getApplicationContext()).getAppDatabase().taskDao().insert(task))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe());

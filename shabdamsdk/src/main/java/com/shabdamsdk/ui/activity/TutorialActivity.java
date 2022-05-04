@@ -57,7 +57,7 @@ public class TutorialActivity extends AppCompatActivity {
         skip_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommonPreference.getInstance(TutorialActivity.this).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, true);
+                CommonPreference.getInstance(TutorialActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, true);
                 startActivity(new Intent(TutorialActivity.this, ShabdamPaheliActivity.class));
                 finish();
 
@@ -69,7 +69,7 @@ public class TutorialActivity extends AppCompatActivity {
         start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommonPreference.getInstance(TutorialActivity.this).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, true);
+                CommonPreference.getInstance(TutorialActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, true);
                 startActivity(new Intent(TutorialActivity.this, ShabdamPaheliActivity.class));
                 finish();
             }

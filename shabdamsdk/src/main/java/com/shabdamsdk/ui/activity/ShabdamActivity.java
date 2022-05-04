@@ -53,12 +53,15 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     private RelativeLayout agla_shabd_btn, rl_share_btn;
     private String minute, second, currentAttempt;
     private InterstitialAd mInterstitialAd;
+    private AdRequest adRequest;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shabdam);
+        adRequest = new AdRequest.Builder().build();
+
         interstitialAdd();
         if (getIntent().getExtras() != null) {
             correctWord = getIntent().getStringExtra("word");
@@ -130,17 +133,17 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         if (id == R.id.iv_back_btn) {
             Intent intent = new Intent(this, GameActivity.class);
            // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
-            intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
-            intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
-            intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
-            intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
+            intent.putExtra("user_id", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
+            intent.putExtra("name", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.NAME));
+            intent.putExtra("uname", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.UNAME));
+            intent.putExtra("email", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.EMAIL));
+            intent.putExtra("profile_image", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.PROFILE_IMAGE));
             startActivity(intent);
             finish();
         } else if (id == R.id.iv_question_mark_btn) {
             kaiseKhelePopup();
         } else if (id == R.id.iv_trophy_btn) {
-            Intent intent = new Intent(this, LeaderBoardActivity.class);
+            Intent intent = new Intent(this, ShabdamLeaderBoardActivity.class);
             intent.putExtra("type", "1");
             startActivity(intent);
             finish();
@@ -247,7 +250,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     private void shareScreenShot(File imageFile) {
         Uri uri = FileProvider.getUriForFile(
                 this,
-                CommonPreference.getInstance(ShabdamActivity.this).getPackageString("applicationId")+".ShabdamActivity.provider",
+                CommonPreference.getInstance(ShabdamActivity.this.getApplicationContext()).getPackageString("applicationId")+".ShabdamActivity.provider",
                 imageFile);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
@@ -263,7 +266,7 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     }
 
     private void callgetStreakAPI() {
-        String game_id = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
+        String game_id = CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID);
         gamePresenter = new GamePresenter(this, ShabdamActivity.this);
         gamePresenter.fetchStatisticsData(game_id);
     }
@@ -323,21 +326,26 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
         super.onBackPressed();
         Intent intent = new Intent(this, GameActivity.class);
        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
-        intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
-        intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
-        intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
-        intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
+        intent.putExtra("user_id", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
+        intent.putExtra("name", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.NAME));
+        intent.putExtra("uname", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.UNAME));
+        intent.putExtra("email", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.EMAIL));
+        intent.putExtra("profile_image", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.PROFILE_IMAGE));
         startActivity(intent);
         finish();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        word_array = null;
+        matra = null;
+        charArray = null;
+        adRequest = null;
         if(gamePresenter != null){
             gamePresenter.onDestroy();
         }
+        super.onDestroy();
+
     }
 
     private void interstitialAdd() {
@@ -347,7 +355,6 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
             public void onInitializationComplete(InitializationStatus initializationStatus) {}
         });*/
 
-        AdRequest adRequest = new AdRequest.Builder().build();
         InterstitialAd.load(this, Constants.INTRESTITIAL_AD_ID, adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
@@ -400,12 +407,14 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
     private void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
       //  intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("user_id", CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
-        intent.putExtra("name", CommonPreference.getInstance(this).getString(CommonPreference.Key.NAME));
-        intent.putExtra("uname", CommonPreference.getInstance(this).getString(CommonPreference.Key.UNAME));
-        intent.putExtra("email", CommonPreference.getInstance(this).getString(CommonPreference.Key.EMAIL));
-        intent.putExtra("profile_image", CommonPreference.getInstance(this).getString(CommonPreference.Key.PROFILE_IMAGE));
+        intent.putExtra("user_id", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
+        intent.putExtra("name", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.NAME));
+        intent.putExtra("uname", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.UNAME));
+        intent.putExtra("email", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.EMAIL));
+        intent.putExtra("profile_image", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.PROFILE_IMAGE));
         startActivity(intent);
         finish();
     }
+
+
 }

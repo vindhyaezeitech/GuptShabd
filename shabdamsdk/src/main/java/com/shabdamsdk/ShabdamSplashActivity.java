@@ -61,7 +61,7 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
         gamePresenter = new GamePresenter(this, ShabdamSplashActivity.this);
 
         if(getIntent() != null && getIntent().getExtras() != null && !TextUtils.isEmpty(getIntent().getStringExtra("applicationId"))){
-            CommonPreference.getInstance(ShabdamSplashActivity.this).put("applicationId", getIntent().getStringExtra("applicationId"));
+            CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put("applicationId", getIntent().getStringExtra("applicationId"));
         }
 
         // load the animation
@@ -73,20 +73,20 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
             profile_image = !TextUtils.isEmpty(getIntent().getStringExtra("profile_image")) ? getIntent().getStringExtra("profile_image") :" ";
 
             if (!TextUtils.isEmpty(userId)) {
-                CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.USER_ID, userId);
+                CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put(CommonPreference.Key.USER_ID, userId);
             }
 
             if (!TextUtils.isEmpty(name)) {
-                CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.NAME, name);
+                CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put(CommonPreference.Key.NAME, name);
             }
             if (!TextUtils.isEmpty(u_name)) {
-                CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.UNAME, u_name);
+                CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put(CommonPreference.Key.UNAME, u_name);
             }
             if (!TextUtils.isEmpty(email)) {
-                CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.EMAIL, email);
+                CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put(CommonPreference.Key.EMAIL, email);
             }
             if (!TextUtils.isEmpty(profile_image)) {
-                CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.PROFILE_IMAGE, profile_image);
+                CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put(CommonPreference.Key.PROFILE_IMAGE, profile_image);
             }
 
             if (!TextUtils.isEmpty(userId)) {
@@ -98,7 +98,7 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
                 request.setProfileimage(profile_image);
                 gamePresenter.addUser(request);
             }
-        }else if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSplashActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
+        }else if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID))){
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -157,7 +157,7 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
     public void onAddUser(com.shabdamsdk.model.adduser.Data data) {
         if (data != null) {
             if (data.getId() != 0) {
-                CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
+                CommonPreference.getInstance(this.getApplicationContext()).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
                 Intent intent = new Intent(ShabdamSplashActivity.this, TutorialActivity.class);
                 startActivity(intent);
                 finish();
