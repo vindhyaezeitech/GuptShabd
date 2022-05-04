@@ -513,20 +513,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        gameTimer();
+      if(click_item != CLICK_ITEM.HINT){
+          gameTimer();
+      }else {
+          click_item = null;
+      }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mTimingRunning) {
-            tv_timer_text.stop();
-            pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
-            mTimingRunning = false;
-            minutes = TimeUnit.MILLISECONDS.toMinutes(pauseOffset);
-            seconds = TimeUnit.MILLISECONDS.toSeconds(pauseOffset) % 60;
-            minute = String.format("%02d", minutes);
-            second = String.format("%02d", seconds);
+        if(click_item != CLICK_ITEM.HINT){
+            if (mTimingRunning ) {
+                tv_timer_text.stop();
+                pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
+                mTimingRunning = false;
+                minutes = TimeUnit.MILLISECONDS.toMinutes(pauseOffset);
+                seconds = TimeUnit.MILLISECONDS.toSeconds(pauseOffset) % 60;
+                minute = String.format("%02d", minutes);
+                second = String.format("%02d", seconds);
+            }
         }
     }
 
