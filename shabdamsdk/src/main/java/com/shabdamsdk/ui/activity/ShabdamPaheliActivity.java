@@ -39,10 +39,10 @@ public class ShabdamPaheliActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (buttonView.isChecked()) {
-                    CommonPreference.getInstance(ShabdamPaheliActivity.this).put(CommonPreference.Key.IS_RULE_SHOWN, true);
+                    CommonPreference.getInstance(ShabdamPaheliActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_RULE_SHOWN, true);
 
                 } else {
-                    CommonPreference.getInstance(ShabdamPaheliActivity.this).put(CommonPreference.Key.IS_RULE_SHOWN, false);
+                    CommonPreference.getInstance(ShabdamPaheliActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_RULE_SHOWN, false);
 
                 }
             }

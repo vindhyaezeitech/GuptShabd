@@ -57,7 +57,7 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
                 com.shabdamsdk.R.anim.bottom_to_up_slide);
         ll_welcome.startAnimation(bottomDown);
 
-        String email = CommonPreference.getInstance(UserDetailActivity.this).getString(CommonPreference.Key.EMAIL);
+        String email = CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).getString(CommonPreference.Key.EMAIL);
         if (!TextUtils.isEmpty(email)) {
             Intent intent = new Intent(UserDetailActivity.this, ShabdamSplashActivity.class);
             startActivity(intent);
@@ -89,8 +89,8 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
             @Override
             public void onClick(View view) {
                 user_type = USER_TYPE.GUEST;
-                CommonPreference.getInstance(UserDetailActivity.this).put(CommonPreference.Key.USER_ID,"");
-                CommonPreference.getInstance(UserDetailActivity.this).put(CommonPreference.Key.GAME_USER_ID,"");
+                CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).put(CommonPreference.Key.USER_ID,"");
+                CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).put(CommonPreference.Key.GAME_USER_ID,"");
                 startFlow();
             }
         });
@@ -112,10 +112,10 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
     }
 
     private void startFlow() {
-        if(!CommonPreference.getInstance(UserDetailActivity.this).getBoolean(CommonPreference.Key.IS_TUTORIAL_SHOWN, false)){
+        if(!CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_TUTORIAL_SHOWN, false)){
             startActivity(new Intent(UserDetailActivity.this, TutorialActivity.class));
             finish();
-        }else if(!CommonPreference.getInstance(UserDetailActivity.this).getBoolean(CommonPreference.Key.IS_RULE_SHOWN, false)){
+        }else if(!CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_RULE_SHOWN, false)){
             startActivity(new Intent(UserDetailActivity.this, ShabdamPaheliActivity.class));
             finish();
         }else {
@@ -211,7 +211,7 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
     public void onAddUser(com.shabdamsdk.model.adduser.Data data) {
         if (data != null) {
             if (data.getId() != 0) {
-                CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
+                CommonPreference.getInstance(this.getApplicationContext()).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
                 startFlow();
             }
         }

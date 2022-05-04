@@ -50,7 +50,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.LeaderBoardActivity"
+            android:name=".ui.activity.ShabdamLeaderBoardActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -64,7 +64,7 @@
         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-3793720534573472~6701601535" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

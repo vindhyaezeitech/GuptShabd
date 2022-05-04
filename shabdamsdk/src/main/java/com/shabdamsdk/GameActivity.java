@@ -3,7 +3,6 @@ package com.shabdamsdk;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -71,19 +70,17 @@ import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
 import com.shabdamsdk.model.getwordresp.Datum;
 import com.shabdamsdk.model.statistics.Data;
 import com.shabdamsdk.pref.CommonPreference;
-import com.shabdamsdk.ui.activity.LeaderBoardActivity;
+import com.shabdamsdk.ui.activity.ShabdamLeaderBoardActivity;
 import com.shabdamsdk.ui.activity.ShabdamSettingsActivity;
 import com.shabdamsdk.ui.activity.ShabdamActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -143,11 +140,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout ll_google_sign_in;
     private TextView tv_google_sign_in;
     private AlertDialog alertDialog;
+    private AdRequest adRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        adRequest = new AdRequest.Builder().build();
 
 
         interstitialAdd();
@@ -155,8 +154,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         callInAppupdate();
         googleSignIn();
 
-        if (!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME))) {
-            ((TextView) findViewById(R.id.tv_uname)).setText(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME));
+        if (!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.NAME))) {
+            ((TextView) findViewById(R.id.tv_uname)).setText(CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.NAME));
         }
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -166,7 +165,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
         animBlink = AnimationUtils.loadAnimation(this,
@@ -187,7 +185,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         if (gamePresenter != null) {
             GetWordRequest getWordRequest = new GetWordRequest();
-            getWordRequest.setUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
+            getWordRequest.setUserId(CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
             gamePresenter.fetchNewWord(GameActivity.this, getWordRequest);
         }
       /*  if (!CommonPreference.getInstance(GameActivity.this).getBoolean(CommonPreference.Key.IS_FIRST_TIME)) {
@@ -280,10 +278,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onAddUser(com.shabdamsdk.model.adduser.Data data) {
         if (data != null) {
             if (data.getId() != 0) {
-                CommonPreference.getInstance(this).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
+                CommonPreference.getInstance(this.getApplicationContext()).put(CommonPreference.Key.GAME_USER_ID, String.valueOf(data.getId()));
                 ll_google_sign_in.setVisibility(View.GONE);
-                if (!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME))) {
-                    ((TextView) findViewById(R.id.tv_uname)).setText(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME));
+                if (!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.NAME))) {
+                    ((TextView) findViewById(R.id.tv_uname)).setText(CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.NAME));
                 }
                 callgetStreakAPI();
             }
@@ -387,11 +385,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void openAglaShabd() {
         Intent intent = new Intent(GameActivity.this, GameActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("user_id", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID));
-        intent.putExtra("name", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.NAME));
-        intent.putExtra("uname", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.UNAME));
-        intent.putExtra("email", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.EMAIL));
-        intent.putExtra("profile_image", CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.PROFILE_IMAGE));
+        intent.putExtra("user_id", CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
+        intent.putExtra("name", CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.NAME));
+        intent.putExtra("uname", CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.UNAME));
+        intent.putExtra("email", CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.EMAIL));
+        intent.putExtra("profile_image", CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.PROFILE_IMAGE));
         startActivity(intent);
         finish();
     }
@@ -418,8 +416,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showRewardAdd() {
         if (mRewardedAd != null) {
-            Activity activityContext = GameActivity.this;
-            mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
+            mRewardedAd.show(this, new OnUserEarnedRewardListener() {
                 @Override
                 public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                     // Handle the reward.
@@ -480,16 +477,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void endGame(String gameStatus, String time, int attempt) {
         gameResult = gameStatus;
-        if(!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
+        if(!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID))){
             SubmitGameRequest submitGameRequest = new SubmitGameRequest();
-            submitGameRequest.setGameUserId(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID));
+            submitGameRequest.setGameUserId(CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
             submitGameRequest.setGameStatus(gameStatus);
             submitGameRequest.setNoOfAttempt(attempt);
             submitGameRequest.setTime(time);
             gamePresenter.submitGame(submitGameRequest);
         }else {
             GameDataManager.getInstance().removeData();
-            Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
+            Intent intent = new Intent(GameActivity.this, ShabdamLeaderBoardActivity.class);
             intent.putExtra(Constants.NUMBER_OF_ATTEMPT, attempt);
             intent.putExtra(Constants.TIME, time);
             intent.putExtra(Constants.GAME_STATUS, gameStatus);
@@ -634,11 +631,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.iv_question_mark_btn) {
             kaiseKhelePopup();
         } else if (id == R.id.iv_trophy_btn) {
-            startActivity(new Intent(this, LeaderBoardActivity.class));
+            startActivity(new Intent(this, ShabdamLeaderBoardActivity.class));
             //finish();
             //onBackPressed();
         } else if (id == R.id.iv_statistics_btn) {
-            if(!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
+            if(!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID))){
                 callgetStreakAPI();
             }else {
                 statisticsPopup(null);
@@ -651,8 +648,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 // loadAdd();
                 // isHintPressed = true;
                 click_item = CLICK_ITEM.HINT;
-                // showRewardAdd();
-                loadAdd();
+                 showRewardAdd();
+                //loadAdd();
             }
         }
     }
@@ -695,7 +692,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tv_max_streak = dialogView.findViewById(R.id.tv_max_streak);
         agla_shabd_btn = dialogView.findViewById(R.id.rl_agla_shabd_btn);
         rl_share_btn = dialogView.findViewById(R.id.rl_share_btn);
-        tv_timer_counter_text = dialogView.findViewById(R.id.tv_time_counter_text);
         ll_google_sign_in = dialogView.findViewById(R.id.ll_google_sign_in);
         ll_google_sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -704,10 +700,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         tv_google_sign_in = dialogView.findViewById(R.id.tv_google_sign_in);
-        tv_timer_counter_text.setText(minute + " " + ":" + " " + second);
 
 
-        if(TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
+        if(TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID))){
             ll_google_sign_in.setVisibility(View.VISIBLE);
             tv_google_sign_in.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -728,7 +723,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         builder.setView(dialogView);
         alertDialog = builder.create();
 
-        String email = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
+        String email = CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID);
         if (!TextUtils.isEmpty(email)) {
             ll_google_sign_in.setVisibility(View.GONE);
         } else {
@@ -910,7 +905,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private void shareScreenShot(File imageFile) {
         Uri uri = FileProvider.getUriForFile(
                 this,
-                CommonPreference.getInstance(GameActivity.this).getPackageString("applicationId")+".GameActivity.provider",
+                CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getPackageString("applicationId")+".GameActivity.provider",
                 imageFile);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
@@ -926,7 +921,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void callgetStreakAPI() {
-        String game_id = CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID);
+        String game_id = CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID);
         gamePresenter = new GamePresenter(this, GameActivity.this);
         gamePresenter.fetchStatisticsData(game_id);
     }
@@ -1011,7 +1006,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             currentAttempt = currentAttempt + 1;
                             updateCurrentAttempt();
                         }
-                        btnIdList.clear();
+                      //  btnIdList.clear();
                     }
 
 
@@ -1130,7 +1125,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (gamePresenter != null) {
                 btnIdList.clear();
                 GetWordRequest getWordRequest = new GetWordRequest();
-                getWordRequest.setUserId(CommonPreference.getInstance(this).getString(CommonPreference.Key.GAME_USER_ID));
+                getWordRequest.setUserId(CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
                 getWordRequest.setWordId(list);
                 gamePresenter.fetchNewWord(GameActivity.this, getWordRequest);
             }
@@ -1231,7 +1226,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(GameActivity.this, LeaderBoardActivity.class);
+                Intent intent = new Intent(GameActivity.this, ShabdamLeaderBoardActivity.class);
                 intent.putExtra("type", "2");
                 startActivity(intent);
                 finish();
@@ -1584,8 +1579,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             gamePresenter.onDestroy();
         }
         tv_timer_text = null;
+        handler.removeCallbacksAndMessages(null);
         handler = null;
-
+        alertDialog = null;
         keyIdArray = null;
         matra = null;
         btnIdList = null;
@@ -1594,6 +1590,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         word_array = null;
         charArray = null;
         gamePresenter = null;
+        mGoogleSignInClient = null;
+        adRequest = null;
+        mRewardedAd = null;
+        shakeAnimation = null;
         super.onDestroy();
     }
 
