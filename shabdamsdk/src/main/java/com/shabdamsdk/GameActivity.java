@@ -404,6 +404,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         // Handle the error.
                         // Log.d(TAG, loadAdError.getMessage());
                         mRewardedAd = null;
+                        initRewardAdd();
                     }
 
                     @Override
@@ -423,6 +424,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     //  Log.d(TAG, "The user earned the reward.");
                     int rewardAmount = rewardItem.getAmount();
                     String rewardType = rewardItem.getType();
+                    showHint();
+                    initRewardAdd();
                 }
             });
             mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
@@ -446,7 +449,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     // Set the ad reference to null so you don't show the ad a second time.
                     // Log.d(TAG, "Ad was dismissed.");
                     mRewardedAd = null;
-                    showHint();
                     initRewardAdd();
                 }
             });
@@ -458,6 +460,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+
 
     private void gameTimer() {
         tv_timer_text.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
@@ -628,8 +632,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.rl_uttar_dekho_btn) {
             click_item = CLICK_ITEM.UTTAR_DEKHO;
             if (!TextUtils.isEmpty(correctWord)) {
-                isUttarDekheClicked = true;
-                endGame(Constants.LOSS,String.valueOf(pauseOffset / 1000),currentAttempt);
+              //  endGame(Constants.LOSS,String.valueOf(pauseOffset / 1000),currentAttempt);
+                if(TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
+                    gameResult = Constants.LOSS;
+                    statisticsPopup(null);
+                }else {
+                    isUttarDekheClicked = true;
+                    endGame(Constants.LOSS,String.valueOf(pauseOffset / 1000),currentAttempt);
+                }
 
 
 
@@ -916,7 +926,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("image/*");
-        //intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from Instagram");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from https://play.google.com/store/apps/details?id=com.guptshabd");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
 
         try {
@@ -1606,6 +1616,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onGameSubmit() {
         if (isUttarDekheClicked) {
+            isUttarDekheClicked = false;
             loadAdd();
 
         } else {

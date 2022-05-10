@@ -118,6 +118,9 @@
         android:layout_marginRight="@dimen/_15sdp"
         android:background="@color/line_color_shb" />
 
+
+
+
     <!-- <RelativeLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
@@ -194,6 +197,30 @@
         android:layout_marginTop="@dimen/_25sdp"
         android:layout_marginRight="@dimen/_15sdp"
         android:background="@color/line_color_shb" />
+    <RelativeLayout
+        android:id="@+id/rl_submit_word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_25sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:text="Submit the word"
+            android:textColor="@color/text_color_black"
+            android:textSize="@dimen/_13sdp" />
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:layout_marginRight="@dimen/_15sdp"
+        android:background="@color/line_color_shb" />
 
     <RelativeLayout
         android:id="@+id/rl_logout_btn"
@@ -210,7 +237,6 @@
             android:textSize="@dimen/_13sdp" />
 
         <ImageView
-            android:id="@+id/iv_faq_icon"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:layout_alignParentRight="true"

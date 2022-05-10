@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_70sdp"
         android:background="@drawable/radius_background"
-        android:backgroundTint="@color/grey">
+        android:backgroundTint="@color/shabdam_grey">
 
         <ImageView
             android:layout_width="@dimen/_20sdp"
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_60sdp"
                 android:background="@drawable/box_radius"
-                android:backgroundTint="@color/grey">
+                android:backgroundTint="@color/shabdam_grey">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_60sdp"
                 android:background="@drawable/box_radius"
-                android:backgroundTint="@color/grey">
+                android:backgroundTint="@color/shabdam_grey">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_60sdp"
                 android:background="@drawable/box_radius"
-                android:backgroundTint="@color/grey">
+                android:backgroundTint="@color/shabdam_grey">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -171,7 +171,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_60sdp"
                 android:background="@drawable/box_radius"
-                android:backgroundTint="@color/grey">
+                android:backgroundTint="@color/shabdam_grey">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -235,7 +235,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginLeft="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_15sdp"
-        android:backgroundTint="@color/grey"
+        android:backgroundTint="@color/shabdam_grey"
         android:orientation="vertical">
 
         <TextView

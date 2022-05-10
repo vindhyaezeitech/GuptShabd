@@ -2,6 +2,7 @@ package com.shabdamsdk.ui.activity;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -43,6 +44,8 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
         findViewById(R.id.iv_back_btn).setOnClickListener(this);
         findViewById(R.id.rl_feedback_btn).setOnClickListener(this);
         findViewById(R.id.rl_logout_btn).setOnClickListener(this);
+        findViewById(R.id.rl_submit_word).setOnClickListener(this);
+
 
         if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID))){
             findViewById(R.id.rl_logout_btn).setVisibility(View.VISIBLE);
@@ -79,6 +82,14 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
             if (email.resolveActivity(getPackageManager()) != null) {
                 startActivity(email);
             }
+            //startActivity(Intent.createChooser(email, "Choose an Email client :"));
+        }
+
+        if (view.getId() == R.id.rl_submit_word) {
+            String url = "https://docs.google.com/forms/d/e/1FAIpQLSdrlK8uTrvqsWAy5Vok3tKNiFJqS2el8Ah1NqmXIsYO0_PF-w/viewform?vc=0&c=0&w=1&flr=0";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
             //startActivity(Intent.createChooser(email, "Choose an Email client :"));
         }
         if (view.getId() == R.id.rl_logout_btn) {

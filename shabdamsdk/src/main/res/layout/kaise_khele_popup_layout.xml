@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_70sdp"
             android:background="@drawable/radius_background"
-            android:backgroundTint="@color/grey">
+            android:backgroundTint="@color/shabdam_grey">
 
             <TextView
                 android:layout_width="wrap_content"
