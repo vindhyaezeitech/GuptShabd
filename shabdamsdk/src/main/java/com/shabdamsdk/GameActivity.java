@@ -926,7 +926,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("image/*");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from https://play.google.com/store/apps/details?id=com.guptshabd");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, Constants.STATISTICS_SHARE_MSG);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
 
         try {

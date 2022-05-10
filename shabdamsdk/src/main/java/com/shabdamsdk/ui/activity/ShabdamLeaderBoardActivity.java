@@ -310,7 +310,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("image/*");
-        //intent.putExtra(android.content.Intent.EXTRA_TEXT, "Download Application from Instagram");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, Constants.LEADER_BOARD_SHARE_MSG);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
 
         try {

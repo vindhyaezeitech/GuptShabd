@@ -14,8 +14,8 @@ android {
         applicationId "com.guptshabd"
         minSdk 21
         targetSdk 32
-        versionCode 6
-        versionName "1.0.5"
+        versionCode 7
+        versionName "1.0.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,7 +23,7 @@ android {
     signingConfigs {
         release {
             //storeFile file('C:\\Users\\Surbhi\\Downloads\\NEWSTAK\\Keys\\PRODUCTION\\mtkeystore.jks')
-            storeFile file('E:\\shabdam\\shabdam_key_store_file.jks')
+            storeFile file('/Users/ezeiatech/Desktop/D/KeyStore/shabdam_key_store_file.jks')
             //storeFile file('E:\\tak_app_credential\\tak_app_keystore_file\\mtkeystore.jks')
             storePassword 'android'
             keyAlias = 'android'
