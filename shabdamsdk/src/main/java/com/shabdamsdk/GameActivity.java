@@ -524,7 +524,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     protected void onPause() {
         super.onPause();
         if(click_item != CLICK_ITEM.HINT){
-            if (mTimingRunning ) {
+            if (mTimingRunning) {
                 tv_timer_text.stop();
                 pauseOffset = SystemClock.elapsedRealtime() - tv_timer_text.getBase();
                 mTimingRunning = false;

@@ -536,20 +536,21 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true">
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/_4sdp"
                                     android:text="@string/answer_dekho_text"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/_13sdp"
-                                    android:layout_marginRight="@dimen/_4sdp"
                                     android:textStyle="bold" />
 
                                 <androidx.appcompat.widget.AppCompatImageView
                                     android:layout_width="@dimen/_20sdp"
                                     android:layout_height="@dimen/_20sdp"
-                                    android:src="@drawable/uttar_dekho_icon"
                                     android:layout_marginLeft="@dimen/_4sdp"
+                                    android:src="@drawable/uttar_dekho_icon"
                                     app:tint="@color/white" />
                             </LinearLayout>
                         </RelativeLayout>

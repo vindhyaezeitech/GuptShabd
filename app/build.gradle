@@ -23,7 +23,7 @@ android {
     signingConfigs {
         release {
             //storeFile file('C:\\Users\\Surbhi\\Downloads\\NEWSTAK\\Keys\\PRODUCTION\\mtkeystore.jks')
-            storeFile file('/Users/ezeiatech/Desktop/D/KeyStore/shabdam_key_store_file.jks')
+            storeFile file('E:\\shabdam\\shabdam_key_store_file.jks')
             //storeFile file('E:\\tak_app_credential\\tak_app_keystore_file\\mtkeystore.jks')
             storePassword 'android'
             keyAlias = 'android'
