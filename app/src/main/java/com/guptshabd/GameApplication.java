@@ -6,6 +6,7 @@ public class GameApplication extends Application {
 
     private static GameApplication application;
 
+
     public static GameApplication getInstance(){
         return application;
     }
