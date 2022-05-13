@@ -30,6 +30,8 @@ import com.shabdamsdk.R;
 import com.shabdamsdk.ShabdamSplashActivity;
 import com.shabdamsdk.ToastUtils;
 import com.shabdamsdk.Utils;
+import com.shabdamsdk.event.CleverTapEventConstants;
+import com.shabdamsdk.event.EventSingleton;
 import com.shabdamsdk.model.SignupRequest;
 import com.shabdamsdk.pref.CommonPreference;
 
@@ -88,6 +90,8 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
         play_guest_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EventSingleton.getInstance().getCleverTapEvents().createOnlyEvent(CleverTapEventConstants.ANDROID);
+
                 user_type = USER_TYPE.GUEST;
                 CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).put(CommonPreference.Key.USER_ID,"");
                 CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).put(CommonPreference.Key.GAME_USER_ID,"");
