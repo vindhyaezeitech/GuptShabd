@@ -11,38 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!--<ViewFlipper
-        android:id="@+id/view_flipper"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/bg_gray_dark">
-
-        <ImageView
-            android:id="@+id/iv_first_img"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/first_img" />
-
-        <ImageView
-            android:id="@+id/iv_second_img"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/second_img" />
-
-        <ImageView
-            android:id="@+id/iv_third_img"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/third_img" />
-
-        <ImageView
-            android:id="@+id/iv_fourth_img"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/fourth_img" />
-
-    </ViewFlipper>-->
-
     <TextView
         android:id="@+id/tv_next_btn"
         android:layout_width="wrap_content"

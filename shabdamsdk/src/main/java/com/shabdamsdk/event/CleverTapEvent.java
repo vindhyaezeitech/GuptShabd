@@ -1,11 +1,11 @@
 package com.shabdamsdk.event;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.clevertap.android.sdk.CleverTapAPI;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.guptshabd.GameApplication;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,22 +13,23 @@ import java.util.Map;
 public class CleverTapEvent {
     private CleverTapAPI clevertapDefaultInstance;
     private FirebaseAnalytics firebaseAnalytics;
+    private static CleverTapEvent cleverTapEvent;
 
-    public void initializedCleverTap() {
+    public void initializedCleverTap(Context context) {
         if (clevertapDefaultInstance == null) {
-            clevertapDefaultInstance = CleverTapAPI.getDefaultInstance();
+            clevertapDefaultInstance = CleverTapAPI.getDefaultInstance(context.getApplicationContext());
         }
     }
 
-    public void initializedFirebase() {
+    public void initializedFirebase(Context context) {
         if (firebaseAnalytics == null) {
-            firebaseAnalytics = FirebaseAnalytics.getInstance();
+            firebaseAnalytics = FirebaseAnalytics.getInstance(context.getApplicationContext());
         }
     }
 
-    public CleverTapEvent() {
-        initializedFirebase();
-        initializedCleverTap();
+    public CleverTapEvent(Context context) {
+        initializedFirebase(context);
+        initializedCleverTap(context);
     }
 
     public void createOnlyEvent(String event_name) {
@@ -58,5 +59,17 @@ public class CleverTapEvent {
         bundle.putString(CleverTapEventConstants.DEVICE_TYPE, CleverTapEventConstants.ANDROID);
 
         firebaseAnalytics.logEvent(event_name, bundle);
+    }
+
+    public static CleverTapEvent getCleverTapEvents(Context context) {
+        if (cleverTapEvent == null) {
+            return new CleverTapEvent(context);
+        }
+        return cleverTapEvent;
+    }
+
+    private CleverTapEvent()
+    {
+
     }
 }

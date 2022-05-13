@@ -24,8 +24,6 @@
             </intent-filter>
         </activity>
 
-
-
         <!--<provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.guptshabd.LeaderBoardActivity.provider;com.guptshabd.ShabdamActivity.provider;com.guptshabd.GameActivity.provider"
