@@ -1,8 +1,6 @@
 package com.shabdamsdk.event;
 
 public class CleverTapEventConstants {
-    public static final String DEFAULT_VALUE_NA = "NA";
-    public static final String DISCOVER_SPOTLIGHT = "discover_spotlight";
     public static final String DEVICE_TYPE = "device_type";
     public static final String ANDROID = "android";
     public static final String APP_INSTALLED = "App_intalled";
