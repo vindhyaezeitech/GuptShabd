@@ -547,8 +547,8 @@
                                     android:textStyle="bold" />
 
                                 <androidx.appcompat.widget.AppCompatImageView
-                                    android:layout_width="@dimen/_20sdp"
-                                    android:layout_height="@dimen/_20sdp"
+                                    android:layout_width="35dp"
+                                    android:layout_height="match_parent"
                                     android:layout_marginLeft="@dimen/_4sdp"
                                     android:src="@drawable/uttar_dekho_icon"
                                     app:tint="@color/white" />

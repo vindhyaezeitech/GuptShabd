@@ -42,6 +42,8 @@ import com.shabdamsdk.GameView;
 import com.shabdamsdk.R;
 import com.shabdamsdk.ToastUtils;
 import com.shabdamsdk.Utils;
+import com.shabdamsdk.event.CleverTapEvent;
+import com.shabdamsdk.event.CleverTapEventConstants;
 import com.shabdamsdk.model.SignupRequest;
 import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
 import com.shabdamsdk.model.leaderboard.LeaderboardListModel;
@@ -120,6 +122,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
         rl_share_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CleverTapEvent.getCleverTapEvents(ShabdamLeaderBoardActivity.this).createOnlyEvent(CleverTapEventConstants.LB_SHARE);
                 takeScreenShot(getWindow().getDecorView());
             }
         });
@@ -189,6 +192,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
                 signupRequest.setUserId("");
 
                 Utils.saveUserData(ShabdamLeaderBoardActivity.this,personName, personName, personEmail, String.valueOf(personPhoto));
+                CleverTapEvent.getCleverTapEvents(ShabdamLeaderBoardActivity.this).createOnlyEvent(CleverTapEventConstants.LB_GOOGLE_LOGIN);
 
                 if (gamePresenter != null) {
                     gamePresenter.signUpUser(signupRequest);
@@ -274,6 +278,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
             }
         } else if (view.getId() == R.id.rl_agla_shabd_btn) {
             findViewById(R.id.rl_agla_shabd_btn).setClickable(false);
+            CleverTapEvent.getCleverTapEvents(ShabdamLeaderBoardActivity.this).createOnlyEvent(CleverTapEventConstants.LB_AGLA_SHABD);
             loadAdd();
         }
     }

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.clevertap.android.sdk.CleverTapAPI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,6 +31,8 @@ import com.shabdamsdk.R;
 import com.shabdamsdk.ShabdamSplashActivity;
 import com.shabdamsdk.ToastUtils;
 import com.shabdamsdk.Utils;
+import com.shabdamsdk.event.CleverTapEvent;
+import com.shabdamsdk.event.CleverTapEventConstants;
 import com.shabdamsdk.model.SignupRequest;
 import com.shabdamsdk.pref.CommonPreference;
 
@@ -40,16 +43,12 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
     private Button play_guest_btn;
     private LinearLayout ll_welcome;
     private FrameLayout flLoading;
-
-
-
-    private enum USER_TYPE{GUEST,GOOGLE};
     private USER_TYPE user_type;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_user_detail);
         ll_welcome = findViewById(R.id.ll_welcome_layout);
         flLoading = findViewById(R.id.fl_loading);
@@ -88,9 +87,10 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
         play_guest_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CleverTapEvent.getCleverTapEvents(UserDetailActivity.this).createOnlyEvent(CleverTapEventConstants.PLAY_GUEST);
                 user_type = USER_TYPE.GUEST;
-                CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).put(CommonPreference.Key.USER_ID,"");
-                CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).put(CommonPreference.Key.GAME_USER_ID,"");
+                CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).put(CommonPreference.Key.USER_ID, "");
+                CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).put(CommonPreference.Key.GAME_USER_ID, "");
                 startFlow();
             }
         });
@@ -112,13 +112,13 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
     }
 
     private void startFlow() {
-        if(!CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_TUTORIAL_SHOWN, false)){
+        if (!CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_TUTORIAL_SHOWN, false)) {
             startActivity(new Intent(UserDetailActivity.this, TutorialActivity.class));
             finish();
-        }else if(!CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_RULE_SHOWN, false)){
+        } else if (!CommonPreference.getInstance(UserDetailActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_RULE_SHOWN, false)) {
             startActivity(new Intent(UserDetailActivity.this, ShabdamPaheliActivity.class));
             finish();
-        }else {
+        } else {
             startActivity(new Intent(UserDetailActivity.this, GameActivity.class));
             finish();
         }
@@ -135,7 +135,6 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -161,7 +160,7 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
                 String personEmail = acct.getEmail();
                 String personId = acct.getId();
                 Uri personPhoto = acct.getPhotoUrl();
-               // CommonPreference.getInstance(UserDetailActivity.this).put(CommonPreference.Key.EMAIL, personEmail);
+                // CommonPreference.getInstance(UserDetailActivity.this).put(CommonPreference.Key.EMAIL, personEmail);
 
                 SignupRequest signupRequest = new SignupRequest();
                 signupRequest.setEmail(personEmail);
@@ -170,9 +169,10 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
                 signupRequest.setUname(personName);
                 signupRequest.setUserId("");
 
-                Utils.saveUserData(UserDetailActivity.this,personName, personName, personEmail, String.valueOf(personPhoto));
+                Utils.saveUserData(UserDetailActivity.this, personName, personName, personEmail, String.valueOf(personPhoto));
+                CleverTapEvent.getCleverTapEvents(UserDetailActivity.this).createOnlyEvent(CleverTapEventConstants.SIGN_UP);
 
-                GamePresenter gamePresenter = new GamePresenter(this,UserDetailActivity.this);
+                GamePresenter gamePresenter = new GamePresenter(this, UserDetailActivity.this);
                 gamePresenter.signUpUser(signupRequest);
 
                 //Toast.makeText(this, ""+personEmail, Toast.LENGTH_SHORT).show();
@@ -186,7 +186,7 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
 
     @Override
     public void showProgress() {
-        if(flLoading != null){
+        if (flLoading != null) {
             flLoading.setVisibility(View.VISIBLE);
         }
 
@@ -194,7 +194,7 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
 
     @Override
     public void hideProgress() {
-        if(flLoading != null){
+        if (flLoading != null) {
             flLoading.setVisibility(View.GONE);
         }
 
@@ -202,7 +202,7 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
 
     @Override
     public void onError(String errorMsg) {
-        if(flLoading != null){
+        if (flLoading != null) {
             flLoading.setVisibility(View.GONE);
         }
     }
@@ -217,4 +217,6 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
         }
 
     }
+
+    private enum USER_TYPE {GUEST, GOOGLE}
 }

@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.shabdamsdk.GameActivity;
 import com.shabdamsdk.R;
+import com.shabdamsdk.event.CleverTapEvent;
+import com.shabdamsdk.event.CleverTapEventConstants;
 import com.shabdamsdk.pref.CommonPreference;
 
 public class ShabdamPaheliActivity extends AppCompatActivity {
@@ -28,6 +30,12 @@ public class ShabdamPaheliActivity extends AppCompatActivity {
         aage_bade_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (CommonPreference.getInstance(ShabdamPaheliActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_RULE_SHOWN) == true) {
+                    CleverTapEvent.getCleverTapEvents(ShabdamPaheliActivity.this).createOnlyEvent(CleverTapEventConstants.GO_FORWARD);
+                    CleverTapEvent.getCleverTapEvents(ShabdamPaheliActivity.this).createOnlyEvent(CleverTapEventConstants.DONOTSHOW);
+                } else {
+                    CleverTapEvent.getCleverTapEvents(ShabdamPaheliActivity.this).createOnlyEvent(CleverTapEventConstants.GO_FORWARD);
+                }
                 startActivity(new Intent(ShabdamPaheliActivity.this, GameActivity.class));
                 finish();
             }
@@ -38,13 +46,7 @@ public class ShabdamPaheliActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (buttonView.isChecked()) {
-                    CommonPreference.getInstance(ShabdamPaheliActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_RULE_SHOWN, true);
-
-                } else {
-                    CommonPreference.getInstance(ShabdamPaheliActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_RULE_SHOWN, false);
-
-                }
+                CommonPreference.getInstance(ShabdamPaheliActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_RULE_SHOWN, buttonView.isChecked());
             }
         });
     }

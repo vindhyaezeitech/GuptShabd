@@ -58,6 +58,7 @@
             android:textSize="@dimen/_13sdp" />
 
         <Switch
+            android:id="@+id/switch_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -159,6 +160,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_faq_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_25sdp">

@@ -29,11 +29,14 @@
         <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/drawable/rectangle_radius.xml" value="0.1325" />
         <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/activity_game.xml" value="0.16666666666666666" />
         <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/activity_leader_board.xml" value="0.1796875" />
+        <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/activity_leader_board_shabdam.xml" value="0.1597222222222222" />
         <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/activity_settings.xml" value="0.1640625" />
         <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/activity_shabdam.xml" value="0.1796875" />
         <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/activity_shabdam_paheli.xml" value="0.1796875" />
+        <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/activity_shabdam_settings.xml" value="0.1597222222222222" />
         <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/activity_splash_shabdam_main.xml" value="0.1796875" />
         <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/activity_tutorial.xml" value="0.1796875" />
+        <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/activity_user_detail.xml" value="0.1597222222222222" />
         <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/pager_item_layout.xml" value="0.1597222222222222" />
         <entry key="..\:/Anil_Project/Shabdam/shabdamsdk/src/main/res/layout/statistics_popup_layout.xml" value="0.1796875" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1475" />
