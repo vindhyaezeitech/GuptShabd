@@ -154,6 +154,8 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
             intent1.putExtra("type", "1");
             startActivity(intent1);
         } else if (id == R.id.rl_agla_shabd_btn) {
+            findViewById(R.id.rl_agla_shabd_btn).setClickable(false);
+
             loadAdd();
         }
     }
@@ -399,6 +401,8 @@ public class ShabdamActivity extends AppCompatActivity implements GameView, View
                 }
             });
         } else {
+            findViewById(R.id.rl_agla_shabd_btn).setClickable(true);
+
             startGame();
            // Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
         }

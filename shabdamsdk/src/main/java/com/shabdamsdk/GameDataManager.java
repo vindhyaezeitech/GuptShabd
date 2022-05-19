@@ -3,6 +3,7 @@ package com.shabdamsdk;
 import com.shabdamsdk.model.getwordresp.Datum;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GameDataManager {
@@ -32,5 +33,19 @@ public class GameDataManager {
             dataList.remove(0);
         }
     }
+
+    public void removeAll(){
+        if(dataList != null && dataList.size()>0){
+            dataList.clear();
+        }
+    }
+
+    public void shuffleList(){
+        if(dataList != null && dataList.size()>0){
+            Collections.shuffle(dataList);
+        }
+    }
+
+
 
 }

@@ -256,12 +256,12 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
         if (view.getId() == R.id.iv_back_btn) {
             if (!TextUtils.isEmpty(type) && type.equals("1")) {
                 Intent intent = new Intent(this, ShabdamActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
             } else if (!TextUtils.isEmpty(type) && type.equals("2")) {
                 Intent intent = new Intent(this, GameActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("user_id", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
                 intent.putExtra("name", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.NAME));
                 intent.putExtra("uname", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.UNAME));
@@ -273,6 +273,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
                 onBackPressed();
             }
         } else if (view.getId() == R.id.rl_agla_shabd_btn) {
+            findViewById(R.id.rl_agla_shabd_btn).setClickable(false);
             loadAdd();
         }
     }
@@ -376,7 +377,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
         super.onBackPressed();
         if (!TextUtils.isEmpty(type) && type.equals("2")) {
             Intent intent = new Intent(this, GameActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("user_id", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
             intent.putExtra("name", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.NAME));
             intent.putExtra("uname", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.UNAME));
@@ -437,6 +438,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
                 }
             });
         } else {
+            findViewById(R.id.rl_agla_shabd_btn).setClickable(true);
             startGame();
             // Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
         }
@@ -444,7 +446,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
 
     private void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("user_id", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
         intent.putExtra("name", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.NAME));
         intent.putExtra("uname", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.UNAME));

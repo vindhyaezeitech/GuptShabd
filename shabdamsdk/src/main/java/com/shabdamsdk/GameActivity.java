@@ -3,8 +3,10 @@ package com.shabdamsdk;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Bitmap;
@@ -31,6 +33,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -73,6 +79,7 @@ import com.shabdamsdk.pref.CommonPreference;
 import com.shabdamsdk.ui.activity.ShabdamLeaderBoardActivity;
 import com.shabdamsdk.ui.activity.ShabdamSettingsActivity;
 import com.shabdamsdk.ui.activity.ShabdamActivity;
+import com.shabdamsdk.ui.activity.UserDetailActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -226,7 +233,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -237,7 +244,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             com.google.android.gms.tasks.Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
-    }
+    }*/
 
     private void handleSignInResult(com.google.android.gms.tasks.Task<GoogleSignInAccount> completedTask) {
         try {
@@ -288,6 +295,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
 
 
 
@@ -359,6 +367,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 openUttarDekho();
             }
             Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
+           if(rl_uttar_dekho_btn != null){
+               rl_uttar_dekho_btn.setEnabled(true);
+           }
+
         }
     }
 
@@ -384,7 +396,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void openAglaShabd() {
         Intent intent = new Intent(GameActivity.this, GameActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("user_id", CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
         intent.putExtra("name", CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.NAME));
         intent.putExtra("uname", CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.UNAME));
@@ -631,10 +643,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             //submitText();
         } else if (id == R.id.rl_uttar_dekho_btn) {
             click_item = CLICK_ITEM.UTTAR_DEKHO;
+            if(rl_uttar_dekho_btn != null){
+                rl_uttar_dekho_btn.setEnabled(false);
+            }
             if (!TextUtils.isEmpty(correctWord)) {
               //  endGame(Constants.LOSS,String.valueOf(pauseOffset / 1000),currentAttempt);
                 if(TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this).getString(CommonPreference.Key.GAME_USER_ID))){
                     gameResult = Constants.LOSS;
+                    GameDataManager.getInstance().removeData();
                     statisticsPopup(null);
                 }else {
                     isUttarDekheClicked = true;
@@ -657,7 +673,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 statisticsPopup(null);
             }
         } else if (id == R.id.iv_settings_btn) {
-            startActivity(new Intent(this, ShabdamSettingsActivity.class));
+         //   startActivityForResult(new Intent(this, ShabdamSettingsActivity.class), 200);
+        Intent intent = new Intent(this, ShabdamSettingsActivity.class);
+        someActivityResultLauncher.launch(intent);
         } else if (id == R.id.rl_hint) {
             // showHint();
             if (hintCount < 2) {
@@ -668,6 +686,28 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 //loadAdd();
             }
         }
+    }
+
+    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        openLogin();
+                    }
+                }
+            });
+
+    private void openLogin(){
+        Intent intent = new Intent(GameActivity.this, UserDetailActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setComponent(new ComponentName(GameActivity.this, UserDetailActivity.class));
+        startActivity(intent);
+        Toast.makeText(GameActivity.this, "Logout successfully", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     private String getEnteredText() {
@@ -682,8 +722,25 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        //startActivityForResult(signInIntent, RC_SIGN_IN);
+        someActivityResultLauncherLogin.launch(signInIntent);
     }
+
+    ActivityResultLauncher<Intent> someActivityResultLauncherLogin = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        com.google.android.gms.tasks.Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                        handleSignInResult(task);
+                    }
+                }
+            });
+
+
 
     private void statisticsPopup(Data data) {
         if(alertDialog != null){
@@ -1136,10 +1193,28 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
             }
+            boolean isDump = false;
+            for (int i = 0; i < word_array.length; i++) {
+                if((int)word_array[i] == 0){
+                    isDump = true;
+                }
+            }
+            if(isDump == true){
+                Log.d("batxmen", correctWord);
+                if (gamePresenter != null) {
+                    btnIdList.clear();
+                    GameDataManager.getInstance().removeData();
+                    GetWordRequest getWordRequest = new GetWordRequest();
+                    getWordRequest.setUserId(CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
+                    getWordRequest.setWordId(list);
+                    gamePresenter.fetchNewWord(GameActivity.this, getWordRequest);
+                }
+            }
             Log.d("", matra.toString());
         } catch (Exception e) {
             if (gamePresenter != null) {
                 btnIdList.clear();
+                GameDataManager.getInstance().removeData();
                 GetWordRequest getWordRequest = new GetWordRequest();
                 getWordRequest.setUserId(CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
                 getWordRequest.setWordId(list);
@@ -1617,6 +1692,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onGameSubmit() {
         if (isUttarDekheClicked) {
             isUttarDekheClicked = false;
+            if(rl_uttar_dekho_btn != null){
+                rl_uttar_dekho_btn.setEnabled(false);
+            }
+
             loadAdd();
 
         } else {

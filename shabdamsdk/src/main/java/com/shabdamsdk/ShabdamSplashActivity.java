@@ -50,6 +50,7 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
     public static void startShabdam(@NotNull Context context, @NotNull String applicationId){
         Intent intent = new Intent(context, ShabdamSplashActivity.class);
         intent.putExtra("applicationId", applicationId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -58,6 +59,7 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_shabdam_main);
+        GameDataManager.getInstance().shuffleList();
         gamePresenter = new GamePresenter(this, ShabdamSplashActivity.this);
 
         if(getIntent() != null && getIntent().getExtras() != null && !TextUtils.isEmpty(getIntent().getStringExtra("applicationId"))){

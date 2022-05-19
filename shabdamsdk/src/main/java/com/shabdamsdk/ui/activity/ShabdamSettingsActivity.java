@@ -63,7 +63,7 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
         if (view.getId() == R.id.iv_back_btn) {
             if (!TextUtils.isEmpty(type) && type.equals("1")) {
                 Intent intent = new Intent(this, ShabdamActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
             } else {
@@ -115,12 +115,9 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
                         CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, isTutShown);
                         CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_RULE_SHOWN, isRuleShown);
 
-                        Intent intent = new Intent(Intent.ACTION_MAIN);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        intent.setComponent(new ComponentName(ShabdamSettingsActivity.this, UserDetailActivity.class));
-                        startActivity(intent);
-                        Toast.makeText(ShabdamSettingsActivity.this, "Logout successfully", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
                         finish();
+
                     }
                 });
     }
