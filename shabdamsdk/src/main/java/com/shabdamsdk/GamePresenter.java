@@ -2,7 +2,9 @@ package com.shabdamsdk;
 
 import android.content.Context;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.shabdamsdk.db.AppDatabase;
 import com.shabdamsdk.db.DatabaseClient;
@@ -16,6 +18,7 @@ import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
 import com.shabdamsdk.network.ApiService;
 import com.shabdamsdk.network.RetrofitClient;
 import com.shabdamsdk.pref.CommonPreference;
+import com.shabdamsdk.ui.activity.ShabdamSettingsActivity;
 
 import java.util.ArrayList;
 
@@ -71,6 +74,10 @@ public class GamePresenter {
     }
 
     public void callWordAPI(GetWordRequest request){
+        if(context != null
+                && !TextUtils.isEmpty(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId())){
+            request.setApp_id(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId());
+        }
         compositeDisposable.add(apiService.fetchNewWord(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -81,7 +88,20 @@ public class GamePresenter {
                     if(response != null && response.getData() != null &&response.getData() != null && response.getData().size() > 0){
 
                         if(!response.getWoord_status().equalsIgnoreCase("true")){
+
+                            boolean isTutShown = CommonPreference.getInstance(context.getApplicationContext()).getBoolean(CommonPreference.Key.IS_TUTORIAL_SHOWN, false);
+                            boolean isRuleShown = CommonPreference.getInstance(context.getApplicationContext()).getBoolean(CommonPreference.Key.IS_RULE_SHOWN, false);
+
+                            String applicationId = CommonPreference.getInstance(context.getApplicationContext()).getPackageString("applicationId");
+                            String appUniqueId = CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId();
+
                             CommonPreference.getInstance(context.getApplicationContext()).clear();
+
+                            CommonPreference.getInstance(context.getApplicationContext()).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, isTutShown);
+                            CommonPreference.getInstance(context.getApplicationContext()).put(CommonPreference.Key.IS_RULE_SHOWN, isRuleShown);
+                            CommonPreference.getInstance(context.getApplicationContext()).put("applicationId", applicationId);
+                            CommonPreference.getInstance(context.getApplicationContext()).put("appUniqueId", appUniqueId);
+
                         }
                         GameDataManager.getInstance().addData(response.getData());
                         gameView.onWordFetched(response.getData().get(0));
@@ -97,6 +117,11 @@ public class GamePresenter {
 
         GetLeaderboardRequest request=new GetLeaderboardRequest();
         request.setGameUserId(game_id);
+
+        if(context != null
+                && !TextUtils.isEmpty(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId())){
+            request.setApp_id(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId());
+        }
 
         if(gameView != null){
             gameView.showProgress();
@@ -126,6 +151,10 @@ public class GamePresenter {
         if(gameView != null){
             gameView.showProgress();
         }
+        if(context != null
+                && !TextUtils.isEmpty(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId())){
+            request.setApp_id(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId());
+        }
         compositeDisposable.add(apiService.getStreakData(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -150,6 +179,10 @@ public class GamePresenter {
         if(gameView != null){
             gameView.showProgress();
         }
+        if(context != null
+                && !TextUtils.isEmpty(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId())){
+            addUserRequest.setApp_id(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId());
+        }
         compositeDisposable.add(apiService.addUser(addUserRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -172,6 +205,10 @@ public class GamePresenter {
 
         if(gameView != null){
             gameView.showProgress();
+        }
+        if(context != null
+                && !TextUtils.isEmpty(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId())){
+            submitGameRequest.setApp_id(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId());
         }
         GameDataManager.getInstance().removeData();
         compositeDisposable.add(apiService.submitGame(submitGameRequest)
@@ -196,6 +233,11 @@ public class GamePresenter {
 
         if(gameView != null){
             gameView.showProgress();
+        }
+
+        if(context != null
+                && !TextUtils.isEmpty(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId())){
+            addUserRequest.setApp_id(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId());
         }
         compositeDisposable.add(apiService.signUpUser(addUserRequest)
                 .subscribeOn(Schedulers.io())
@@ -224,6 +266,11 @@ public class GamePresenter {
         if(gameView != null){
             gameView.showProgress();
         }
+        if(context != null
+                && !TextUtils.isEmpty(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId())){
+            checkWordDicRequest.setApp_id(CommonPreference.getInstance(context.getApplicationContext()).getUniqueAppId());
+        }
+
         compositeDisposable.add(apiService.checkWord(checkWordDicRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

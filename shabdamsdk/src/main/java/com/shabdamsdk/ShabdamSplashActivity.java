@@ -47,9 +47,10 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
         context.startActivity(intent);
     }*/
 
-    public static void startShabdam(@NotNull Context context, @NotNull String applicationId){
+    public static void startShabdam(@NotNull Context context, @NotNull String appPackageName,@NotNull String appUniqueId){
         Intent intent = new Intent(context, ShabdamSplashActivity.class);
-        intent.putExtra("applicationId", applicationId);
+        intent.putExtra("applicationId", appPackageName);
+        intent.putExtra("appUniqueId", appUniqueId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -64,6 +65,10 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
 
         if(getIntent() != null && getIntent().getExtras() != null && !TextUtils.isEmpty(getIntent().getStringExtra("applicationId"))){
             CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put("applicationId", getIntent().getStringExtra("applicationId"));
+        }
+
+        if(getIntent() != null && getIntent().getExtras() != null && !TextUtils.isEmpty(getIntent().getStringExtra("appUniqueId"))){
+            CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put("appUniqueId", getIntent().getStringExtra("appUniqueId"));
         }
 
         // load the animation

@@ -16,7 +16,7 @@ public class TestActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                ShabdamSplashActivity.startShabdam(TestActivity.this,BuildConfig.APPLICATION_ID);
+                ShabdamSplashActivity.startShabdam(TestActivity.this,BuildConfig.APPLICATION_ID, "1");
 
             }
         }, 5000);

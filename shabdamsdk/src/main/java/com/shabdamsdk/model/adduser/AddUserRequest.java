@@ -22,6 +22,9 @@ public class AddUserRequest implements Parcelable
     @SerializedName("profileimage")
     @Expose
     private String profileimage = " ";
+    @SerializedName("app_id")
+    @Expose
+    private String app_id;
     public final static Creator<AddUserRequest> CREATOR = new Creator<AddUserRequest>() {
 
 
@@ -45,6 +48,8 @@ public class AddUserRequest implements Parcelable
         this.uname = ((String) in.readValue((String.class.getClassLoader())));
         this.email = ((String) in.readValue((String.class.getClassLoader())));
         this.profileimage = ((String) in.readValue((String.class.getClassLoader())));
+        this.app_id = ((String) in.readValue((String.class.getClassLoader())));
+
     }
 
     public AddUserRequest() {
@@ -96,10 +101,20 @@ public class AddUserRequest implements Parcelable
         dest.writeValue(uname);
         dest.writeValue(email);
         dest.writeValue(profileimage);
+        dest.writeValue(app_id);
+
     }
 
     public int describeContents() {
         return  0;
+    }
+
+    public String getApp_id() {
+        return app_id;
+    }
+
+    public void setApp_id(String app_id) {
+        this.app_id = app_id;
     }
 
 }

@@ -134,10 +134,15 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
                         boolean isTutShown = CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_TUTORIAL_SHOWN, false);
                         boolean isRuleShown = CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).getBoolean(CommonPreference.Key.IS_RULE_SHOWN, false);
 
+                        String applicationId = CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).getPackageString("applicationId");
+                        String appUniqueId = CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).getUniqueAppId();
+
                         CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).clear();
 
                         CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_TUTORIAL_SHOWN, isTutShown);
                         CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).put(CommonPreference.Key.IS_RULE_SHOWN, isRuleShown);
+                        CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).put("applicationId", applicationId);
+                        CommonPreference.getInstance(ShabdamSettingsActivity.this.getApplicationContext()).put("appUniqueId", appUniqueId);
 
                         setResult(RESULT_OK);
                         finish();

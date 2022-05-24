@@ -75,6 +75,11 @@ public class CommonPreference {
         return mPref.getString(key, "com.shabdamsdk");
     }
 
+    public String getUniqueAppId() {
+        return mPref.getString("appUniqueId", null);
+    }
+
+
     public boolean getBoolean(String key, boolean defaultValue) {
         return mPref.getBoolean(key, defaultValue);
     }
@@ -201,6 +206,7 @@ public class CommonPreference {
         public static final String TYPE = "type";
         public static final String IS_TUTORIAL_SHOWN = "is_tut_shown";
         public static final String IS_RULE_SHOWN = "is_rule_shown";
+
 
     }
 

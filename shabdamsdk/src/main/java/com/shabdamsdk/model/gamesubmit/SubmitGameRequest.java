@@ -18,7 +18,9 @@ public class SubmitGameRequest implements Parcelable
     @SerializedName("game_status")
     @Expose
     private String gameStatus;
-
+    @SerializedName("app_id")
+    @Expose
+    private String app_id;
 
 
     @SerializedName("no_of_attempt")
@@ -46,6 +48,8 @@ public class SubmitGameRequest implements Parcelable
         this.time = ((String) in.readValue((String.class.getClassLoader())));
         this.gameStatus = ((String) in.readValue((String.class.getClassLoader())));
         this.noOfAttempt = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.app_id = ((String) in.readValue((Integer.class.getClassLoader())));
+
 
     }
 
@@ -89,10 +93,21 @@ public class SubmitGameRequest implements Parcelable
         dest.writeValue(time);
         dest.writeValue(gameStatus);
         dest.writeValue(noOfAttempt);
+        dest.writeValue(app_id);
+
+
     }
 
     public int describeContents() {
         return  0;
+    }
+
+    public String getApp_id() {
+        return app_id;
+    }
+
+    public void setApp_id(String app_id) {
+        this.app_id = app_id;
     }
 
 }
