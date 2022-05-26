@@ -43,7 +43,7 @@
             android:fontFamily="sans-serif-medium"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="12sp"></TextView>
+            android:textSize="12sp"/>
 
         <ImageView
             android:id="@+id/iv_settings_btn"
@@ -436,6 +436,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:background="@drawable/bg_hint"
+                            android:clickable="true"
                             android:paddingLeft="@dimen/_16sdp"
                             android:paddingRight="@dimen/_16sdp">
 

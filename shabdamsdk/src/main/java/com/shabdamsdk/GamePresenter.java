@@ -65,9 +65,6 @@ public class GamePresenter {
                         callWordAPI(request);
                     }));
         }
-
-
-
     }
 
     public void callWordAPI(GetWordRequest request){

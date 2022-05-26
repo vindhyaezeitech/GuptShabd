@@ -43,8 +43,8 @@
         android:id="@+id/ll_welcome_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/radius_box"
         android:layout_alignParentBottom="true"
+        android:background="@drawable/radius_box"
         android:orientation="vertical">
 
         <TextView
