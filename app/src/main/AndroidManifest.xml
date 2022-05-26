@@ -13,7 +13,7 @@
             android:name=".TestActivity"
             android:exported="false" />-->
         <activity
-            android:name=".TestActivity"
+            android:name="com.shabdamsdk.ShabdamSplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
            >

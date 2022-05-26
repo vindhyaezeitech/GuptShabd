@@ -24,6 +24,9 @@ public class SignupRequest implements Parcelable
     @SerializedName("profileimage")
     @Expose
     private String profileimage;
+    @SerializedName("app_id")
+    @Expose
+    private String app_id;
     public final static Creator<SignupRequest> CREATOR = new Creator<SignupRequest>() {
 
 
@@ -47,6 +50,8 @@ public class SignupRequest implements Parcelable
         this.uname = ((String) in.readValue((String.class.getClassLoader())));
         this.userId = ((String) in.readValue((String.class.getClassLoader())));
         this.profileimage = ((String) in.readValue((String.class.getClassLoader())));
+        this.app_id = ((String) in.readValue((String.class.getClassLoader())));
+
     }
 
     public SignupRequest() {
@@ -98,10 +103,20 @@ public class SignupRequest implements Parcelable
         dest.writeValue(uname);
         dest.writeValue(userId);
         dest.writeValue(profileimage);
+        dest.writeValue(app_id);
+
     }
 
     public int describeContents() {
         return  0;
+    }
+
+    public String getApp_id() {
+        return app_id;
+    }
+
+    public void setApp_id(String app_id) {
+        this.app_id = app_id;
     }
 
 }

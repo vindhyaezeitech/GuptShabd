@@ -1249,7 +1249,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private boolean checkLetter(char c) {
-        return ((int) c >= 2309 && (int) c <= 2316) || ((int) c >= 2325 && (int) c <= 2361)
+        return ((int) c >= 2309 && (int) c <= 2324)
+                || ((int) c >= 2400 && (int) c <= 2401)|| ((int) c >= 2325 && (int) c <= 2361)
+                || ((int) c >= 2392 && (int) c <= 2399)
                 || (int) c == 2319 || (int) c == 2320 || (int) c == 2323 || (int) c == 2324;
     }
 

@@ -77,12 +77,23 @@
         </provider>
 
 
-        <meta-data
+        <!--<meta-data
             android:name="CLEVERTAP_ACCOUNT_ID"
             android:value="TEST-K76-65Z-R56Z" />
         <meta-data
             android:name="CLEVERTAP_TOKEN"
             android:value="TEST-156-6a3" />
+        &lt;!&ndash; IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ &ndash;&gt;
+        <meta-data
+            android:name="CLEVERTAP_USE_GOOGLE_AD_ID"
+            android:value="1" />-->
+
+        <meta-data
+            android:name="CLEVERTAP_ACCOUNT_ID"
+            android:value="R76-65Z-R56Z" />
+        <meta-data
+            android:name="CLEVERTAP_TOKEN"
+            android:value="156-6a2" />
         <!-- IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ -->
         <meta-data
             android:name="CLEVERTAP_USE_GOOGLE_AD_ID"
