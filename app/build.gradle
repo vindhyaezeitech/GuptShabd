@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'maven-publish'
+
 }
 
 
@@ -35,13 +37,34 @@ android {
 
         release {
             minifyEnabled false
-            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+configurations.maybeCreate("default")
+def publishArtifact = artifacts.add("default", file('shabdamsdk-release.aar.aar'))
+
+
+publishing {
+    publications {
+        myPulication(MavenPublication) {
+            groupId 'com.tvtoday.shabdamtest'
+            version '1.0.2'
+            artifactId 'shabdamsdk'
+            artifact("$buildDir/outputs/aar/shabdamsdk-release.aar")
+        }
+    }
+    repositories {
+        maven {
+            url "http://www.myrepository.com"
+            allowInsecureProtocol = true
+        }
     }
 }
 
