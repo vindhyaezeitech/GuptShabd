@@ -55,13 +55,13 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
         context.startActivity(intent);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_shabdam_main);
         GameDataManager.getInstance().shuffleList();
         gamePresenter = new GamePresenter(this, ShabdamSplashActivity.this);
+
 
         if(getIntent() != null && getIntent().getExtras() != null && !TextUtils.isEmpty(getIntent().getStringExtra("applicationId"))){
             CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put("applicationId", getIntent().getStringExtra("applicationId"));
@@ -86,12 +86,15 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
             if (!TextUtils.isEmpty(name)) {
                 CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put(CommonPreference.Key.NAME, name);
             }
+
             if (!TextUtils.isEmpty(u_name)) {
                 CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put(CommonPreference.Key.UNAME, u_name);
             }
+
             if (!TextUtils.isEmpty(email)) {
                 CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put(CommonPreference.Key.EMAIL, email);
             }
+
             if (!TextUtils.isEmpty(profile_image)) {
                 CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).put(CommonPreference.Key.PROFILE_IMAGE, profile_image);
             }
@@ -105,6 +108,7 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
                 request.setProfileimage(profile_image);
                 gamePresenter.addUser(request);
             }
+
         }else if(!TextUtils.isEmpty(CommonPreference.getInstance(ShabdamSplashActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID))){
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -142,7 +146,6 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
             signupRequest.setProfileimage(profile_image);
             gamePresenter.signUpUser(signupRequest);
         }*/
-
     }
 
     @Override
@@ -170,7 +173,6 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
                 finish();
             }
         }
-
     }
 
     @Override

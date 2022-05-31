@@ -108,6 +108,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     StringBuilder[] matra = new StringBuilder[3];
     char[] charArray;
     Animation animBlink;
+    private Boolean hintToastCounter = false;
     int blinkCount;
     Animator.AnimatorListener animatorListener;
     List<String> list = new ArrayList<>();
@@ -133,7 +134,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tvKa;
     private TextView tvCross;
     private TextView tvEnter;
-    private RelativeLayout rl_uttar_dekho_btn, continue_btn, agla_shabd_btn, rl_share_btn,rl_hint;
+    private RelativeLayout rl_uttar_dekho_btn, continue_btn, agla_shabd_btn, rl_share_btn,rl_hint,rLayUttarDekho;
     private GamePresenter gamePresenter;
     private FrameLayout flLoading;
     private boolean mTimingRunning;
@@ -157,8 +158,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        adRequest = new AdRequest.Builder().build();
 
+        adRequest = new AdRequest.Builder().build();
+        rLayUttarDekho = findViewById(R.id.rLayUttarDekho);
 
         interstitialAdd();
         initRewardAdd();
@@ -298,10 +300,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 callgetStreakAPI();
             }
         }
-
     }
-
-
 
 
     private void interstitialAdd() {
@@ -330,7 +329,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         mInterstitialAd = null;
                     }
                 });
-
     }
 
     private void loadAdd() {
@@ -420,13 +418,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                         // Handle the error.
                         // Log.d(TAG, loadAdError.getMessage());
+                       // Toast.makeText(this,)
                         mRewardedAd = null;
-                        initRewardAdd();
+                        //initRewardAdd();
                     }
 
                     @Override
                     public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
                         mRewardedAd = rewardedAd;
+
+                       // rl_hint.setBackgroundResource(R.drawable.bg_hint);
+                        rl_hint.setVisibility(View.VISIBLE);
                         // Log.d(TAG, "Ad was loaded.");
                     }
                 });
@@ -441,8 +443,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     //  Log.d(TAG, "The user earned the reward.");
                     int rewardAmount = rewardItem.getAmount();
                     String rewardType = rewardItem.getType();
+
                     showHint();
                     initRewardAdd();
+
+
                 }
             });
             mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
@@ -512,7 +517,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             finish();
         }
-        //
     }
 
     private void startTimer() {
@@ -684,28 +688,38 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             CleverTapEvent.getCleverTapEvents(GameActivity.this).createOnlyEvent(CleverTapEventConstants.HINT_BUTTON);
             // showHint();
 
+           /* hintToastCounter++;
+            if(hintToastCounter==2){
+                ToastUtils.show(GameActivity.this, "Your hint button has activated");
+            }*/
+
             if(currentAttempt<4){
                 if(!isHintTaken){
                     rl_hint.setBackgroundResource(R.drawable.bg_hint_gray);
                     rl_hint.setClickable(false);
                     if (hintCount < 2) {
+                        showRewardAdd();
                         // loadAdd();
                         // isHintPressed = true;
                         click_item = CLICK_ITEM.HINT;
-                        showRewardAdd();
+
                         //loadAdd();
                     }
                     isHintTaken = true;
                 }
             }else{
                 rl_hint.setBackgroundResource(R.drawable.bg_hint_gray);
+                rl_hint.setClickable(false);
+
                     if (hintCount < 2) {
+                        showRewardAdd();
                         // loadAdd();
                         // isHintPressed = true;
                         click_item = CLICK_ITEM.HINT;
-                        showRewardAdd();
                         //loadAdd();
                     }
+
+
             }
         }
     }
@@ -1079,13 +1093,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             index = index - 1;
 
-
         }
     }
 
     private void submitText() {
         animate();
-
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -1138,10 +1150,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             hintTwo();
         }
 
-        if(currentAttempt == 4){
-            ToastUtils.show(GameActivity.this, "Your hint button has activated");
-        }
+
         if(currentAttempt > 3){
+           /* if(!isHintTaken){
+                ToastUtils.show(GameActivity.this, "Your hint button has activated");
+            }else{
+
+            }*/
             rl_hint.setBackgroundResource(R.drawable.bg_hint);
             rl_hint.setClickable(true);
         }
