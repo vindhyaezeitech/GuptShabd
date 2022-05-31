@@ -47,26 +47,10 @@ android {
     }
 }
 
-configurations.maybeCreate("default")
-def publishArtifact = artifacts.add("default", file('shabdamsdk-release.aar.aar'))
 
 
-publishing {
-    publications {
-        myPulication(MavenPublication) {
-            groupId 'com.tvtoday.shabdamtest'
-            version '1.0.2'
-            artifactId 'shabdamsdk'
-            artifact("$buildDir/outputs/aar/shabdamsdk-release.aar")
-        }
-    }
-    repositories {
-        maven {
-            url "http://www.myrepository.com"
-            allowInsecureProtocol = true
-        }
-    }
-}
+
+
 
 dependencies {
 
