@@ -108,12 +108,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     StringBuilder[] matra = new StringBuilder[3];
     char[] charArray;
     Animation animBlink;
+    private Boolean hintToastCounter = false;
     int blinkCount;
     Animator.AnimatorListener animatorListener;
     List<String> list = new ArrayList<>();
     GoogleSignInClient mGoogleSignInClient;
     private ArrayList<Integer> btnIdList = new ArrayList<>();
     private String gameResult;
+    private Boolean isHintTaken = false;
 
     private CLICK_ITEM click_item;
     private int[] keyIdArray = {R.id.tv_ka, R.id.tv_kha, R.id.tv_ga, R.id.tv_gha, R.id.tv_anga,
@@ -132,7 +134,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tvKa;
     private TextView tvCross;
     private TextView tvEnter;
-    private RelativeLayout rl_uttar_dekho_btn, continue_btn, agla_shabd_btn, rl_share_btn;
+    private RelativeLayout rl_uttar_dekho_btn, continue_btn, agla_shabd_btn, rl_share_btn,rl_hint,rLayUttarDekho;
     private GamePresenter gamePresenter;
     private FrameLayout flLoading;
     private boolean mTimingRunning;
@@ -156,8 +158,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        adRequest = new AdRequest.Builder().build();
 
+        adRequest = new AdRequest.Builder().build();
+        rLayUttarDekho = findViewById(R.id.rLayUttarDekho);
 
         interstitialAdd();
         initRewardAdd();
@@ -297,10 +300,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 callgetStreakAPI();
             }
         }
-
     }
-
-
 
 
     private void interstitialAdd() {
@@ -329,7 +329,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         mInterstitialAd = null;
                     }
                 });
-
     }
 
     private void loadAdd() {
@@ -419,13 +418,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                         // Handle the error.
                         // Log.d(TAG, loadAdError.getMessage());
+                       // Toast.makeText(this,)
                         mRewardedAd = null;
-                        initRewardAdd();
+                        //initRewardAdd();
                     }
 
                     @Override
                     public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
                         mRewardedAd = rewardedAd;
+
+                       // rl_hint.setBackgroundResource(R.drawable.bg_hint);
+                        rl_hint.setVisibility(View.VISIBLE);
                         // Log.d(TAG, "Ad was loaded.");
                     }
                 });
@@ -440,8 +443,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     //  Log.d(TAG, "The user earned the reward.");
                     int rewardAmount = rewardItem.getAmount();
                     String rewardType = rewardItem.getType();
+
                     showHint();
                     initRewardAdd();
+
+
                 }
             });
             mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
@@ -468,13 +474,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     initRewardAdd();
                 }
             });
-
         } else {
             // Log.d(TAG, "The rewarded ad wasn't ready yet.");
-            showHint();
+           // showHint();
             initRewardAdd();
         }
-
     }
 
 
@@ -513,7 +517,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
             finish();
         }
-        //
     }
 
     private void startTimer() {
@@ -562,11 +565,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         flLoading = findViewById(R.id.fl_loading);
         agla_shabd_btn = findViewById(R.id.rl_agla_shabd_btn);
         tv_timer_text = findViewById(R.id.tv_timer_text);
+        rl_hint = findViewById(R.id.rl_hint);
 
         tvKa.setOnClickListener(this);
         tvCross.setOnClickListener(this);
         tvEnter.setOnClickListener(this);
         findViewById(R.id.rl_hint).setOnClickListener(this);
+
 
         findViewById(R.id.tv_kha).setOnClickListener(this);
         findViewById(R.id.tv_ga).setOnClickListener(this);
@@ -618,8 +623,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.iv_trophy_btn).setOnClickListener(this);
         findViewById(R.id.iv_statistics_btn).setOnClickListener(this);
         findViewById(R.id.iv_settings_btn).setOnClickListener(this);
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -661,8 +664,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     isUttarDekheClicked = true;
                     endGame(Constants.LOSS, String.valueOf(pauseOffset / 1000), currentAttempt);
                 }
-
-
             }
         } else if (id == R.id.iv_question_mark_btn) {
             CleverTapEvent.getCleverTapEvents(GameActivity.this).createOnlyEvent(CleverTapEventConstants.QUESTION_MARK);
@@ -685,14 +686,40 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         someActivityResultLauncher.launch(intent);
         } else if (id == R.id.rl_hint) {
             CleverTapEvent.getCleverTapEvents(GameActivity.this).createOnlyEvent(CleverTapEventConstants.HINT_BUTTON);
-
             // showHint();
-            if (hintCount < 2) {
-                // loadAdd();
-                // isHintPressed = true;
-                click_item = CLICK_ITEM.HINT;
-                showRewardAdd();
-                //loadAdd();
+
+           /* hintToastCounter++;
+            if(hintToastCounter==2){
+                ToastUtils.show(GameActivity.this, "Your hint button has activated");
+            }*/
+
+            if(currentAttempt<4){
+                if(!isHintTaken){
+                    rl_hint.setBackgroundResource(R.drawable.bg_hint_gray);
+                    rl_hint.setClickable(false);
+                    if (hintCount < 2) {
+                        showRewardAdd();
+                        // loadAdd();
+                        // isHintPressed = true;
+                        click_item = CLICK_ITEM.HINT;
+
+                        //loadAdd();
+                    }
+                    isHintTaken = true;
+                }
+            }else{
+                rl_hint.setBackgroundResource(R.drawable.bg_hint_gray);
+                rl_hint.setClickable(false);
+
+                    if (hintCount < 2) {
+                        showRewardAdd();
+                        // loadAdd();
+                        // isHintPressed = true;
+                        click_item = CLICK_ITEM.HINT;
+                        //loadAdd();
+                    }
+
+
             }
         }
     }
@@ -899,7 +926,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                 } else {
                     dialogView.findViewById(R.id.rl_layout3).setVisibility(View.VISIBLE);
-
                 }
 
                 if (!TextUtils.isEmpty(data.getNoOfAttempts().get4())
@@ -911,7 +937,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                 } else {
                     dialogView.findViewById(R.id.rl_layout4).setVisibility(View.VISIBLE);
-
                 }
 
                 if (!TextUtils.isEmpty(data.getNoOfAttempts().get5())
@@ -923,7 +948,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                 } else {
                     dialogView.findViewById(R.id.rl_layout5).setVisibility(View.VISIBLE);
-
                 }
 
                 if (!TextUtils.isEmpty(data.getNoOfAttempts().get6())
@@ -1042,8 +1066,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 updateWordCharArray(s);
                 ((TextView) findViewById(getId(index))).setTextColor(ContextCompat.getColor(GameActivity.this, R.color.black));
                 ((TextView) findViewById(getId(index))).setText(new StringBuilder().append(s).append(getTextIndex(index)));
-
-
             }
         }
 
@@ -1063,7 +1085,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (btnIdList != null && btnIdList.size() > 0) {
                 btnIdList.remove(btnIdList.size() - 1);
                 CleverTapEvent.getCleverTapEvents(GameActivity.this).createOnlyEvent(CleverTapEventConstants.BACK_SPACE);
-
             }
             updateWordCharArray("x");
             findViewById(getId(index)).setBackgroundResource(R.drawable.bg_answer);
@@ -1072,13 +1093,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             index = index - 1;
 
-
         }
     }
 
     private void submitText() {
         animate();
-
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -1102,9 +1121,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             endGame(Constants.LOSS, String.valueOf(pauseOffset / 1000), currentAttempt);
                             //openLeaderBoardOnGameEnd();
                         }
-
                     }
-
                 }
             }
         }, 1600);
@@ -1122,6 +1139,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (btnIdList != null) {
             btnIdList.clear();
         }
+
         for (int i = 1; i < MAX_CHAR_LENGTH + 1; i++) {
             ((TextView) findViewById(getId((currentAttempt - 1) * 3 + i))).setText(matra[i - 1].toString());
         }
@@ -1133,6 +1151,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+        if(currentAttempt > 3){
+           /* if(!isHintTaken){
+                ToastUtils.show(GameActivity.this, "Your hint button has activated");
+            }else{
+
+            }*/
+            rl_hint.setBackgroundResource(R.drawable.bg_hint);
+            rl_hint.setClickable(true);
+        }
     }
 
     private int getId(int pos) {
@@ -1508,8 +1535,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onStatisticsDataFetched(Data data) {
         GameView.super.onStatisticsDataFetched(data);
         statisticsPopup(data);
-
-
     }
 
     /**
@@ -1579,7 +1604,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         ((TextView) findViewById(getId(pos + 2))).setText(matra[2]);
 
         // Second Text
-
         entered_word_array[1] = word_array[1];
         int pos2 = ((currentAttempt - 1) * 3) + 2;
         ((TextView) findViewById(getId(pos2))).setText(new StringBuilder().append(word_array[1]).append(matra[1]));
@@ -1665,7 +1689,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     index = (currentAttempt - 1) * 3;
                     updateCurrentAttempt();
                     findViewById(R.id.fl_dic_error).setVisibility(View.GONE);
-
                 }
 
                 @Override
@@ -1730,12 +1753,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (currentAttempt == 1) {
             return findViewById(R.id.ll_grid_one);
         } else if (currentAttempt == 2) {
+
             return findViewById(R.id.ll_grid_two);
         } else if (currentAttempt == 3) {
+
             return findViewById(R.id.ll_grid_three);
         } else if (currentAttempt == 4) {
+
             return findViewById(R.id.ll_grid_four);
         } else if (currentAttempt == 5) {
+
             return findViewById(R.id.ll_grid_five);
         }
 

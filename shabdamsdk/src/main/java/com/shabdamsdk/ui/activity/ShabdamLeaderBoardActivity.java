@@ -64,7 +64,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
     private GamePresenter gamePresenter;
     private GetLeaderboardListAdapter adapter;
     private RecyclerView recyclerView;
-    private RelativeLayout rl_one, rl_two, rl_three, rl_share_btn;
+    private RelativeLayout rl_one, rl_two, rl_three, rl_share_btn,rlProgressBar;
     private TextView tv_name_one, tv_name_two, tv_name_three;
     private InterstitialAd mInterstitialAd;
     private LinearLayout ll_google_sign_in;
@@ -80,6 +80,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
         setContentView(R.layout.activity_leader_board_shabdam);
         adRequest = new AdRequest.Builder().build();
         gamePresenter = new GamePresenter(this, ShabdamLeaderBoardActivity.this);
+
         interstitialAdd();
         inIt();
         googleSignIn();
@@ -90,6 +91,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
     private void inIt() {
         findViewById(R.id.iv_back_btn).setOnClickListener(this);
         recyclerView = findViewById(R.id.rv_getLeaderboard_List);
+        rlProgressBar = findViewById(R.id.rlProgressBar);
         rl_one = findViewById(R.id.rl_one);
         rl_two = findViewById(R.id.rl_two);
         rl_three = findViewById(R.id.rl_three);
@@ -232,7 +234,6 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
         GameView.super.onGameSubmit();
         String game_id = CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID);
 
-
         //  compositeDisposable = interestPresenter.loadCategoryData();
         if(gamePresenter != null)
             gamePresenter.fetchLeaderBoardList(game_id);
@@ -249,7 +250,6 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
     private void callGetLeaderBoardListAPI() {
         String game_id = CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID);
 
-
         //  compositeDisposable = interestPresenter.loadCategoryData();
         if(gamePresenter != null)
         gamePresenter.fetchLeaderBoardList(game_id);
@@ -258,12 +258,16 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.iv_back_btn) {
+            loadAdd();
             if (!TextUtils.isEmpty(type) && type.equals("1")) {
                 Intent intent = new Intent(this, ShabdamActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
             } else if (!TextUtils.isEmpty(type) && type.equals("2")) {
+                //ad added today
+                loadAdd();
+
                 Intent intent = new Intent(this, GameActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("user_id", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
@@ -278,8 +282,8 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
             }
         } else if (view.getId() == R.id.rl_agla_shabd_btn) {
             findViewById(R.id.rl_agla_shabd_btn).setClickable(false);
-            CleverTapEvent.getCleverTapEvents(ShabdamLeaderBoardActivity.this).createOnlyEvent(CleverTapEventConstants.LB_AGLA_SHABD);
             loadAdd();
+            CleverTapEvent.getCleverTapEvents(ShabdamLeaderBoardActivity.this).createOnlyEvent(CleverTapEventConstants.LB_AGLA_SHABD);
         }
     }
 
@@ -380,7 +384,9 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
         if (!TextUtils.isEmpty(type) && type.equals("2")) {
+
             Intent intent = new Intent(this, GameActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("user_id", CommonPreference.getInstance(this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID));
@@ -407,6 +413,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
                         // The mInterstitialAd reference will be null until
                         // an ad is loaded.
                         mInterstitialAd = interstitialAd;
+                        rlProgressBar.setVisibility(View.GONE);
                         //Log.i(TAG, "onAdLoaded");
                         // loadAdd();
                     }
@@ -417,10 +424,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
                         //Log.i(TAG, loadAdError.getMessage());
                         mInterstitialAd = null;
                     }
-
-
                 });
-
     }
 
 
@@ -431,20 +435,22 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
                 @Override
                 public void onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent();
-                    startGame();
                     interstitialAdd();
+                    startGame();
                 }
 
                 @Override
                 public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                     super.onAdFailedToShowFullScreenContent(adError);
-                    startGame();
                     interstitialAdd();
+                    startGame();
                 }
             });
         } else {
             findViewById(R.id.rl_agla_shabd_btn).setClickable(true);
-            startGame();
+            //interstitialAdd();
+            //loadAdd();
+           // startGame();
             // Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
         }
     }
@@ -460,6 +466,7 @@ public class ShabdamLeaderBoardActivity extends AppCompatActivity implements Gam
         startActivity(intent);
         finish();
     }
+
 
     @Override
     protected void onDestroy() {

@@ -43,7 +43,7 @@
             android:fontFamily="sans-serif-medium"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="12sp"></TextView>
+            android:textSize="12sp"/>
 
         <ImageView
             android:id="@+id/iv_settings_btn"
@@ -428,7 +428,6 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:paddingBottom="@dimen/_4sdp"
                         android:background="@drawable/box_radius"
-
                         android:backgroundTint="@color/text_color_black">
 
                         <RelativeLayout
@@ -436,6 +435,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:background="@drawable/bg_hint"
+                            android:visibility="gone"
+                            android:clickable="true"
                             android:paddingLeft="@dimen/_16sdp"
                             android:paddingRight="@dimen/_16sdp">
 
@@ -488,10 +489,10 @@
                      </Button>-->
 
                     <LinearLayout
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true">
+
                         <ImageView
                             android:id="@+id/iv_timer_icon"
                             android:layout_width="@dimen/_17sdp"
@@ -519,6 +520,8 @@
                         android:layout_height="@dimen/_35sdp"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="@dimen/_10sdp"
+                        android:visibility="visible"
+                        android:id="@+id/rLayUttarDekho"
                         android:paddingBottom="@dimen/_4sdp"
                         android:background="@drawable/box_radius"
                         android:backgroundTint="@color/text_color_black">
@@ -527,6 +530,7 @@
                             android:id="@+id/rl_uttar_dekho_btn"
                             android:layout_width="@dimen/_100sdp"
                             android:layout_height="@dimen/_35sdp"
+
                             android:layout_alignParentRight="true"
                             android:background="@drawable/bg_uttar_dekho"
                             android:paddingLeft="@dimen/_12sdp"
