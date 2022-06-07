@@ -718,8 +718,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         click_item = CLICK_ITEM.HINT;
                         //loadAdd();
                     }
-
-
             }
         }
     }
@@ -776,8 +774,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
 
-
-
+    
     private void statisticsPopup(Data data) {
         if (alertDialog != null) {
             alertDialog.dismiss();
