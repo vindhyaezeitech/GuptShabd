@@ -48,6 +48,8 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
         findViewById(R.id.rl_feedback_btn).setOnClickListener(this);
         findViewById(R.id.rl_logout_btn).setOnClickListener(this);
         findViewById(R.id.rl_submit_word).setOnClickListener(this);
+        findViewById(R.id.rl_PrivacyPolicy).setOnClickListener(this);
+        findViewById(R.id.rl_Term).setOnClickListener(this);
         findViewById(R.id.rl_faq_btn).setOnClickListener(this);
         Switch sw = findViewById(R.id.switch_btn);
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -73,6 +75,7 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
         Intent intent = getIntent();
         type = intent.getStringExtra("type");
     }
+
 
     @Override
     public void onClick(View view) {
@@ -117,6 +120,14 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
         }
         if (view.getId() == R.id.rl_faq_btn) {
             CleverTapEvent.getCleverTapEvents(ShabdamSettingsActivity.this).createOnlyEvent(CleverTapEventConstants.FAQ);
+        }
+        if(view.getId() == R.id.rl_Term){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/document/d/1efJN1iZrt9r_hd4hK8_Kct0tUsnVNptSXSm_26DcE6Q/edit?usp=sharing"));
+            startActivity(browserIntent);
+        }
+        if(view.getId() == R.id.rl_PrivacyPolicy){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/document/d/1efJN1iZrt9r_hd4hK8_Kct0tUsnVNptSXSm_26DcE6Q/edit?usp=sharing"));
+            startActivity(browserIntent);
         }
     }
 
