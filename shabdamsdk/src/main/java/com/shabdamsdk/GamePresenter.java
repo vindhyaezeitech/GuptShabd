@@ -36,6 +36,7 @@ public class GamePresenter {
 
     public GamePresenter(GameView gameView, Context context){
         this.gameView = gameView;
+        this.context = context;
     }
 
     public void fetchNewWord(Context context,GetWordRequest request){
