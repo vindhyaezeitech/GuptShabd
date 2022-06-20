@@ -230,7 +230,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 // Request the update.
 
                 try {
-                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, UPDATE_REQUEST_CODE);
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, UPDATE_REQUEST_CODE);
 
                 } catch (IntentSender.SendIntentException exception) {
                     Log.d("Error_Message", "" + exception.getMessage());
@@ -238,6 +238,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
+
 
    /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -251,6 +253,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             handleSignInResult(task);
         }
     }*/
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == UPDATE_REQUEST_CODE){
+            if(requestCode != RESULT_OK){
+                finish();
+            }
+        }
+    }
 
     private void handleSignInResult(com.google.android.gms.tasks.Task<GoogleSignInAccount> completedTask) {
         try {
