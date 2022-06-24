@@ -10,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -98,6 +99,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class GameActivity extends AppCompatActivity implements View.OnClickListener, GameView {
 
+   private MediaPlayer mediaPlayer;
+   private MediaPlayer mediaPlayerGameComplete;
+   private MediaPlayer mediaPlayerWrongAnswer;
+
     public static final int MAX_CHAR_LENGTH = 3;
     public static final int MAX_ATTEMPT = 5;
     private static final int RC_SIGN_IN = 1;
@@ -161,6 +166,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         adRequest = new AdRequest.Builder().build();
         rLayUttarDekho = findViewById(R.id.rLayUttarDekho);
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.peaceful_garden_healing);
+        mediaPlayerGameComplete = MediaPlayer.create(this, R.raw.game_complete);
+        mediaPlayerWrongAnswer = MediaPlayer.create(this, R.raw.for_error_music);
+        mediaPlayer.start();
 
         interstitialAdd();
         initRewardAdd();
@@ -447,7 +457,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     showHint();
                     initRewardAdd();
 
-
                 }
             });
             mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
@@ -535,6 +544,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        mediaPlayer.start();
         if (click_item != CLICK_ITEM.HINT) {
             gameTimer();
         } else {
@@ -545,6 +555,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
+        mediaPlayer.pause();
         if (click_item != CLICK_ITEM.HINT) {
             if (mTimingRunning) {
                 tv_timer_text.stop();
@@ -1205,8 +1216,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             case 15:
                 return R.id.et_15;
-
-
         }
 
         return 0;
@@ -1352,6 +1361,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void openLeaderBoardOnGameEnd() {
+        mediaPlayerGameComplete.start();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -1380,8 +1390,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void animate() {
         try {
-
-
             //visibleView.visible()
             AnimatorSet flipOutAnimatorSet =
                     (AnimatorSet) AnimatorInflater.loadAnimator(
@@ -1663,6 +1671,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             // shake attempted layout
             submitText();
         } else {
+            mediaPlayerWrongAnswer.start();
             shakeAnimation();
             for (int i = 1; i < MAX_CHAR_LENGTH + 1; i++) {
                 findViewById(getId((currentAttempt - 1) * 3 + i)).setBackgroundResource(R.drawable.bg_red);
@@ -1700,6 +1709,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
+        mediaPlayer.stop();
         if (gamePresenter != null) {
             gamePresenter.onDestroy();
         }
