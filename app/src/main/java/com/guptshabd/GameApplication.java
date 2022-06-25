@@ -3,12 +3,12 @@ package com.guptshabd;
 import android.app.Application;
 
 import com.clevertap.android.sdk.ActivityLifecycleCallback;
-import com.clevertap.android.sdk.CTPushNotificationListener;
 import com.clevertap.android.sdk.CleverTapAPI;
+import com.guptshabd.notification.CTPushNotificationListener;
 
 import java.util.HashMap;
 
-public class GameApplication extends Application implements CTPushNotificationListener {
+public class GameApplication extends Application {
 
 
     private static GameApplication application;
@@ -36,11 +36,6 @@ public class GameApplication extends Application implements CTPushNotificationLi
         super.onCreate();
         application = (GameApplication) getApplicationContext();
         CleverTapAPI cleverTapAPI = CleverTapAPI.getDefaultInstance(getApplicationContext());
-        cleverTapAPI.setCTPushNotificationListener(this);
     }
 
-    @Override
-    public void onNotificationClickedPayloadReceived(HashMap<String, Object> payload) {
-
-    }
 }
