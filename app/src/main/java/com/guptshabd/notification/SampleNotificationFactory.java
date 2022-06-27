@@ -10,19 +10,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.gson.Gson;
 import com.guptshabd.GameApplication;
 import com.guptshabd.R;
-import com.shabdamsdk.ShabdamSplashActivity;
 
 /**
  * Check if notification id is comming if yes then update if not then do nothing
@@ -49,11 +45,10 @@ public class SampleNotificationFactory {
 
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(GameApplication.getInstance(), NOTIFICATION_CHANNEL_ID);
-        mBuilder.setSmallIcon(com.shabdamsdk.R.drawable.app_logo);
+        mBuilder.setSmallIcon(R.drawable.notification_logo);
         mBuilder.setColor(ContextCompat.getColor(GameApplication.getInstance(), android.R.color.white));
         mBuilder.setContentIntent(PendingIntent.getBroadcast(GameApplication.getInstance(), notify_id, newIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         mBuilder.setContentTitle(pushMessage.getHeader())
-                .setSmallIcon(R.drawable.app_logo)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentText(pushMessage.getMessage())
                 .setAutoCancel(true);
