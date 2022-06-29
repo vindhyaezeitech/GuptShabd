@@ -170,7 +170,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mediaPlayer = MediaPlayer.create(this, R.raw.peaceful_garden_healing);
         mediaPlayerGameComplete = MediaPlayer.create(this, R.raw.game_complete);
         mediaPlayerWrongAnswer = MediaPlayer.create(this, R.raw.for_error_music);
-        mediaPlayer.start();
+        if(CommonPreference.getInstance(GameActivity.this).getSoundState()){
+            mediaPlayer.start();
+        }else {
+            mediaPlayer.stop();
+        }
 
         interstitialAdd();
         initRewardAdd();
@@ -557,7 +561,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        mediaPlayer.start();
+        if(!CommonPreference.getInstance(GameActivity.this).getSoundState()){
+            mediaPlayer.pause();
+            mediaPlayerGameComplete.pause();
+            mediaPlayerWrongAnswer.pause();
+        }
+        if(CommonPreference.getInstance(GameActivity.this).getSoundState()){
+            mediaPlayer.start();
+        }else {
+            mediaPlayer.pause();
+        }
+
         if (click_item != CLICK_ITEM.HINT) {
             gameTimer();
         } else {
@@ -1374,7 +1388,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void openLeaderBoardOnGameEnd() {
-        mediaPlayerGameComplete.start();
+        if(CommonPreference.getInstance(GameActivity.this).getSoundState()){
+            mediaPlayerGameComplete.start();
+        }else {
+            mediaPlayerGameComplete.pause();
+        }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -1685,6 +1703,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             submitText();
         } else {
             mediaPlayerWrongAnswer.start();
+            if(CommonPreference.getInstance(GameActivity.this).getSoundState()){
+                mediaPlayerWrongAnswer.start();
+
+            }else {
+                mediaPlayerWrongAnswer.pause();
+
+            }
             shakeAnimation();
             for (int i = 1; i < MAX_CHAR_LENGTH + 1; i++) {
                 findViewById(getId((currentAttempt - 1) * 3 + i)).setBackgroundResource(R.drawable.bg_red);
@@ -1723,6 +1748,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         mediaPlayer.stop();
+        mediaPlayerWrongAnswer.stop();
+        mediaPlayerGameComplete.stop();
         if (gamePresenter != null) {
             gamePresenter.onDestroy();
         }

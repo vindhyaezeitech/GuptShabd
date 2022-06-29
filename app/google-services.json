@@ -1,49 +1,34 @@
 {
   "project_info": {
-    "project_number": "563094630518",
-    "project_id": "shabdal-2001",
-    "storage_bucket": "shabdal-2001.appspot.com"
+    "project_number": "934830103940",
+    "project_id": "shabdam-test",
+    "storage_bucket": "shabdam-test.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:563094630518:android:77a18e3c3e6f3c00276f57",
+        "mobilesdk_app_id": "1:934830103940:android:bfbba5f9cb3aa81ceb51d1",
         "android_client_info": {
           "package_name": "com.guptshabd"
         }
       },
       "oauth_client": [
         {
-          "client_id": "563094630518-6mgqingggqvnqm22tlnk9i8ed7hsg0m7.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.guptshabd",
-            "certificate_hash": "9ada812d7885d12c760fbb41a7402d96a400eade"
-          }
-        },
-        {
-          "client_id": "563094630518-75q6fvh11n5e5bm87dprdmliptli5l54.apps.googleusercontent.com",
+          "client_id": "934830103940-0vj9b7uj6tkobcq91l77978nklqmb06r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCnB5mfXBUZdkM_btgE12fC4d0hMQwf9v0"
+          "current_key": "AIzaSyDBNpO_8W1l3EylXwAk8Fi0Xx_QuWx39BU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "563094630518-57e0ko2pn2389rqkstr23mc4l2em33rt.apps.googleusercontent.com",
+              "client_id": "934830103940-0vj9b7uj6tkobcq91l77978nklqmb06r.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "563094630518-vhh35h7u5jgpm4ls9hmg6mt6u65nr0kf.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.shabdam"
-              }
             }
           ]
         }

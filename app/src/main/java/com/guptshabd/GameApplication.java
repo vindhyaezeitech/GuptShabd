@@ -2,6 +2,12 @@ package com.guptshabd;
 
 import android.app.Application;
 
+import com.clevertap.android.sdk.ActivityLifecycleCallback;
+import com.clevertap.android.sdk.CleverTapAPI;
+import com.guptshabd.notification.CTPushNotificationListener;
+
+import java.util.HashMap;
+
 public class GameApplication extends Application {
 
 
@@ -26,7 +32,10 @@ public class GameApplication extends Application {
 
     @Override
     public void onCreate() {
+        ActivityLifecycleCallback.register(this);
         super.onCreate();
         application = (GameApplication) getApplicationContext();
+        CleverTapAPI cleverTapAPI = CleverTapAPI.getDefaultInstance(getApplicationContext());
     }
+
 }

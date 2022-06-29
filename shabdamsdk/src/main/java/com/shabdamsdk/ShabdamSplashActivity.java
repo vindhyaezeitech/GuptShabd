@@ -10,6 +10,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.clevertap.android.sdk.CleverTapAPI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.shabdamsdk.model.SignupRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.pref.CommonPreference;
@@ -18,9 +22,12 @@ import com.shabdamsdk.ui.activity.UserDetailActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+
 public  class ShabdamSplashActivity extends AppCompatActivity implements GameView {
     private GamePresenter gamePresenter;
     private String userId, name, u_name, email, profile_image;
+    private String token;
 
    /* public static void startShabdam(@NonNull Context context, @NonNull String userId, @NonNull String name, String uName, String email, String profile_image, String rewardAdId, String interstitialsAdId, String bannerAdId){
         if(context == null){
@@ -59,6 +66,32 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_shabdam_main);
+
+        try {
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    try {
+                        token = task.getResult();
+                        Log.d("beemen", token);
+                        if (token != null) {
+                            CleverTapAPI.getDefaultInstance(ShabdamSplashActivity.this).pushFcmRegistrationId(token, true);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        /*HashMap<String, Object> profileUpdate = new HashMap<String, Object>();
+        profileUpdate.put("deviceId", token);
+        CleverTapAPI cleverTapAPI = CleverTapAPI.getDefaultInstance(getApplicationContext());
+        cleverTapAPI.pushProfile(profileUpdate);*/
+
+
         GameDataManager.getInstance().shuffleList();
         gamePresenter = new GamePresenter(this, ShabdamSplashActivity.this);
 
