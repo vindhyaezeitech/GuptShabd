@@ -156,6 +156,14 @@ public class CommonPreference {
         return isType() ? "" : getString(Key.TYPE);
     }
 
+    public boolean getSoundState(){
+        return getBoolean(Key.SOUND_STATE, true);
+    }
+
+    public void saveSoundState(boolean soundState){
+        put(Key.SOUND_STATE, soundState);
+    }
+
     public void remove(String... keys) {
         doEdit();
         for (String key : keys) {
@@ -206,6 +214,7 @@ public class CommonPreference {
         public static final String TYPE = "type";
         public static final String IS_TUTORIAL_SHOWN = "is_tut_shown";
         public static final String IS_RULE_SHOWN = "is_rule_shown";
+        public static final String SOUND_STATE = "sound_state";
 
 
     }

@@ -77,6 +77,40 @@
         android:layout_marginRight="@dimen/_15sdp"
         android:background="@color/line_color_shb" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="music on of"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
+
+        <Switch
+            android:id="@+id/switch_music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:switchMinWidth="45dp"
+            android:thumb="@drawable/custom_thumb"
+            android:track="@drawable/custom_track"
+            android:trackTintMode="@color/blue"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/line_color_shb" />
+
 
     <RelativeLayout
         android:id="@+id/rl_feedback_btn"

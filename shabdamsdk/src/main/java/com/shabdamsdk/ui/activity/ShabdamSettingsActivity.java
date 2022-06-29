@@ -28,6 +28,7 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
     private String type;
     private RelativeLayout rl_feedback_btn;
     private GoogleSignInClient mGoogleSignInClient;
+    private Switch swithc_sound;
 
 
     @Override
@@ -56,6 +57,23 @@ public class ShabdamSettingsActivity extends AppCompatActivity implements View.O
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // The toggle is enabled
+                    CleverTapEvent.getCleverTapEvents(ShabdamSettingsActivity.this).createOnlyEvent(CleverTapEventConstants.NOTIFICATION_ON);
+
+                } else {
+                    // The toggle is disabled
+                    CleverTapEvent.getCleverTapEvents(ShabdamSettingsActivity.this).createOnlyEvent(CleverTapEventConstants.NOTIFICATION_OFF);
+                }
+            }
+        });
+
+        swithc_sound = findViewById(R.id.switch_music);
+        swithc_sound.setChecked(CommonPreference.getInstance(ShabdamSettingsActivity.this).getSoundState());
+        swithc_sound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                CommonPreference.getInstance(ShabdamSettingsActivity.this).saveSoundState(isChecked);
+                if (isChecked) {
+                    // The toggle is enabled
+
                     CleverTapEvent.getCleverTapEvents(ShabdamSettingsActivity.this).createOnlyEvent(CleverTapEventConstants.NOTIFICATION_ON);
 
                 } else {
