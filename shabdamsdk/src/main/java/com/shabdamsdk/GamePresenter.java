@@ -245,7 +245,6 @@ public class GamePresenter {
                         String userId = response.getData().getId().toString();
 
 
-
                         UpdateUserTokenRequest updateTokenRequest = new UpdateUserTokenRequest();
                         updateTokenRequest.setGameUserId(userId);
                         updateTokenRequest.setDeviceType(Constants.DEVICE_TYPE);
@@ -313,7 +312,6 @@ public class GamePresenter {
             compositeDisposable.dispose();
         }
         context = null;
-
     }
 
     public void updateUserToken(UpdateUserTokenRequest updateUserToken ){
@@ -322,8 +320,9 @@ public class GamePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    Log.d("response:updateToken",""+response.getData());
+
                     if(response != null ){
+                        Log.d("response:updateToken",""+response.getData().getDeviceToken().toString());
 
                     }
                 }, throwable -> {
