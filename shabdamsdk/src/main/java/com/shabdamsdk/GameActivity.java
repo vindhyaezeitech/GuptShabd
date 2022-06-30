@@ -525,6 +525,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void endGame(String gameStatus, String time, int attempt) {
+
         gameResult = gameStatus;
         if (!TextUtils.isEmpty(CommonPreference.getInstance(GameActivity.this.getApplicationContext()).getString(CommonPreference.Key.GAME_USER_ID))) {
             SubmitGameRequest submitGameRequest = new SubmitGameRequest();
@@ -534,6 +535,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             submitGameRequest.setTime(time);
             gamePresenter.submitGame(submitGameRequest);
         } else {
+            if(CommonPreference.getInstance(GameActivity.this).getSoundState()){
+                mediaPlayerGameComplete.start();
+            }else {
+                mediaPlayerGameComplete.pause();
+            }
             GameDataManager.getInstance().removeData();
             Intent intent = new Intent(GameActivity.this, ShabdamLeaderBoardActivity.class);
             intent.putExtra(Constants.NUMBER_OF_ATTEMPT, attempt);
