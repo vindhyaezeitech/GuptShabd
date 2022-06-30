@@ -128,7 +128,6 @@ public class UserDetailActivity extends AppCompatActivity implements GameView {
     protected void onStart() {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-
     }
 
     private void signIn() {

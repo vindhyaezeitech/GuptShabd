@@ -3,6 +3,8 @@ package com.shabdamsdk.network;
 import com.shabdamsdk.model.SignupRequest;
 import com.shabdamsdk.model.dictionary.CheckWordDicRequest;
 import com.shabdamsdk.model.GetWordRequest;
+import com.shabdamsdk.model.game_user_update_token.UpdateUserTokenRequest;
+import com.shabdamsdk.model.game_user_update_token.UpdateUserTokenResponse;
 import com.shabdamsdk.model.gamesubmit.GameSubmitResponse;
 import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
@@ -43,5 +45,8 @@ public interface ApiService {
 
     @POST("get_gamewordsid")
     Observable<WordResponse> fetchWordFromWordId(@Body CheckWordDicRequest body);
+
+    @POST("gameuser_update_token")
+    Observable<UpdateUserTokenResponse> updateUserToken(@Body UpdateUserTokenRequest body);
 
 }
