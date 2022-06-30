@@ -86,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:text="music on of"
+            android:text="Sound"
             android:textColor="@color/black"
             android:textSize="15dp" />
 

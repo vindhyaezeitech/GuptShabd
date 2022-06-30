@@ -14,6 +14,8 @@ public class Constants {
     public static final String TIME = "time";
     public static final String NUMBER_OF_ATTEMPT = "number_of_attempt";
 
+    public static final String DEVICE_TYPE = "A";
+
     public static String INTRESTITIAL_AD_ID = "ca-app-pub-3793720534573472/9189546963";
     public static final String BANNER_AD = "/1007232/Tak_Shabdam_320x50";
     public static final String REWARD_AD_ID = "ca-app-pub-3793720534573472/7128938959";

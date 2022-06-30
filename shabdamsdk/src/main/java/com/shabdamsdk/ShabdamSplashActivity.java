@@ -73,8 +73,12 @@ public  class ShabdamSplashActivity extends AppCompatActivity implements GameVie
                 public void onComplete(@NonNull Task<String> task) {
                     try {
                         token = task.getResult();
+
+                        CommonPreference.getInstance(ShabdamSplashActivity.this).put(CommonPreference.Key.DEVICE_TOKEN,token);
                         Log.d("beemen", token);
                         if (token != null) {
+
+
                             CleverTapAPI.getDefaultInstance(ShabdamSplashActivity.this).pushFcmRegistrationId(token, true);
                         }
                     } catch (Exception e) {

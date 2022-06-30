@@ -5,8 +5,6 @@ import static com.guptshabd.notification.SampleNotificationFactory.onGenerateNot
 
 import android.os.Bundle;
 import android.util.Log;
-
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import java.util.Map;

@@ -1,24 +1,21 @@
 package com.shabdamsdk;
 
 import android.content.Context;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.TextView;
 
-import com.shabdamsdk.db.AppDatabase;
 import com.shabdamsdk.db.DatabaseClient;
 import com.shabdamsdk.db.Task;
 import com.shabdamsdk.model.SignupRequest;
 import com.shabdamsdk.model.dictionary.CheckWordDicRequest;
 import com.shabdamsdk.model.GetWordRequest;
+import com.shabdamsdk.model.game_user_update_token.UpdateUserTokenRequest;
 import com.shabdamsdk.model.gamesubmit.SubmitGameRequest;
 import com.shabdamsdk.model.adduser.AddUserRequest;
 import com.shabdamsdk.model.leaderboard.GetLeaderboardRequest;
 import com.shabdamsdk.network.ApiService;
 import com.shabdamsdk.network.RetrofitClient;
 import com.shabdamsdk.pref.CommonPreference;
-import com.shabdamsdk.ui.activity.ShabdamSettingsActivity;
 
 import java.util.ArrayList;
 
@@ -99,7 +96,6 @@ public class GamePresenter {
                             CommonPreference.getInstance(context.getApplicationContext()).put(CommonPreference.Key.IS_RULE_SHOWN, isRuleShown);
                             CommonPreference.getInstance(context.getApplicationContext()).put("applicationId", applicationId);
                             CommonPreference.getInstance(context.getApplicationContext()).put("appUniqueId", appUniqueId);
-
                         }
                         GameDataManager.getInstance().addData(response.getData());
                         gameView.onWordFetched(response.getData().get(0));
@@ -196,7 +192,6 @@ public class GamePresenter {
                         gameView.hideProgress();
                     }
                 }));
-
     }
 
     public void submitGame(SubmitGameRequest submitGameRequest){
@@ -244,9 +239,20 @@ public class GamePresenter {
                     if(gameView != null){
                         gameView.hideProgress();
                     }
+
                     if(response != null ){
 
+                        String userId = response.getData().getId().toString();
+
+
+                        UpdateUserTokenRequest updateTokenRequest = new UpdateUserTokenRequest();
+                        updateTokenRequest.setGameUserId(userId);
+                        updateTokenRequest.setDeviceType(Constants.DEVICE_TYPE);
+                        updateTokenRequest.setDeviceToken(CommonPreference.getInstance(context.getApplicationContext()).getString(CommonPreference.Key.DEVICE_TOKEN));
+
+                        updateUserToken(updateTokenRequest);
                         gameView.onAddUser(response.getData());
+
                     }
 
                 }, throwable -> {
@@ -258,6 +264,8 @@ public class GamePresenter {
                 }));
 
     }
+
+
 
     public void checkDictionary(CheckWordDicRequest checkWordDicRequest){
 
@@ -304,6 +312,23 @@ public class GamePresenter {
             compositeDisposable.dispose();
         }
         context = null;
+    }
 
+    public void updateUserToken(UpdateUserTokenRequest updateUserToken ){
+
+        compositeDisposable.add(apiService.updateUserToken(updateUserToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+
+                    if(response != null ){
+                        Log.d("response:updateToken",""+response.getData().getDeviceToken().toString());
+
+                    }
+                }, throwable -> {
+                    if(gameView != null){
+                        gameView.hideProgress();
+                    }
+                }));
     }
 }
