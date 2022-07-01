@@ -252,7 +252,6 @@ public class GamePresenter {
 
                         updateUserToken(updateTokenRequest);
                         gameView.onAddUser(response.getData());
-
                     }
 
                 }, throwable -> {
@@ -262,9 +261,7 @@ public class GamePresenter {
                     Log.d("Error",""+throwable);
 
                 }));
-
     }
-
 
 
     public void checkDictionary(CheckWordDicRequest checkWordDicRequest){
