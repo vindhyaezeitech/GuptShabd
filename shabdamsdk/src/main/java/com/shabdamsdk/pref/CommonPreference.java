@@ -214,7 +214,11 @@ public class CommonPreference {
         public static final String TYPE = "type";
         public static final String IS_TUTORIAL_SHOWN = "is_tut_shown";
         public static final String IS_RULE_SHOWN = "is_rule_shown";
+
         public static final String SOUND_STATE = "sound_state";
+
+        public static final String DEVICE_TOKEN = "device_token";
+
 
 
     }
