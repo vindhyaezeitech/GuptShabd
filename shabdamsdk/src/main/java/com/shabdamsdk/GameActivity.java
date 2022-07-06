@@ -306,6 +306,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     gamePresenter.signUpUser(signupRequest);
                 }
 
+
+
+
                 //Toast.makeText(this, ""+personEmail, Toast.LENGTH_SHORT).show();
             }
             //startActivity(new Intent(this, ShabdamSplashActivity.class));
