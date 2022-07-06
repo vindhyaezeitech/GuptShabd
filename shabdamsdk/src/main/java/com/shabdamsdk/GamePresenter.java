@@ -120,6 +120,7 @@ public class GamePresenter {
         if(gameView != null){
             gameView.showProgress();
         }
+
         compositeDisposable.add(apiService.getLeaderBoardAPIList(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -165,7 +166,6 @@ public class GamePresenter {
                         gameView.hideProgress();
                     }
                 }));
-
     }
 
     public void addUser(AddUserRequest addUserRequest){
@@ -219,7 +219,6 @@ public class GamePresenter {
                         gameView.hideProgress();
                     }
                 }));
-
     }
 
     public void signUpUser(SignupRequest addUserRequest){
@@ -244,7 +243,6 @@ public class GamePresenter {
 
                         String userId = response.getData().getId().toString();
 
-
                         UpdateUserTokenRequest updateTokenRequest = new UpdateUserTokenRequest();
                         updateTokenRequest.setGameUserId(userId);
                         updateTokenRequest.setDeviceType(Constants.DEVICE_TYPE);
@@ -265,7 +263,6 @@ public class GamePresenter {
 
 
     public void checkDictionary(CheckWordDicRequest checkWordDicRequest){
-
         if(gameView != null){
             gameView.showProgress();
         }
