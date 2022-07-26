@@ -94,7 +94,7 @@
                 android:layout_gravity="center_horizontal"
                 ads:adSize="BANNER"
                 android:layout_marginTop="@dimen/_4sdp"
-                ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+                ads:adUnitId="/1007232/Tak_Shabdam_320x50">
             </com.google.android.gms.ads.AdView>
 
             <LinearLayout

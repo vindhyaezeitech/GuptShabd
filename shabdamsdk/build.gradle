@@ -25,7 +25,6 @@ android {
 
             buildConfigField "String", "BASE_URL", '"https://mtappfeed.mobiletak.com/appapi/nt/"'
             minifyEnabled false
-            debuggable true
 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
